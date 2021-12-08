@@ -1,7 +1,7 @@
 var searchData=
 [
   ['gauss_5fmodel_0',['gauss_model',['../classctlcmd_1_1viscmd_1_1visualmaxsharp_1_1gauss__model.html',1,'ctlcmd::viscmd::visualmaxsharp']]],
-  ['gcoder_1',['GCoder',['../structGCoder.html',1,'']]],
+  ['gcoder_1',['GCoder',['../classGCoder.html',1,'']]],
   ['gcoder_2',['gcoder',['../classctlcmd_1_1cmdbase_1_1controlcmd.html#a44ee89515ea98bd95e82c8956e16c0de',1,'ctlcmd::cmdbase::controlcmd']]],
   ['gcoder_2ecc_3',['gcoder.cc',['../gcoder_8cc.html',1,'']]],
   ['get_4',['get',['../classctlcmd_1_1getset_1_1get.html',1,'ctlcmd::getset']]],
@@ -21,7 +21,7 @@ var searchData=
   ['getrate_18',['GetRate',['../classDRSContainer.html#a618d907683c5210b797e5295ca6d6a19',1,'DRSContainer']]],
   ['getrawcontours_19',['GetRawContours',['../classVisual.html#ade5f606904c07440f14dc25d93c986a6',1,'Visual']]],
   ['getsamples_20',['GetSamples',['../classDRSContainer.html#a5dcdacf6a5a60ddf5a66b50e03f1bba8',1,'DRSContainer']]],
-  ['getsettings_21',['GetSettings',['../structGCoder.html#a4d2308ca05f78f5d7a7d995d5d35c6bc',1,'GCoder']]],
+  ['getsettings_21',['GetSettings',['../classGCoder.html#a4d2308ca05f78f5d7a7d995d5d35c6bc',1,'GCoder']]],
   ['gettimearray_22',['GetTimeArray',['../classDRSContainer.html#a109129be88b319cf5e34388e1420cf98',1,'DRSContainer']]],
   ['getvisresult_23',['GetVisResult',['../classVisual.html#ab6a5d4b57d0adee00eba0a68a822386b',1,'Visual']]],
   ['getwaveform_24',['GetWaveform',['../classDRSContainer.html#ad7fdbaabf1241621b75b5d989a29464e',1,'DRSContainer']]],

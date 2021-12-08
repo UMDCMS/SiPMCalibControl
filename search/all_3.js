@@ -28,7 +28,7 @@ var searchData=
   ['create_5fserver_5fflask_25',['create_server_flask',['../namespaceserver.html#a1036cee3149b4d989ef5d40fc4cc4362',1,'server']]],
   ['cubic_5fmodel_26',['cubic_model',['../classctlcmd_1_1viscmd_1_1visualmaxsharp_1_1cubic__model.html',1,'ctlcmd::viscmd::visualmaxsharp']]],
   ['current_5fimage_5fbytes_27',['current_image_bytes',['../namespaceserver_1_1sockets_1_1parsing.html#a8acec576b27b29a432fa7a9132082db3',1,'server::sockets::parsing']]],
-  ['cx_28',['cx',['../structGCoder.html#ab216457715e907c472ddad6ffbd8e3c0',1,'GCoder']]],
+  ['cx_28',['cx',['../classGCoder.html#ab216457715e907c472ddad6ffbd8e3c0',1,'GCoder']]],
   ['cyan_29',['CYAN',['../group__Logger.html#gaec49ac086ee4fa9e858a992d09318706',1,'CYAN(const std::string &amp;str):&#160;logger.cc'],['../group__Logger.html#gaec49ac086ee4fa9e858a992d09318706',1,'CYAN(const std::string &amp;):&#160;logger.cc']]],
   ['getset_30',['getset',['../namespacectlcmd_1_1getset.html',1,'ctlcmd']]],
   ['motioncmd_31',['motioncmd',['../namespacectlcmd_1_1motioncmd.html',1,'ctlcmd']]],

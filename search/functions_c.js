@@ -37,6 +37,6 @@ var searchData=
   ['run_5fsystem_5fcalibration_34',['run_system_calibration',['../namespaceserver_1_1sockets_1_1action.html#aae2b254cdd1f57778166f000038dff11',1,'server::sockets::action']]],
   ['run_5fzscan_5fsettings_35',['run_zscan_settings',['../namespaceserver_1_1sockets_1_1action.html#a20760198d602d5ff97fd11c70b94c522',1,'server::sockets::action']]],
   ['runcalib_36',['RunCalib',['../classDRSContainer.html#af4f73a736ee08f7a6de87650b865085b',1,'DRSContainer']]],
-  ['rungcode_37',['RunGcode',['../structGCoder.html#a8bfd6378e36fc3ddcb8e9b6e8dc87641',1,'GCoder']]],
+  ['rungcode_37',['RunGcode',['../classGCoder.html#a8bfd6378e36fc3ddcb8e9b6e8dc87641',1,'GCoder']]],
   ['runmainloop_38',['RunMainLoop',['../classVisual.html#ad7489217caf63d7afa323b7e051f935a',1,'Visual']]]
 ];

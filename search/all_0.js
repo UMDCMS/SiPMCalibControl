@@ -23,9 +23,9 @@ var searchData=
   ['_5finstance_20',['_instance',['../classGPIO.html#a4b53f1d5ad0ab8f5b3d342435cbb0b02',1,'GPIO']]],
   ['_5fis_5fcounting_21',['_is_counting',['../classctlcmd_1_1cmdbase_1_1readoutcmd.html#a669019b21d732d13c3a7613deffcde47',1,'ctlcmd::cmdbase::readoutcmd']]],
   ['_5fmake_5fgp_5flist_22',['_make_gp_list',['../classcmod_1_1readoutmodel_1_1SiPMModel.html#a45517679bb9887b1063031757d24f75a',1,'cmod::readoutmodel::SiPMModel']]],
-  ['_5fmax_5fx_23',['_max_x',['../structGCoder.html#af29459e06c2ad3fba98a23aeae568663',1,'GCoder']]],
-  ['_5fmax_5fy_24',['_max_y',['../structGCoder.html#a7832a308d83b5c75935e9e916d77c701',1,'GCoder']]],
-  ['_5fmax_5fz_25',['_max_z',['../structGCoder.html#a477dd0481d4241fe57f9a93170bb06cd',1,'GCoder']]],
+  ['_5fmax_5fx_23',['_max_x',['../classGCoder.html#af29459e06c2ad3fba98a23aeae568663',1,'GCoder']]],
+  ['_5fmax_5fy_24',['_max_y',['../classGCoder.html#a7832a308d83b5c75935e9e916d77c701',1,'GCoder']]],
+  ['_5fmax_5fz_25',['_max_z',['../classGCoder.html#a477dd0481d4241fe57f9a93170bb06cd',1,'GCoder']]],
   ['_5fpwm_5fmultiplier_26',['_pwm_multiplier',['../namespacecmod_1_1readoutmodel.html#a936d840151b114eddb4b909d690f68b5',1,'cmod::readoutmodel']]],
   ['_5fsmear_5fvalues_27',['_smear_values',['../classcmod_1_1readoutmodel_1_1SiPMModel.html#af324d43714cfc03cb2c7c8fbd2aafcad',1,'cmod::readoutmodel::SiPMModel']]]
 ];

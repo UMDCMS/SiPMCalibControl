@@ -15,7 +15,7 @@ var searchData=
   ['getrate_12',['GetRate',['../classDRSContainer.html#a618d907683c5210b797e5295ca6d6a19',1,'DRSContainer']]],
   ['getrawcontours_13',['GetRawContours',['../classVisual.html#ade5f606904c07440f14dc25d93c986a6',1,'Visual']]],
   ['getsamples_14',['GetSamples',['../classDRSContainer.html#a5dcdacf6a5a60ddf5a66b50e03f1bba8',1,'DRSContainer']]],
-  ['getsettings_15',['GetSettings',['../structGCoder.html#a4d2308ca05f78f5d7a7d995d5d35c6bc',1,'GCoder']]],
+  ['getsettings_15',['GetSettings',['../classGCoder.html#a4d2308ca05f78f5d7a7d995d5d35c6bc',1,'GCoder']]],
   ['gettimearray_16',['GetTimeArray',['../classDRSContainer.html#a109129be88b319cf5e34388e1420cf98',1,'DRSContainer']]],
   ['getvisresult_17',['GetVisResult',['../classVisual.html#ab6a5d4b57d0adee00eba0a68a822386b',1,'Visual']]],
   ['getwaveform_18',['GetWaveform',['../classDRSContainer.html#ad7fdbaabf1241621b75b5d989a29464e',1,'DRSContainer']]],

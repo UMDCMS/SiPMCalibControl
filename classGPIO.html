@@ -255,13 +255,11 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>ClosePWM</b> ()</td><
 void&#160;</td><td class="memItemRight" valign="bottom"><b>PushADCSetting</b> ()</td></tr>
 <tr class="memdesc:ac752b6b7512f39230cde2fb04901ed26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writing the configuration settings to the I2D device. Notcie we will always be using the continuous readout operation mode. <br /></td></tr>
 <tr class="separator:ac752b6b7512f39230cde2fb04901ed26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a80d11826f8f86ce37700fb5d36f2a4dd"><td class="memItemLeft" align="right" valign="top"><a id="a80d11826f8f86ce37700fb5d36f2a4dd" name="a80d11826f8f86ce37700fb5d36f2a4dd"></a>
-int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>ADCReadRaw</b> ()</td></tr>
-<tr class="memdesc:a80d11826f8f86ce37700fb5d36f2a4dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reading out the I2C interface at the current channel as a 16bit number. Conversion is handled by the flushing loop. <br /></td></tr>
+<tr class="memitem:a80d11826f8f86ce37700fb5d36f2a4dd"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGPIO.html#a80d11826f8f86ce37700fb5d36f2a4dd">ADCReadRaw</a> ()</td></tr>
+<tr class="memdesc:a80d11826f8f86ce37700fb5d36f2a4dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reading out the I2C interface at the current channel as a 16bit number.  <a href="classGPIO.html#a80d11826f8f86ce37700fb5d36f2a4dd">More...</a><br /></td></tr>
 <tr class="separator:a80d11826f8f86ce37700fb5d36f2a4dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d8164a9c9a3de3be43632cf99fb8db3"><td class="memItemLeft" align="right" valign="top"><a id="a3d8164a9c9a3de3be43632cf99fb8db3" name="a3d8164a9c9a3de3be43632cf99fb8db3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>FlushLoop</b> (std::atomic&lt; bool &gt; &amp;)</td></tr>
-<tr class="memdesc:a3d8164a9c9a3de3be43632cf99fb8db3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The main loop for flushing the readout results into the the buffer. Notice that the i2C readout will always be a single channel so the loop is responsible for iterating the readout channel. The loop is continuously run until the i2d_flush is set to false (when exiting the program or re-initializing the i2c interface.) <br /></td></tr>
+<tr class="memitem:a3d8164a9c9a3de3be43632cf99fb8db3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGPIO.html#a3d8164a9c9a3de3be43632cf99fb8db3">FlushLoop</a> (std::atomic&lt; bool &gt; &amp;)</td></tr>
+<tr class="memdesc:a3d8164a9c9a3de3be43632cf99fb8db3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The main loop for flushing the readout results into the the buffer.  <a href="classGPIO.html#a3d8164a9c9a3de3be43632cf99fb8db3">More...</a><br /></td></tr>
 <tr class="separator:a3d8164a9c9a3de3be43632cf99fb8db3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05bf2612de9065757b8ff822492fdb46"><td class="memItemLeft" align="right" valign="top"><a id="a05bf2612de9065757b8ff822492fdb46" name="a05bf2612de9065757b8ff822492fdb46"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>InitI2CFlush</b> ()</td></tr>
@@ -359,6 +357,59 @@ static std::unique_ptr&lt; <a class="el" href="classGPIO.html">GPIO</a> &gt;&#16
 <tr class="separator:a4b53f1d5ad0ab8f5b3d342435cbb0b02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a80d11826f8f86ce37700fb5d36f2a4dd" name="a80d11826f8f86ce37700fb5d36f2a4dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80d11826f8f86ce37700fb5d36f2a4dd">&#9670;&nbsp;</a></span>ADCReadRaw()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int16_t GPIO::ADCReadRaw </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Conversion is handled by the flushing loop. </p>
+
+</div>
+</div>
+<a id="a3d8164a9c9a3de3be43632cf99fb8db3" name="a3d8164a9c9a3de3be43632cf99fb8db3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d8164a9c9a3de3be43632cf99fb8db3">&#9670;&nbsp;</a></span>FlushLoop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GPIO::FlushLoop </td>
+          <td>(</td>
+          <td class="paramtype">std::atomic&lt; bool &gt; &amp;&#160;</td>
+          <td class="paramname"><em>i2d_flush</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Notice that the i2C readout will always be a single channel so the loop is responsible for iterating the readout channel. The loop is continuously run until the i2d_flush is set to false (when exiting the program or re-initializing the i2c interface.) </p>
+
+</div>
+</div>
 <a id="a5d7f8a9ae162449e53e0516d1df54bc4" name="a5d7f8a9ae162449e53e0516d1df54bc4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5d7f8a9ae162449e53e0516d1df54bc4">&#9670;&nbsp;</a></span>InitGPIOPin()</h2>
 
