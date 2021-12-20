@@ -77,10 +77,10 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classGCoder-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">GCoder Class Reference<div class="ingroups"><a class="el" href="group__hardware.html">Hardware Interface</a></div></div></div>
@@ -90,8 +90,55 @@ $(function() {
 <div class="textblock"><p >Handling the transmission of gcode commands used for motion control from raw gcode operations to user-ready, human-readable function with appropriate abstraction of command sequences and additional signal parsing between commands. The <a class="el" href="classGCoder.html" title="Handling the transmission of gcode motion commands.">GCoder</a> class is responsible for the transmission of instructions to the 3D-printer for motion control. The transmission in performed over USB using the UNIX termios interface. The full documentation could be found <a href="https://www.xanthium.in/Serial-Port-Programming-on-Linux">here</a>.</p>
 <p >The class also abstracts motion controls which may or may not involve many gcode commands into single functions with parameters which is simpler to call for end users. For the full list of available marlin-flavored gcode, see <a href="https://marlinfw.org/meta/gcode/">here</a>. Due to how communications is handled in the kernel, not all motions is abstractable in C++, with some needing to be handled at python level. Those will be high-lighted for in the various code segments. </p>
 </div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a9aa59bd0b7c0d926d0c911b0534be95e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#a9aa59bd0b7c0d926d0c911b0534be95e">Init</a> (const std::string &amp;dev)</td></tr>
+<tr class="memdesc:a9aa59bd0b7c0d926d0c911b0534be95e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializing the communications interface.  <a href="classGCoder.html#a9aa59bd0b7c0d926d0c911b0534be95e">More...</a><br /></td></tr>
+<tr class="separator:a9aa59bd0b7c0d926d0c911b0534be95e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8bfd6378e36fc3ddcb8e9b6e8dc87641"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#a8bfd6378e36fc3ddcb8e9b6e8dc87641">RunGcode</a> (const std::string &amp;gcode, const unsigned attempt=0, const unsigned waitack=1e4, const bool verbose=false) const</td></tr>
+<tr class="memdesc:a8bfd6378e36fc3ddcb8e9b6e8dc87641"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main function abstraction for sending a gcode command to the session.  <a href="classGCoder.html#a8bfd6378e36fc3ddcb8e9b6e8dc87641">More...</a><br /></td></tr>
+<tr class="separator:a8bfd6378e36fc3ddcb8e9b6e8dc87641"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d2308ca05f78f5d7a7d995d5d35c6bc"><td class="memItemLeft" align="right" valign="top"><a id="a4d2308ca05f78f5d7a7d995d5d35c6bc" name="a4d2308ca05f78f5d7a7d995d5d35c6bc"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>GetSettings</b> () const</td></tr>
+<tr class="memdesc:a4d2308ca05f78f5d7a7d995d5d35c6bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting a list of settings a the string reported by the gantry. <br /></td></tr>
+<tr class="separator:a4d2308ca05f78f5d7a7d995d5d35c6bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c45fc67887a3c799fcb38776ef10d36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#a9c45fc67887a3c799fcb38776ef10d36">SendHome</a> (bool x, bool y, bool z)</td></tr>
+<tr class="memdesc:a9c45fc67887a3c799fcb38776ef10d36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sending the gantry to home.  <a href="classGCoder.html#a9c45fc67887a3c799fcb38776ef10d36">More...</a><br /></td></tr>
+<tr class="separator:a9c45fc67887a3c799fcb38776ef10d36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f730927cf344cb4e42a2549e9604787"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#a0f730927cf344cb4e42a2549e9604787">EnableStepper</a> (bool x, bool y, bool z)</td></tr>
+<tr class="memdesc:a0f730927cf344cb4e42a2549e9604787"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enabling the stepper motors.  <a href="classGCoder.html#a0f730927cf344cb4e42a2549e9604787">More...</a><br /></td></tr>
+<tr class="separator:a0f730927cf344cb4e42a2549e9604787"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d3e4704be17c626698aebdb87761d7a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#a9d3e4704be17c626698aebdb87761d7a">DisableStepper</a> (bool x, bool y, bool z)</td></tr>
+<tr class="memdesc:a9d3e4704be17c626698aebdb87761d7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disabling the stepper motors.  <a href="classGCoder.html#a9d3e4704be17c626698aebdb87761d7a">More...</a><br /></td></tr>
+<tr class="separator:a9d3e4704be17c626698aebdb87761d7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f428ab205517a18865b4d40eac64688"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#a6f428ab205517a18865b4d40eac64688">InMotion</a> (float x, float y, float z)</td></tr>
+<tr class="memdesc:a6f428ab205517a18865b4d40eac64688"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checking whether the gantry has completed the motion to a set of coordinates.  <a href="classGCoder.html#a6f428ab205517a18865b4d40eac64688">More...</a><br /></td></tr>
+<tr class="separator:a6f428ab205517a18865b4d40eac64688"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5fd4da405a16c662eea1375e02ba4c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#ab5fd4da405a16c662eea1375e02ba4c7">SetSpeedLimit</a> (float x=std::nanf(&quot;&quot;), float y=std::nanf(&quot;&quot;), float z=std::nanf(&quot;&quot;))</td></tr>
+<tr class="memdesc:ab5fd4da405a16c662eea1375e02ba4c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the motion speed limit (in units of mm/s)  <a href="classGCoder.html#ab5fd4da405a16c662eea1375e02ba4c7">More...</a><br /></td></tr>
+<tr class="separator:ab5fd4da405a16c662eea1375e02ba4c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57e0ec622a84c08f0d236b58ae63f9e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#a57e0ec622a84c08f0d236b58ae63f9e8">MoveTo</a> (float x=std::nanf(&quot;&quot;), float y=std::nanf(&quot;&quot;), float z=std::nanf(&quot;&quot;), const bool verbose=false)</td></tr>
+<tr class="memdesc:a57e0ec622a84c08f0d236b58ae63f9e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple abstraction of the motion command to ensure motion safety.  <a href="classGCoder.html#a57e0ec622a84c08f0d236b58ae63f9e8">More...</a><br /></td></tr>
+<tr class="separator:a57e0ec622a84c08f0d236b58ae63f9e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec4a8271b868941912b138870f25da14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#aec4a8271b868941912b138870f25da14">MoveToRaw</a> (float x=std::nanf(&quot;&quot;), float y=std::nanf(&quot;&quot;), float z=std::nanf(&quot;&quot;), const bool verbose=false)</td></tr>
+<tr class="memdesc:aec4a8271b868941912b138870f25da14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sending the command for linear motion.  <a href="classGCoder.html#aec4a8271b868941912b138870f25da14">More...</a><br /></td></tr>
+<tr class="separator:aec4a8271b868941912b138870f25da14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:abbb97624e5b1748b3d5857ede48716d3"><td class="memItemLeft" align="right" valign="top"><a id="abbb97624e5b1748b3d5857ede48716d3" name="abbb97624e5b1748b3d5857ede48716d3"></a>
+static float&#160;</td><td class="memItemRight" valign="bottom"><b>max_x</b> ()</td></tr>
+<tr class="separator:abbb97624e5b1748b3d5857ede48716d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafff55b030593a9fc4017964dbd8b7a0"><td class="memItemLeft" align="right" valign="top"><a id="aafff55b030593a9fc4017964dbd8b7a0" name="aafff55b030593a9fc4017964dbd8b7a0"></a>
+static float&#160;</td><td class="memItemRight" valign="bottom"><b>max_y</b> ()</td></tr>
+<tr class="separator:aafff55b030593a9fc4017964dbd8b7a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a974d28cff1bb08261447c8771108a805"><td class="memItemLeft" align="right" valign="top"><a id="a974d28cff1bb08261447c8771108a805" name="a974d28cff1bb08261447c8771108a805"></a>
+static float&#160;</td><td class="memItemRight" valign="bottom"><b>max_z</b> ()</td></tr>
+<tr class="separator:a974d28cff1bb08261447c8771108a805"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad25591d06ba002a2a8513deb24f830f8"><td class="memItemLeft" align="right" valign="top"><a id="ad25591d06ba002a2a8513deb24f830f8" name="ad25591d06ba002a2a8513deb24f830f8"></a>
+static bool&#160;</td><td class="memItemRight" valign="bottom"><b>MatchCoord</b> (double x, double y)</td></tr>
+<tr class="memdesc:ad25591d06ba002a2a8513deb24f830f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple function to check if two coordinate values are identical, with the gantry resolution of 0.1 mm. <br /></td></tr>
+<tr class="separator:ad25591d06ba002a2a8513deb24f830f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf0c52a5b8afb508c0f6c1c2cd6d9545"><td class="memItemLeft" align="right" valign="top"><a id="abf0c52a5b8afb508c0f6c1c2cd6d9545" name="abf0c52a5b8afb508c0f6c1c2cd6d9545"></a>
 static <a class="el" href="classGCoder.html">GCoder</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>instance</b> ()</td></tr>
 <tr class="separator:abf0c52a5b8afb508c0f6c1c2cd6d9545"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,67 +179,8 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>vz</b></td></tr>
 <tr class="memitem:ac7341ee1195207149f271ac51ebb8ed5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#ac7341ee1195207149f271ac51ebb8ed5">dev_path</a></td></tr>
 <tr class="separator:ac7341ee1195207149f271ac51ebb8ed5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:a9aa59bd0b7c0d926d0c911b0534be95e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#a9aa59bd0b7c0d926d0c911b0534be95e">Init</a> (const std::string &amp;dev)</td></tr>
-<tr class="memdesc:a9aa59bd0b7c0d926d0c911b0534be95e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializing the communications interface.  <a href="classGCoder.html#a9aa59bd0b7c0d926d0c911b0534be95e">More...</a><br /></td></tr>
-<tr class="separator:a9aa59bd0b7c0d926d0c911b0534be95e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8bfd6378e36fc3ddcb8e9b6e8dc87641"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#a8bfd6378e36fc3ddcb8e9b6e8dc87641">RunGcode</a> (const std::string &amp;gcode, const unsigned attempt=0, const unsigned waitack=1e4, const bool verbose=false) const</td></tr>
-<tr class="memdesc:a8bfd6378e36fc3ddcb8e9b6e8dc87641"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main function abstraction for sending a gcode command to the session.  <a href="classGCoder.html#a8bfd6378e36fc3ddcb8e9b6e8dc87641">More...</a><br /></td></tr>
-<tr class="separator:a8bfd6378e36fc3ddcb8e9b6e8dc87641"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d2308ca05f78f5d7a7d995d5d35c6bc"><td class="memItemLeft" align="right" valign="top"><a id="a4d2308ca05f78f5d7a7d995d5d35c6bc" name="a4d2308ca05f78f5d7a7d995d5d35c6bc"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>GetSettings</b> () const</td></tr>
-<tr class="memdesc:a4d2308ca05f78f5d7a7d995d5d35c6bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting a list of settings a the string reported by the gantry. <br /></td></tr>
-<tr class="separator:a4d2308ca05f78f5d7a7d995d5d35c6bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c45fc67887a3c799fcb38776ef10d36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#a9c45fc67887a3c799fcb38776ef10d36">SendHome</a> (bool x, bool y, bool z)</td></tr>
-<tr class="memdesc:a9c45fc67887a3c799fcb38776ef10d36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sending the gantry to home.  <a href="classGCoder.html#a9c45fc67887a3c799fcb38776ef10d36">More...</a><br /></td></tr>
-<tr class="separator:a9c45fc67887a3c799fcb38776ef10d36"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f730927cf344cb4e42a2549e9604787"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#a0f730927cf344cb4e42a2549e9604787">EnableStepper</a> (bool x, bool y, bool z)</td></tr>
-<tr class="memdesc:a0f730927cf344cb4e42a2549e9604787"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enabling the stepper motors.  <a href="classGCoder.html#a0f730927cf344cb4e42a2549e9604787">More...</a><br /></td></tr>
-<tr class="separator:a0f730927cf344cb4e42a2549e9604787"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d3e4704be17c626698aebdb87761d7a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#a9d3e4704be17c626698aebdb87761d7a">DisableStepper</a> (bool x, bool y, bool z)</td></tr>
-<tr class="memdesc:a9d3e4704be17c626698aebdb87761d7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disabling the stepper motors.  <a href="classGCoder.html#a9d3e4704be17c626698aebdb87761d7a">More...</a><br /></td></tr>
-<tr class="separator:a9d3e4704be17c626698aebdb87761d7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f428ab205517a18865b4d40eac64688"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#a6f428ab205517a18865b4d40eac64688">InMotion</a> (float x, float y, float z)</td></tr>
-<tr class="memdesc:a6f428ab205517a18865b4d40eac64688"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checking whether the gantry has completed the motion to a set of coordinates.  <a href="classGCoder.html#a6f428ab205517a18865b4d40eac64688">More...</a><br /></td></tr>
-<tr class="separator:a6f428ab205517a18865b4d40eac64688"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5fd4da405a16c662eea1375e02ba4c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#ab5fd4da405a16c662eea1375e02ba4c7">SetSpeedLimit</a> (float x=std::nanf(&quot;&quot;), float y=std::nanf(&quot;&quot;), float z=std::nanf(&quot;&quot;))</td></tr>
-<tr class="memdesc:ab5fd4da405a16c662eea1375e02ba4c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the motion speed limit (in units of mm/s)  <a href="classGCoder.html#ab5fd4da405a16c662eea1375e02ba4c7">More...</a><br /></td></tr>
-<tr class="separator:ab5fd4da405a16c662eea1375e02ba4c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57e0ec622a84c08f0d236b58ae63f9e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#a57e0ec622a84c08f0d236b58ae63f9e8">MoveTo</a> (float x=std::nanf(&quot;&quot;), float y=std::nanf(&quot;&quot;), float z=std::nanf(&quot;&quot;), const bool verbose=false)</td></tr>
-<tr class="memdesc:a57e0ec622a84c08f0d236b58ae63f9e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple abstraction of the motion command to ensure motion safety.  <a href="classGCoder.html#a57e0ec622a84c08f0d236b58ae63f9e8">More...</a><br /></td></tr>
-<tr class="separator:a57e0ec622a84c08f0d236b58ae63f9e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec4a8271b868941912b138870f25da14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#aec4a8271b868941912b138870f25da14">MoveToRaw</a> (float x=std::nanf(&quot;&quot;), float y=std::nanf(&quot;&quot;), float z=std::nanf(&quot;&quot;), const bool verbose=false)</td></tr>
-<tr class="memdesc:aec4a8271b868941912b138870f25da14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sending the command for linear motion.  <a href="classGCoder.html#aec4a8271b868941912b138870f25da14">More...</a><br /></td></tr>
-<tr class="separator:aec4a8271b868941912b138870f25da14"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7da3d0b8ec103fe38f5170ccdb7c72f"><td class="memItemLeft" align="right" valign="top"><a id="ab7da3d0b8ec103fe38f5170ccdb7c72f" name="ab7da3d0b8ec103fe38f5170ccdb7c72f"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>GCoder</b> (const <a class="el" href="classGCoder.html">GCoder</a> &amp;)=delete</td></tr>
-<tr class="separator:ab7da3d0b8ec103fe38f5170ccdb7c72f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaca1e5b3036cf95c399eb1bd50560d60"><td class="memItemLeft" align="right" valign="top"><a id="aaca1e5b3036cf95c399eb1bd50560d60" name="aaca1e5b3036cf95c399eb1bd50560d60"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>GCoder</b> (const <a class="el" href="classGCoder.html">GCoder</a> &amp;&amp;)=delete</td></tr>
-<tr class="separator:aaca1e5b3036cf95c399eb1bd50560d60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
-Static Private Member Functions</h2></td></tr>
-<tr class="memitem:abbb97624e5b1748b3d5857ede48716d3"><td class="memItemLeft" align="right" valign="top"><a id="abbb97624e5b1748b3d5857ede48716d3" name="abbb97624e5b1748b3d5857ede48716d3"></a>
-static float&#160;</td><td class="memItemRight" valign="bottom"><b>max_x</b> ()</td></tr>
-<tr class="separator:abbb97624e5b1748b3d5857ede48716d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aafff55b030593a9fc4017964dbd8b7a0"><td class="memItemLeft" align="right" valign="top"><a id="aafff55b030593a9fc4017964dbd8b7a0" name="aafff55b030593a9fc4017964dbd8b7a0"></a>
-static float&#160;</td><td class="memItemRight" valign="bottom"><b>max_y</b> ()</td></tr>
-<tr class="separator:aafff55b030593a9fc4017964dbd8b7a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a974d28cff1bb08261447c8771108a805"><td class="memItemLeft" align="right" valign="top"><a id="a974d28cff1bb08261447c8771108a805" name="a974d28cff1bb08261447c8771108a805"></a>
-static float&#160;</td><td class="memItemRight" valign="bottom"><b>max_z</b> ()</td></tr>
-<tr class="separator:a974d28cff1bb08261447c8771108a805"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad25591d06ba002a2a8513deb24f830f8"><td class="memItemLeft" align="right" valign="top"><a id="ad25591d06ba002a2a8513deb24f830f8" name="ad25591d06ba002a2a8513deb24f830f8"></a>
-static bool&#160;</td><td class="memItemRight" valign="bottom"><b>MatchCoord</b> (double x, double y)</td></tr>
-<tr class="memdesc:ad25591d06ba002a2a8513deb24f830f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple function to check if two coordinate values are identical, with the gantry resolution of 0.1 mm. <br /></td></tr>
-<tr class="separator:ad25591d06ba002a2a8513deb24f830f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
-Static Private Attributes</h2></td></tr>
-<tr class="memitem:a2e796ec143cb8ce9dddfb52c958a1c81"><td class="memItemLeft" align="right" valign="top"><a id="a2e796ec143cb8ce9dddfb52c958a1c81" name="a2e796ec143cb8ce9dddfb52c958a1c81"></a>
-static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_instance</b> = nullptr</td></tr>
-<tr class="separator:a2e796ec143cb8ce9dddfb52c958a1c81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:af29459e06c2ad3fba98a23aeae568663"><td class="memItemLeft" align="right" valign="top">static const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#af29459e06c2ad3fba98a23aeae568663">_max_x</a> = 345</td></tr>
 <tr class="memdesc:af29459e06c2ad3fba98a23aeae568663"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hard limit coordinates for gantry motion.  <a href="classGCoder.html#af29459e06c2ad3fba98a23aeae568663">More...</a><br /></td></tr>
@@ -203,6 +191,21 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
 <tr class="memitem:a477dd0481d4241fe57f9a93170bb06cd"><td class="memItemLeft" align="right" valign="top">static const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#a477dd0481d4241fe57f9a93170bb06cd">_max_z</a> = 460</td></tr>
 <tr class="memdesc:a477dd0481d4241fe57f9a93170bb06cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hard limit coordinates for gantry motion.  <a href="classGCoder.html#a477dd0481d4241fe57f9a93170bb06cd">More...</a><br /></td></tr>
 <tr class="separator:a477dd0481d4241fe57f9a93170bb06cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:ab7da3d0b8ec103fe38f5170ccdb7c72f"><td class="memItemLeft" align="right" valign="top"><a id="ab7da3d0b8ec103fe38f5170ccdb7c72f" name="ab7da3d0b8ec103fe38f5170ccdb7c72f"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>GCoder</b> (const <a class="el" href="classGCoder.html">GCoder</a> &amp;)=delete</td></tr>
+<tr class="separator:ab7da3d0b8ec103fe38f5170ccdb7c72f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaca1e5b3036cf95c399eb1bd50560d60"><td class="memItemLeft" align="right" valign="top"><a id="aaca1e5b3036cf95c399eb1bd50560d60" name="aaca1e5b3036cf95c399eb1bd50560d60"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>GCoder</b> (const <a class="el" href="classGCoder.html">GCoder</a> &amp;&amp;)=delete</td></tr>
+<tr class="separator:aaca1e5b3036cf95c399eb1bd50560d60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a2e796ec143cb8ce9dddfb52c958a1c81"><td class="memItemLeft" align="right" valign="top"><a id="a2e796ec143cb8ce9dddfb52c958a1c81" name="a2e796ec143cb8ce9dddfb52c958a1c81"></a>
+static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_instance</b> = nullptr</td></tr>
+<tr class="separator:a2e796ec143cb8ce9dddfb52c958a1c81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a9d3e4704be17c626698aebdb87761d7a" name="a9d3e4704be17c626698aebdb87761d7a"></a>
@@ -210,9 +213,6 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void GCoder::DisableStepper </td>
@@ -238,11 +238,6 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 <p >The power supply of the gantry is rather noisy, causing issues with the readout system. Disabling the stepper closes the relevant power supplies while the gantry still remembers where it is, at the cost of less stability of the gantry position. Python will be handling for disabling the stepper motors when readout systems are invoked. </p>
 
@@ -253,9 +248,6 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void GCoder::EnableStepper </td>
@@ -281,11 +273,6 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 <p >This should be used after the readout has been completed. </p>
 
@@ -296,9 +283,6 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void GCoder::Init </td>
@@ -308,11 +292,6 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 <p >Low level instructions in the termios interface for setting up the read speed and mode for the communicating with the printer over USB. This part of the code currently considered black-magicm as most of the statements are copy from <a href="https://www.xanthium.in/Serial-Port-Programming-on-Linux">here</a>, so do not edit statements containing the tty container unless you are absolutely sure about what you are doing.</p>
 <p >After initialization, the printer will always perform these 3 steps:</p><ul>
@@ -328,9 +307,6 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool GCoder::InMotion </td>
@@ -356,11 +332,6 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 <p >The file description interface used for communicating with the gantry does not play well with other interfaces when used as a continuous stream. So rather than having the file interface suspend the thread while the gantry is in motion, we opt to have the gantry perfrom simple one-off checks, and have thread suspension be handled by the higher interfaces.</p>
 <p >The function will only return false (gantry has completed motion) if the following condition is fulfilled:</p><ul>
@@ -377,9 +348,6 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void GCoder::MoveTo </td>
@@ -411,11 +379,6 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 <p >This motion command keeps the z coordinates above 3mm for as much as the motion duration as possible. This help ensures that elements in the gantry head does not impact the platten or the circuit board. </p>
 
@@ -426,9 +389,6 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void GCoder::MoveToRaw </td>
@@ -460,11 +420,6 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 <p >This is a very simple interface for the linear motion G0 command, here we will do very minimal parsing on the coordinates:</p>
 <ul>
@@ -480,9 +435,6 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::string GCoder::RunGcode </td>
@@ -514,11 +466,6 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
           <td></td><td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 <p >As a standard in this program, all gcode command string should end in a newline character. This function will parse the gcode string to the printer via the defined interface, and pass the return string of the printer as the return value. Notice that the function will check the return string for the acknowledgement string ("ok" at the start of a line) to know that the command has been executed by the printer. If this acknowledgement string is not received after a wait period, then the command is tried again up to 10 times.</p>
 <p >Notice that exactly when the acknowledgement string is reported will depend on the gcode command in question, and so later functions of abstracting gcode commands should be responsible for choosing an appropriate timeout duration to reduce multiple function calls. </p>
@@ -530,9 +477,6 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void GCoder::SendHome </td>
@@ -558,11 +502,6 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 <p >The gcode command G28 can have each of the axis sent reset for the axis. This also wipes the current stored axis coordinates to 0 </p>
 
@@ -573,9 +512,6 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void GCoder::SetSpeedLimit </td>
@@ -601,11 +537,6 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 <p >There are two steps to setting the motion speeds:</p><ol type="1">
 <li>Setting the maximum feedrate (M203)</li>
@@ -635,7 +566,7 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -658,7 +589,7 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -681,7 +612,7 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
