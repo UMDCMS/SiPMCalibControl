@@ -11,9 +11,10 @@ var searchData=
   ['makeresult_8',['MakeResult',['../classVisual.html#a067821b0c0b442f442757059365a74de',1,'Visual']]],
   ['matchcoord_9',['MatchCoord',['../classGCoder.html#ad25591d06ba002a2a8513deb24f830f8',1,'GCoder']]],
   ['mode_10',['Mode',['../classctlcmd_1_1cmdbase_1_1readoutcmd_1_1Mode.html',1,'ctlcmd::cmdbase::readoutcmd']]],
-  ['move_5fgantry_11',['move_gantry',['../classctlcmd_1_1cmdbase_1_1controlcmd.html#a74703b72742aa4d52ee94514a169a47b',1,'ctlcmd::cmdbase::controlcmd']]],
-  ['movespeed_12',['movespeed',['../classctlcmd_1_1motioncmd_1_1movespeed.html',1,'ctlcmd::motioncmd']]],
-  ['moveto_13',['moveto',['../classctlcmd_1_1motioncmd_1_1moveto.html',1,'ctlcmd::motioncmd']]],
-  ['moveto_14',['MoveTo',['../classGCoder.html#a57e0ec622a84c08f0d236b58ae63f9e8',1,'GCoder']]],
-  ['movetoraw_15',['MoveToRaw',['../classGCoder.html#aec4a8271b868941912b138870f25da14',1,'GCoder']]]
+  ['modifytargetcoordinate_11',['ModifyTargetCoordinate',['../classGCoder.html#a0fadfd83acbbe109079586b0448b6ebb',1,'GCoder']]],
+  ['move_5fgantry_12',['move_gantry',['../classctlcmd_1_1cmdbase_1_1controlcmd.html#a74703b72742aa4d52ee94514a169a47b',1,'ctlcmd::cmdbase::controlcmd']]],
+  ['movespeed_13',['movespeed',['../classctlcmd_1_1motioncmd_1_1movespeed.html',1,'ctlcmd::motioncmd']]],
+  ['moveto_14',['moveto',['../classctlcmd_1_1motioncmd_1_1moveto.html',1,'ctlcmd::motioncmd']]],
+  ['moveto_15',['MoveTo',['../classGCoder.html#a57e0ec622a84c08f0d236b58ae63f9e8',1,'GCoder']]],
+  ['movetoraw_16',['MoveToRaw',['../classGCoder.html#aec4a8271b868941912b138870f25da14',1,'GCoder']]]
 ];

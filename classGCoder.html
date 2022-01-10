@@ -139,6 +139,9 @@ static float&#160;</td><td class="memItemRight" valign="bottom"><b>max_z</b> ()<
 static bool&#160;</td><td class="memItemRight" valign="bottom"><b>MatchCoord</b> (double x, double y)</td></tr>
 <tr class="memdesc:ad25591d06ba002a2a8513deb24f830f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple function to check if two coordinate values are identical, with the gantry resolution of 0.1 mm. <br /></td></tr>
 <tr class="separator:ad25591d06ba002a2a8513deb24f830f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fadfd83acbbe109079586b0448b6ebb"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#a0fadfd83acbbe109079586b0448b6ebb">ModifyTargetCoordinate</a> (double orig, const double max, const bool verbose=false)</td></tr>
+<tr class="memdesc:a0fadfd83acbbe109079586b0448b6ebb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modifying the orignal target cooridnate to somewhere that can be accessed by the gantry.  <a href="classGCoder.html#a0fadfd83acbbe109079586b0448b6ebb">More...</a><br /></td></tr>
+<tr class="separator:a0fadfd83acbbe109079586b0448b6ebb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf0c52a5b8afb508c0f6c1c2cd6d9545"><td class="memItemLeft" align="right" valign="top"><a id="abf0c52a5b8afb508c0f6c1c2cd6d9545" name="abf0c52a5b8afb508c0f6c1c2cd6d9545"></a>
 static <a class="el" href="classGCoder.html">GCoder</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>instance</b> ()</td></tr>
 <tr class="separator:abf0c52a5b8afb508c0f6c1c2cd6d9545"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -340,6 +343,54 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
 <li>The target coordinates and the current coordinates match to within 0.1(mm)</li>
 </ul>
 <p >Anything else and the function will return True. Regardless of whether the function returns true or false, the results of the M114 command will be used to update the current gantry coordinates. </p>
+
+</div>
+</div>
+<a id="a0fadfd83acbbe109079586b0448b6ebb" name="a0fadfd83acbbe109079586b0448b6ebb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fadfd83acbbe109079586b0448b6ebb">&#9670;&nbsp;</a></span>ModifyTargetCoordinate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double GCoder::ModifyTargetCoordinate </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>orig</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>max_value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>verbose</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Original given some original coodinate value, we return a modified target cooridnate such that:</p><ul>
+<li>the return value is always larger than the minimum value 0.1</li>
+<li>The return value is always smaller than the given maximum value.</li>
+<li>The return value is rounded to the closest 0.1 decimal place.</li>
+</ul>
+<p >This ensure that given any input coordinate. the target coordinate will always be some value that the physically safe target for the gantry. If the target value is modified in any way other than simple rounding, then an error message will be displayed to ensure notify the user of these modifications. </p>
 
 </div>
 </div>
