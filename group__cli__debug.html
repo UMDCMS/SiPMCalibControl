@@ -82,7 +82,13 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<table class="memberdecls">
+<p >Below are a set of commands either for miscellaneous testing or debugging the calibration system. Notice that for most analysis related work, the "bug" would usually be a wrong setting in the physical cabling, or in the readout settings. Be sure to check the commands related to configuring the <a class="el" href="group__cli2__readout.html">readout</a> before resorting to these commands. As these commands have fewer fail-safes and can physically damage the system is used improperly, only use the command listed here if you both:</p>
+<ul>
+<li>Know exactly what the command you are running will do</li>
+<li>Have been requested to do so by a core developer.</li>
+</ul>
+<hr  />
+ <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1motioncmd_1_1rungcode.html">ctlcmd.motioncmd.rungcode</a></td></tr>
@@ -101,7 +107,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manual re-enabling of stepper motor.  <a href="classctlcmd_1_1motioncmd_1_1enablestepper.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1motioncmd_1_1sendhome.html">ctlcmd.motioncmd.sendhome</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sending the gantry system home.  <a href="classctlcmd_1_1motioncmd_1_1sendhome.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sending the gantry system home and reset in the internal coordinate.  <a href="classctlcmd_1_1motioncmd_1_1sendhome.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1motioncmd_1_1movespeed.html">ctlcmd.motioncmd.movespeed</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the motion speed of the gantry x-y-z motors.  <a href="classctlcmd_1_1motioncmd_1_1movespeed.html#details">More...</a><br /></td></tr>

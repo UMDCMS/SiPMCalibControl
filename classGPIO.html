@@ -85,32 +85,37 @@ $(function() {
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classGPIO-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">GPIO Class Reference</div></div>
+  <div class="headertitle"><div class="title">GPIO Class Reference<div class="ingroups"><a class="el" href="group__hardware.html">Hardware Interface</a></div></div></div>
 </div><!--header-->
 <div class="contents">
-<table class="memberdecls">
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >To reduce the number of external dependencies, we will be using the UNIX <code>/sys</code> interface for direct access of the underlying system, which allows for fast (microsecond level) timing precision, while still given decent levels of human-readable interface abstraction. This will mean that the additional system permission will need to be setup manually, rather than through the packages. System permission for installation on calibration hardware are kept in the <code>/external/rules</code> directory. See the install instructions to learn more about how the permission need to be setup.</p>
+<p >Three sub-interfaces are implemented in this file:</p><ul>
+<li>A direct <a class="el" href="classGPIO.html" title="Interface to the GPIO hardware interfaces.">GPIO</a> interface for simple 1/0 outputs, such as for the trigger and sub-system switches.</li>
+<li>The PWM system for the systems voltage control.</li>
+<li>The I2C interface used to handle a 16bit ADC converter for DC readout. This is mainly used to monitor the system sensors like temperature and voltage drifts. To avoid overhead of acquiring ADC readout (which is one of the slowest interfaces of the control system), once the I2C interface is initialized, the readout is continuously flushed to a buffer in a separate thread, and retrieved whenever requested.</li>
+</ul>
+<p >The <a class="el" href="classGPIO.html" title="Interface to the GPIO hardware interfaces.">GPIO</a> class will assume that all systems are present, if any one system fails, then all interfaces should be shutdown. This is by design, as adjusting GPIO/PWM settings on typical laptops and desktops is dangerous and can potentially break the machine. The user will need to be very explicit about hardware permission settings to be able to execute these routines.</p>
+<p >To ensure that the gantry control program is the only process on the system that is using the control pins, all file descriptors will be locked on opening. If anything fails to be locked uniquely to the control program instance, then an exceptions is raised.</p>
+<p >Physical Pin locations:</p><ul>
+<li>PWM Channel 0 is Physical PIN 12 (BWM pin 1/ALT5 mode in <code>gpio readall</code></li>
+<li>PWM Channel 1 is Physical PIN 35 (BWM pin 24/ALT5 mode in <code>gpio readall</code>)</li>
+</ul>
+<p >List of references:</p><ul>
+<li>General purpose input/ouput manipulation using <code>/sysfs</code>: [here][gpiosys]</li>
+<li>PWM manipulation (command-line piping): [here][pwmsys]</li>
+<li>I2C interface ofr ADS1115 ADC [here][adcsys]</li>
+</ul>
+<p >[adcsys]: <a href="http://www.bristolwatch.com/rpi/ads1115.html">http://www.bristolwatch.com/rpi/ads1115.html</a> [gpiosys]: <a href="https://www.ics.com/blog/gpio-programming-using-sysfs-interface">https://www.ics.com/blog/gpio-programming-using-sysfs-interface</a> [pwmsys]: <a href="https://jumpnowtek.com/rpi/Using-the-Raspberry-Pi-Hardware-PWM-timers.html">https://jumpnowtek.com/rpi/Using-the-Raspberry-Pi-Hardware-PWM-timers.html</a> </p>
+</div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2b6d306a5a435d155d5aca130894710e"><td class="memItemLeft" align="right" valign="top"><a id="a2b6d306a5a435d155d5aca130894710e" name="a2b6d306a5a435d155d5aca130894710e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Init</b> ()</td></tr>
+<tr class="memitem:a2b6d306a5a435d155d5aca130894710e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGPIO.html#a2b6d306a5a435d155d5aca130894710e">Init</a> ()</td></tr>
+<tr class="memdesc:a2b6d306a5a435d155d5aca130894710e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interface initialization.  <a href="classGPIO.html#a2b6d306a5a435d155d5aca130894710e">More...</a><br /></td></tr>
 <tr class="separator:a2b6d306a5a435d155d5aca130894710e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe81fd1d9fdfd6418d239e8074e10976"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGPIO.html#afe81fd1d9fdfd6418d239e8074e10976">Pulse</a> (const unsigned n, const unsigned wait) const</td></tr>
 <tr class="memdesc:afe81fd1d9fdfd6418d239e8074e10976"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generating N pulses with some time in between pulses.  <a href="classGPIO.html#afe81fd1d9fdfd6418d239e8074e10976">More...</a><br /></td></tr>
 <tr class="separator:afe81fd1d9fdfd6418d239e8074e10976"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98e4005a7a71c97e7b0f395db0c1dec5"><td class="memItemLeft" align="right" valign="top"><a id="a98e4005a7a71c97e7b0f395db0c1dec5" name="a98e4005a7a71c97e7b0f395db0c1dec5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>LightsOn</b> () const</td></tr>
-<tr class="memdesc:a98e4005a7a71c97e7b0f395db0c1dec5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple function for turning on and off the light pin. <br /></td></tr>
-<tr class="separator:a98e4005a7a71c97e7b0f395db0c1dec5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75176b22349f882963287a792ab40f56"><td class="memItemLeft" align="right" valign="top"><a id="a75176b22349f882963287a792ab40f56" name="a75176b22349f882963287a792ab40f56"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>LightsOff</b> () const</td></tr>
-<tr class="separator:a75176b22349f882963287a792ab40f56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acde60d4402d6434fd2e4dc4a1e1d42a1"><td class="memItemLeft" align="right" valign="top"><a id="acde60d4402d6434fd2e4dc4a1e1d42a1" name="acde60d4402d6434fd2e4dc4a1e1d42a1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SpareOn</b> () const</td></tr>
-<tr class="memdesc:acde60d4402d6434fd2e4dc4a1e1d42a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple function for turning on and off the spare pin. <br /></td></tr>
-<tr class="separator:acde60d4402d6434fd2e4dc4a1e1d42a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e1d68f533951266ab08897fcfd96ccf"><td class="memItemLeft" align="right" valign="top"><a id="a3e1d68f533951266ab08897fcfd96ccf" name="a3e1d68f533951266ab08897fcfd96ccf"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SpareOff</b> () const</td></tr>
-<tr class="separator:a3e1d68f533951266ab08897fcfd96ccf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afbd2bc165b298f8517a29337d4912c40"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGPIO.html#afbd2bc165b298f8517a29337d4912c40">SetPWM</a> (const unsigned channel, const double duty_cycle, const double frequency)</td></tr>
 <tr class="memdesc:afbd2bc165b298f8517a29337d4912c40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the PWM channel to a specific duty cycle and operation frequency.  <a href="classGPIO.html#afbd2bc165b298f8517a29337d4912c40">More...</a><br /></td></tr>
 <tr class="separator:afbd2bc165b298f8517a29337d4912c40"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -118,12 +123,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>SpareOff</b> () const
 float&#160;</td><td class="memItemRight" valign="bottom"><b>GetPWM</b> (unsigned channel)</td></tr>
 <tr class="memdesc:a4d255cb6f5d4e0e71d79fb5d2df45160"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reading out the duty cycle for a given channel. <br /></td></tr>
 <tr class="separator:a4d255cb6f5d4e0e71d79fb5d2df45160"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86b12d8835610f9e61b0cb187d2c19f0"><td class="memItemLeft" align="right" valign="top"><a id="a86b12d8835610f9e61b0cb187d2c19f0" name="a86b12d8835610f9e61b0cb187d2c19f0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetADCRange</b> (const int)</td></tr>
-<tr class="separator:a86b12d8835610f9e61b0cb187d2c19f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac033f6b96d0a3732f57336c8491da14e"><td class="memItemLeft" align="right" valign="top"><a id="ac033f6b96d0a3732f57336c8491da14e" name="ac033f6b96d0a3732f57336c8491da14e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetADCRate</b> (const int)</td></tr>
-<tr class="separator:ac033f6b96d0a3732f57336c8491da14e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46c2f4e34f98d2911bb70b4621cec641"><td class="memItemLeft" align="right" valign="top"><a id="a46c2f4e34f98d2911bb70b4621cec641" name="a46c2f4e34f98d2911bb70b4621cec641"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>ReadADC</b> (const unsigned channel) const</td></tr>
 <tr class="memdesc:a46c2f4e34f98d2911bb70b4621cec641"><td class="mdescLeft">&#160;</td><td class="mdescRight">High level function for reading the latest i2c readout voltage of a given channel in mV. <br /></td></tr>
@@ -139,7 +138,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>SetReferenceVoltage</
 <tr class="memdesc:acf34da61c5ba82757da46e59928fb093"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reference voltage (in mV) for the voltage readout conversion. <br /></td></tr>
 <tr class="separator:acf34da61c5ba82757da46e59928fb093"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a445d809b13900d4a720d8237931faaf8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGPIO.html#a445d809b13900d4a720d8237931faaf8">StatusGPIO</a> () const</td></tr>
-<tr class="memdesc:a445d809b13900d4a720d8237931faaf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checking that the 3 specified <a class="el" href="classGPIO.html">GPIO</a> PINs are available.  <a href="classGPIO.html#a445d809b13900d4a720d8237931faaf8">More...</a><br /></td></tr>
+<tr class="memdesc:a445d809b13900d4a720d8237931faaf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checking that the 3 specified <a class="el" href="classGPIO.html" title="Interface to the GPIO hardware interfaces.">GPIO</a> PINs are available.  <a href="classGPIO.html#a445d809b13900d4a720d8237931faaf8">More...</a><br /></td></tr>
 <tr class="separator:a445d809b13900d4a720d8237931faaf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89896d995de3665ef7c8f113a210b33b"><td class="memItemLeft" align="right" valign="top"><a id="a89896d995de3665ef7c8f113a210b33b" name="a89896d995de3665ef7c8f113a210b33b"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>StatusADC</b> () const</td></tr>
@@ -153,6 +152,24 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>StatusPWM</b> () cons
 &#160;</td><td class="memItemRight" valign="bottom"><b>~GPIO</b> ()</td></tr>
 <tr class="memdesc:ae8205f95f108a15a612485b6358031a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verbose closing interface to make sure all interfaces has closed properly. <br /></td></tr>
 <tr class="separator:ae8205f95f108a15a612485b6358031a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:a98e4005a7a71c97e7b0f395db0c1dec5"><td class="memItemLeft" align="right" valign="top"><a id="a98e4005a7a71c97e7b0f395db0c1dec5" name="a98e4005a7a71c97e7b0f395db0c1dec5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>LightsOn</b> () const</td></tr>
+<tr class="memdesc:a98e4005a7a71c97e7b0f395db0c1dec5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple function for turning on and off the light pin. <br /></td></tr>
+<tr class="separator:a98e4005a7a71c97e7b0f395db0c1dec5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75176b22349f882963287a792ab40f56"><td class="memItemLeft" align="right" valign="top"><a id="a75176b22349f882963287a792ab40f56" name="a75176b22349f882963287a792ab40f56"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>LightsOff</b> () const</td></tr>
+<tr class="memdesc:a75176b22349f882963287a792ab40f56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple function for turning on and off the light pin. <br /></td></tr>
+<tr class="separator:a75176b22349f882963287a792ab40f56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:acde60d4402d6434fd2e4dc4a1e1d42a1"><td class="memItemLeft" align="right" valign="top"><a id="acde60d4402d6434fd2e4dc4a1e1d42a1" name="acde60d4402d6434fd2e4dc4a1e1d42a1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>SpareOn</b> () const</td></tr>
+<tr class="memdesc:acde60d4402d6434fd2e4dc4a1e1d42a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple function for turning on and off the spare pin. <br /></td></tr>
+<tr class="separator:acde60d4402d6434fd2e4dc4a1e1d42a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e1d68f533951266ab08897fcfd96ccf"><td class="memItemLeft" align="right" valign="top"><a id="a3e1d68f533951266ab08897fcfd96ccf" name="a3e1d68f533951266ab08897fcfd96ccf"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>SpareOff</b> () const</td></tr>
+<tr class="memdesc:a3e1d68f533951266ab08897fcfd96ccf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple function for turning on and off the spare pin. <br /></td></tr>
+<tr class="separator:a3e1d68f533951266ab08897fcfd96ccf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -198,63 +215,73 @@ static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>IO_FA
 <tr class="memitem:aa7527e236966fe43fa1d2ce0ffe64a12"><td class="memItemLeft" align="right" valign="top"><a id="aa7527e236966fe43fa1d2ce0ffe64a12" name="aa7527e236966fe43fa1d2ce0ffe64a12"></a>
 static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>NORMAL_PTR</b> = 0</td></tr>
 <tr class="separator:aa7527e236966fe43fa1d2ce0ffe64a12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:afb6f8fb83763c47f51593df798e7e87e"><td class="memItemLeft" align="right" valign="top"><a id="afb6f8fb83763c47f51593df798e7e87e" name="afb6f8fb83763c47f51593df798e7e87e"></a>
 static const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>ADS_RANGE_6V</b> = 0x0</td></tr>
+<tr class="memdesc:afb6f8fb83763c47f51593df798e7e87e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static variables for setting to the ADC configurations. <br /></td></tr>
 <tr class="separator:afb6f8fb83763c47f51593df798e7e87e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70fbe4eb106e83561ae0559d8e7ea638"><td class="memItemLeft" align="right" valign="top"><a id="a70fbe4eb106e83561ae0559d8e7ea638" name="a70fbe4eb106e83561ae0559d8e7ea638"></a>
 static const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>ADS_RANGE_4V</b> = 0x1</td></tr>
+<tr class="memdesc:a70fbe4eb106e83561ae0559d8e7ea638"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static variables for setting to the ADC configurations. <br /></td></tr>
 <tr class="separator:a70fbe4eb106e83561ae0559d8e7ea638"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0954ddac6da6ced4943543ca9e50cc8d"><td class="memItemLeft" align="right" valign="top"><a id="a0954ddac6da6ced4943543ca9e50cc8d" name="a0954ddac6da6ced4943543ca9e50cc8d"></a>
 static const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>ADS_RANGE_2V</b> = 0x2</td></tr>
+<tr class="memdesc:a0954ddac6da6ced4943543ca9e50cc8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static variables for setting to the ADC configurations. <br /></td></tr>
 <tr class="separator:a0954ddac6da6ced4943543ca9e50cc8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab03317eb8cbc3b885a295455651b893"><td class="memItemLeft" align="right" valign="top"><a id="aab03317eb8cbc3b885a295455651b893" name="aab03317eb8cbc3b885a295455651b893"></a>
 static const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>ADS_RANGE_1V</b> = 0x3</td></tr>
+<tr class="memdesc:aab03317eb8cbc3b885a295455651b893"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static variables for setting to the ADC configurations. <br /></td></tr>
 <tr class="separator:aab03317eb8cbc3b885a295455651b893"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12cd16847c155460e8c862fd3b546121"><td class="memItemLeft" align="right" valign="top"><a id="a12cd16847c155460e8c862fd3b546121" name="a12cd16847c155460e8c862fd3b546121"></a>
 static const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>ADS_RANGE_p5V</b> = 0x4</td></tr>
+<tr class="memdesc:a12cd16847c155460e8c862fd3b546121"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static variables for setting to the ADC configurations. <br /></td></tr>
 <tr class="separator:a12cd16847c155460e8c862fd3b546121"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a84a118adbb7cef01d840ed8a2962ecd7"><td class="memItemLeft" align="right" valign="top"><a id="a84a118adbb7cef01d840ed8a2962ecd7" name="a84a118adbb7cef01d840ed8a2962ecd7"></a>
 static const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>ADS_RANGE_p25V</b> = 0x5</td></tr>
+<tr class="memdesc:a84a118adbb7cef01d840ed8a2962ecd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static variables for setting to the ADC configurations. <br /></td></tr>
 <tr class="separator:a84a118adbb7cef01d840ed8a2962ecd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeae2d55d5b680be73f69133c9f800822"><td class="memItemLeft" align="right" valign="top"><a id="aeae2d55d5b680be73f69133c9f800822" name="aeae2d55d5b680be73f69133c9f800822"></a>
 static const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>ADS_RATE_8SPS</b> = 0x0</td></tr>
+<tr class="memdesc:aeae2d55d5b680be73f69133c9f800822"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static variables for setting to the ADC configurations. <br /></td></tr>
 <tr class="separator:aeae2d55d5b680be73f69133c9f800822"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0a9601dd9114c1eb6db7aa53ff16d5f"><td class="memItemLeft" align="right" valign="top"><a id="aa0a9601dd9114c1eb6db7aa53ff16d5f" name="aa0a9601dd9114c1eb6db7aa53ff16d5f"></a>
 static const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>ADS_RATE_16SPS</b> = 0x1</td></tr>
+<tr class="memdesc:aa0a9601dd9114c1eb6db7aa53ff16d5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static variables for setting to the ADC configurations. <br /></td></tr>
 <tr class="separator:aa0a9601dd9114c1eb6db7aa53ff16d5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72867dfafa790105580e0e1759a4802f"><td class="memItemLeft" align="right" valign="top"><a id="a72867dfafa790105580e0e1759a4802f" name="a72867dfafa790105580e0e1759a4802f"></a>
 static const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>ADS_RATE_32SPS</b> = 0x2</td></tr>
+<tr class="memdesc:a72867dfafa790105580e0e1759a4802f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static variables for setting to the ADC configurations. <br /></td></tr>
 <tr class="separator:a72867dfafa790105580e0e1759a4802f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6cb24d18c02a2efe606a244e983bc0ae"><td class="memItemLeft" align="right" valign="top"><a id="a6cb24d18c02a2efe606a244e983bc0ae" name="a6cb24d18c02a2efe606a244e983bc0ae"></a>
 static const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>ADS_RATE_64SPS</b> = 0x3</td></tr>
+<tr class="memdesc:a6cb24d18c02a2efe606a244e983bc0ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static variables for setting to the ADC configurations. <br /></td></tr>
 <tr class="separator:a6cb24d18c02a2efe606a244e983bc0ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeff2778f5deb709f178b57e393cb4bc0"><td class="memItemLeft" align="right" valign="top"><a id="aeff2778f5deb709f178b57e393cb4bc0" name="aeff2778f5deb709f178b57e393cb4bc0"></a>
 static const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>ADS_RATE_128SPS</b> = 0x4</td></tr>
+<tr class="memdesc:aeff2778f5deb709f178b57e393cb4bc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static variables for setting to the ADC configurations. <br /></td></tr>
 <tr class="separator:aeff2778f5deb709f178b57e393cb4bc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a616f7e0d2f5ec7c3a59066408e0092d1"><td class="memItemLeft" align="right" valign="top"><a id="a616f7e0d2f5ec7c3a59066408e0092d1" name="a616f7e0d2f5ec7c3a59066408e0092d1"></a>
 static const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>ADS_RATE_250SPS</b> = 0x5</td></tr>
+<tr class="memdesc:a616f7e0d2f5ec7c3a59066408e0092d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static variables for setting to the ADC configurations. <br /></td></tr>
 <tr class="separator:a616f7e0d2f5ec7c3a59066408e0092d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbee5f1eb695b36aed3ca8b14eacd69b"><td class="memItemLeft" align="right" valign="top"><a id="adbee5f1eb695b36aed3ca8b14eacd69b" name="adbee5f1eb695b36aed3ca8b14eacd69b"></a>
 static const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>ADS_RATE_475SPS</b> = 0x6</td></tr>
+<tr class="memdesc:adbee5f1eb695b36aed3ca8b14eacd69b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static variables for setting to the ADC configurations. <br /></td></tr>
 <tr class="separator:adbee5f1eb695b36aed3ca8b14eacd69b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7878f8b74cc20c016adfed00f4b92fe7"><td class="memItemLeft" align="right" valign="top"><a id="a7878f8b74cc20c016adfed00f4b92fe7" name="a7878f8b74cc20c016adfed00f4b92fe7"></a>
 static const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>ADS_RATE_860SPS</b> = 0x7</td></tr>
+<tr class="memdesc:a7878f8b74cc20c016adfed00f4b92fe7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static variables for setting to the ADC configurations. <br /></td></tr>
 <tr class="separator:a7878f8b74cc20c016adfed00f4b92fe7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a6f564598e619a86eefed667adacc296d"><td class="memItemLeft" align="right" valign="top"><a id="a6f564598e619a86eefed667adacc296d" name="a6f564598e619a86eefed667adacc296d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>InitPWM</b> ()</td></tr>
-<tr class="memdesc:a6f564598e619a86eefed667adacc296d"><td class="mdescLeft">&#160;</td><td class="mdescRight">As the pwmchip is at a fixed location, no input is needed for initialization. <br /></td></tr>
+<tr class="memitem:a6f564598e619a86eefed667adacc296d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGPIO.html#a6f564598e619a86eefed667adacc296d">InitPWM</a> ()</td></tr>
+<tr class="memdesc:a6f564598e619a86eefed667adacc296d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opening the file descriptors for PWM manipulation.  <a href="classGPIO.html#a6f564598e619a86eefed667adacc296d">More...</a><br /></td></tr>
 <tr class="separator:a6f564598e619a86eefed667adacc296d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a210910729b028bf8f77a70f968bd7c3e"><td class="memItemLeft" align="right" valign="top"><a id="a210910729b028bf8f77a70f968bd7c3e" name="a210910729b028bf8f77a70f968bd7c3e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ClosePWM</b> ()</td></tr>
 <tr class="memdesc:a210910729b028bf8f77a70f968bd7c3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Closing the PWM interface. Important for restarts. <br /></td></tr>
 <tr class="separator:a210910729b028bf8f77a70f968bd7c3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac752b6b7512f39230cde2fb04901ed26"><td class="memItemLeft" align="right" valign="top"><a id="ac752b6b7512f39230cde2fb04901ed26" name="ac752b6b7512f39230cde2fb04901ed26"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>PushADCSetting</b> ()</td></tr>
-<tr class="memdesc:ac752b6b7512f39230cde2fb04901ed26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writing the configuration settings to the I2D device. Notcie we will always be using the continuous readout operation mode. <br /></td></tr>
-<tr class="separator:ac752b6b7512f39230cde2fb04901ed26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80d11826f8f86ce37700fb5d36f2a4dd"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGPIO.html#a80d11826f8f86ce37700fb5d36f2a4dd">ADCReadRaw</a> ()</td></tr>
 <tr class="memdesc:a80d11826f8f86ce37700fb5d36f2a4dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reading out the I2C interface at the current channel as a 16bit number.  <a href="classGPIO.html#a80d11826f8f86ce37700fb5d36f2a4dd">More...</a><br /></td></tr>
 <tr class="separator:a80d11826f8f86ce37700fb5d36f2a4dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -269,6 +296,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>InitI2CFlush</b> ()</
 void&#160;</td><td class="memItemRight" valign="bottom"><b>CloseI2CFlush</b> ()</td></tr>
 <tr class="memdesc:aaeeb55f085c0eee78b4a30138d7ea368"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stopping the i2c flushing loop. <br /></td></tr>
 <tr class="separator:aaeeb55f085c0eee78b4a30138d7ea368"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab443a641cef81b1a9ec0211c5aa9c1ac"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGPIO.html#ab443a641cef81b1a9ec0211c5aa9c1ac">GPIO</a> ()</td></tr>
+<tr class="memdesc:ab443a641cef81b1a9ec0211c5aa9c1ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classGPIO.html#ab443a641cef81b1a9ec0211c5aa9c1ac" title="Construct a new GPIO::GPIO handler.">GPIO::GPIO</a> handler.  <a href="classGPIO.html#ab443a641cef81b1a9ec0211c5aa9c1ac">More...</a><br /></td></tr>
+<tr class="separator:ab443a641cef81b1a9ec0211c5aa9c1ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d86b4e49247fff3d05903fd6c8a01d4"><td class="memItemLeft" align="right" valign="top"><a id="a2d86b4e49247fff3d05903fd6c8a01d4" name="a2d86b4e49247fff3d05903fd6c8a01d4"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>GPIO</b> (const <a class="el" href="classGPIO.html">GPIO</a> &amp;)=delete</td></tr>
 <tr class="separator:a2d86b4e49247fff3d05903fd6c8a01d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -281,17 +311,14 @@ Static Private Member Functions</h2></td></tr>
 <tr class="memitem:a5d7f8a9ae162449e53e0516d1df54bc4"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGPIO.html#a5d7f8a9ae162449e53e0516d1df54bc4">InitGPIOPin</a> (const int pin, const unsigned direction)</td></tr>
 <tr class="memdesc:a5d7f8a9ae162449e53e0516d1df54bc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialization a PIN for read or write.  <a href="classGPIO.html#a5d7f8a9ae162449e53e0516d1df54bc4">More...</a><br /></td></tr>
 <tr class="separator:a5d7f8a9ae162449e53e0516d1df54bc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4fb08b0afb5679c14d38cd689796cc95"><td class="memItemLeft" align="right" valign="top"><a id="a4fb08b0afb5679c14d38cd689796cc95" name="a4fb08b0afb5679c14d38cd689796cc95"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>CloseGPIO</b> (const int pin)</td></tr>
-<tr class="memdesc:a4fb08b0afb5679c14d38cd689796cc95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Closing the <a class="el" href="classGPIO.html">GPIO</a> file descriptor. This is important for restarting the program, otherwise the <a class="el" href="classGPIO.html">GPIO</a> sysfs will be occupied by the non-existant closed program. <br /></td></tr>
+<tr class="memitem:a4fb08b0afb5679c14d38cd689796cc95"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGPIO.html#a4fb08b0afb5679c14d38cd689796cc95">CloseGPIO</a> (const int pin)</td></tr>
+<tr class="memdesc:a4fb08b0afb5679c14d38cd689796cc95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Closing the <a class="el" href="classGPIO.html" title="Interface to the GPIO hardware interfaces.">GPIO</a> file descriptor.  <a href="classGPIO.html#a4fb08b0afb5679c14d38cd689796cc95">More...</a><br /></td></tr>
 <tr class="separator:a4fb08b0afb5679c14d38cd689796cc95"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0cc048d46544bc9be95f22bb7f670a12"><td class="memItemLeft" align="right" valign="top"><a id="a0cc048d46544bc9be95f22bb7f670a12" name="a0cc048d46544bc9be95f22bb7f670a12"></a>
-static int&#160;</td><td class="memItemRight" valign="bottom"><b>GPIORead</b> (const int fd)</td></tr>
-<tr class="memdesc:a0cc048d46544bc9be95f22bb7f670a12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reading from a <a class="el" href="classGPIO.html">GPIO</a> initialized file descriptor. <br /></td></tr>
+<tr class="memitem:a0cc048d46544bc9be95f22bb7f670a12"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGPIO.html#a0cc048d46544bc9be95f22bb7f670a12">GPIORead</a> (const int fd)</td></tr>
+<tr class="memdesc:a0cc048d46544bc9be95f22bb7f670a12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reading from a <a class="el" href="classGPIO.html" title="Interface to the GPIO hardware interfaces.">GPIO</a> initialized file descriptor.  <a href="classGPIO.html#a0cc048d46544bc9be95f22bb7f670a12">More...</a><br /></td></tr>
 <tr class="separator:a0cc048d46544bc9be95f22bb7f670a12"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a960201daa506963d5764ce64a0542441"><td class="memItemLeft" align="right" valign="top"><a id="a960201daa506963d5764ce64a0542441" name="a960201daa506963d5764ce64a0542441"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>GPIOWrite</b> (const int fd, const unsigned val)</td></tr>
-<tr class="memdesc:a960201daa506963d5764ce64a0542441"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writing to a <a class="el" href="classGPIO.html">GPIO</a> initialized file descriptor. <br /></td></tr>
+<tr class="memitem:a960201daa506963d5764ce64a0542441"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGPIO.html#a960201daa506963d5764ce64a0542441">GPIOWrite</a> (const int fd, const unsigned val)</td></tr>
+<tr class="memdesc:a960201daa506963d5764ce64a0542441"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writing to a <a class="el" href="classGPIO.html" title="Interface to the GPIO hardware interfaces.">GPIO</a> initialized file descriptor.  <a href="classGPIO.html#a960201daa506963d5764ce64a0542441">More...</a><br /></td></tr>
 <tr class="separator:a960201daa506963d5764ce64a0542441"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a552ee349a0ce20fc9c111dcf197ecc"><td class="memItemLeft" align="right" valign="top"><a id="a3a552ee349a0ce20fc9c111dcf197ecc" name="a3a552ee349a0ce20fc9c111dcf197ecc"></a>
 static int&#160;</td><td class="memItemRight" valign="bottom"><b>InitI2C</b> ()</td></tr>
@@ -355,7 +382,44 @@ static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>ads_d
 static std::unique_ptr&lt; <a class="el" href="classGPIO.html">GPIO</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_instance</b> = nullptr</td></tr>
 <tr class="memdesc:a4b53f1d5ad0ab8f5b3d342435cbb0b02"><td class="mdescLeft">&#160;</td><td class="mdescRight">singleton stuff <br /></td></tr>
 <tr class="separator:a4b53f1d5ad0ab8f5b3d342435cbb0b02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86b12d8835610f9e61b0cb187d2c19f0"><td class="memItemLeft" align="right" valign="top"><a id="a86b12d8835610f9e61b0cb187d2c19f0" name="a86b12d8835610f9e61b0cb187d2c19f0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>SetADCRange</b> (const int)</td></tr>
+<tr class="memdesc:a86b12d8835610f9e61b0cb187d2c19f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modifying the ADC settings via the configuration constant variables. <br /></td></tr>
+<tr class="separator:a86b12d8835610f9e61b0cb187d2c19f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac033f6b96d0a3732f57336c8491da14e"><td class="memItemLeft" align="right" valign="top"><a id="ac033f6b96d0a3732f57336c8491da14e" name="ac033f6b96d0a3732f57336c8491da14e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>SetADCRate</b> (const int)</td></tr>
+<tr class="memdesc:ac033f6b96d0a3732f57336c8491da14e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modifying the ADC settings via the configuration constant variables. <br /></td></tr>
+<tr class="separator:ac033f6b96d0a3732f57336c8491da14e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac752b6b7512f39230cde2fb04901ed26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGPIO.html#ac752b6b7512f39230cde2fb04901ed26">PushADCSetting</a> ()</td></tr>
+<tr class="separator:ac752b6b7512f39230cde2fb04901ed26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ab443a641cef81b1a9ec0211c5aa9c1ac" name="ab443a641cef81b1a9ec0211c5aa9c1ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab443a641cef81b1a9ec0211c5aa9c1ac">&#9670;&nbsp;</a></span>GPIO()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">GPIO::GPIO </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Here this is simply setting everything to a default values, and flagging all used file descriptors as unopen. During construction time. No interfaces will be activated. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a80d11826f8f86ce37700fb5d36f2a4dd" name="a80d11826f8f86ce37700fb5d36f2a4dd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a80d11826f8f86ce37700fb5d36f2a4dd">&#9670;&nbsp;</a></span>ADCReadRaw()</h2>
@@ -383,6 +447,33 @@ static std::unique_ptr&lt; <a class="el" href="classGPIO.html">GPIO</a> &gt;&#16
 
 </div>
 </div>
+<a id="a4fb08b0afb5679c14d38cd689796cc95" name="a4fb08b0afb5679c14d38cd689796cc95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4fb08b0afb5679c14d38cd689796cc95">&#9670;&nbsp;</a></span>CloseGPIO()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GPIO::CloseGPIO </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>pin</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >This is important for restarting the program, otherwise the <a class="el" href="classGPIO.html" title="Interface to the GPIO hardware interfaces.">GPIO</a> sysfs will be occupied by the non-existant closed program. </p>
+
+</div>
+</div>
 <a id="a3d8164a9c9a3de3be43632cf99fb8db3" name="a3d8164a9c9a3de3be43632cf99fb8db3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3d8164a9c9a3de3be43632cf99fb8db3">&#9670;&nbsp;</a></span>FlushLoop()</h2>
 
@@ -407,6 +498,88 @@ static std::unique_ptr&lt; <a class="el" href="classGPIO.html">GPIO</a> &gt;&#16
 </table>
 </div><div class="memdoc">
 <p >Notice that the i2C readout will always be a single channel so the loop is responsible for iterating the readout channel. The loop is continuously run until the i2d_flush is set to false (when exiting the program or re-initializing the i2c interface.) </p>
+
+</div>
+</div>
+<a id="a0cc048d46544bc9be95f22bb7f670a12" name="a0cc048d46544bc9be95f22bb7f670a12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0cc048d46544bc9be95f22bb7f670a12">&#9670;&nbsp;</a></span>GPIORead()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GPIO::GPIORead </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>fd</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >The value would be either 1 or 0 (integer) depending of if the pin detects high or low voltage values. </p>
+
+</div>
+</div>
+<a id="a960201daa506963d5764ce64a0542441" name="a960201daa506963d5764ce64a0542441"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a960201daa506963d5764ce64a0542441">&#9670;&nbsp;</a></span>GPIOWrite()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GPIO::GPIOWrite </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>fd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const unsigned&#160;</td>
+          <td class="paramname"><em>val</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Writing either 1 or 0 (string) to the designated file descriptor. If anything goes wrong raise an excpetion. </p>
+
+</div>
+</div>
+<a id="a2b6d306a5a435d155d5aca130894710e" name="a2b6d306a5a435d155d5aca130894710e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b6d306a5a435d155d5aca130894710e">&#9670;&nbsp;</a></span>Init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GPIO::Init </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >The continuous readout system of the ADC interface will need to exists regardless of whether a real i2C interface is present, so additional excpetion handling needs to be done on C++ level before rethrowing the excpetion (In the case that the i2c interface is not "real", the continuous readout is simply the a continuous steam of what ever the current set value for the PWM duty cycle is) </p>
 
 </div>
 </div>
@@ -447,6 +620,35 @@ static std::unique_ptr&lt; <a class="el" href="classGPIO.html">GPIO</a> &gt;&#16
 
 </div>
 </div>
+<a id="a6f564598e619a86eefed667adacc296d" name="a6f564598e619a86eefed667adacc296d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f564598e619a86eefed667adacc296d">&#9670;&nbsp;</a></span>InitPWM()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GPIO::InitPWM </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >As the pwmchip is at a fixed location, no input is needed for initialization. Some additional concerns:</p><ul>
+<li>As the PWM requires some kernel time to become available. A very small loop will be used to open the variable file descriptors require to start the process.</li>
+<li>We will always attempt to lock the file descriptors to ensure that the program is the only processes using the specified physical pins. Failure to lock the file descriptors will raise an error. </li>
+</ul>
+
+</div>
+</div>
 <a id="afe81fd1d9fdfd6418d239e8074e10976" name="afe81fd1d9fdfd6418d239e8074e10976"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afe81fd1d9fdfd6418d239e8074e10976">&#9670;&nbsp;</a></span>Pulse()</h2>
 
@@ -473,6 +675,32 @@ static std::unique_ptr&lt; <a class="el" href="classGPIO.html">GPIO</a> &gt;&#16
       </table>
 </div><div class="memdoc">
 <p >All pulses will have a high-time of 1 microsecond, and a w microsecond of down time. The fastest pulse rate is about 100 microseconds. </p>
+
+</div>
+</div>
+<a id="ac752b6b7512f39230cde2fb04901ed26" name="ac752b6b7512f39230cde2fb04901ed26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac752b6b7512f39230cde2fb04901ed26">&#9670;&nbsp;</a></span>PushADCSetting()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GPIO::PushADCSetting </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >This is the routine that actually writes the configuration settings to the I2D device. Notice we will always be using the continuous readout operation mode. </p>
 
 </div>
 </div>

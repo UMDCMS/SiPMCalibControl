@@ -84,26 +84,21 @@ $(function() {
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classPicoUnit-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">PicoUnit Class Reference</div></div>
+  <div class="headertitle"><div class="title">PicoUnit Class Reference<div class="ingroups"><a class="el" href="group__hardware.html">Hardware Interface</a></div></div></div>
 </div><!--header-->
 <div class="contents">
-<table class="memberdecls">
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >Here we are specializing the PICOSCOPE to the specific model used at UMD (PS5234), and the operations needed for collecting SiPM/pulse-like data. The main reference program used making this interface class can be found in the official picotech <a href="https://github.com/picotech/picosdk-c-examples">Github repository</a>.</p>
+<p >A big chuck of the PICO scope interface revolves round hte collection of "rapidblocks", sets waveforms collected over multiple triggers, which speeds up the available data aquisition rate of the picoscope. Most of the storage classes in the <a class="el" href="classPicoUnit.html" title="Interface for the picotech PICOSCOPE for data collection.">PicoUnit</a> class is creating machine side memory space to receive the larger data blocks from the picscope unit.</p>
+<p >Notice that the timing spacing is explicitly initialized to be the smallest time interval available (2ns) and explicitly hidden from the user. </p>
+</div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9dc11a4a50e28ad858f665b7c42f8d16"><td class="memItemLeft" align="right" valign="top"><a id="a9dc11a4a50e28ad858f665b7c42f8d16" name="a9dc11a4a50e28ad858f665b7c42f8d16"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Init</b> ()</td></tr>
+<tr class="memitem:a9dc11a4a50e28ad858f665b7c42f8d16"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPicoUnit.html#a9dc11a4a50e28ad858f665b7c42f8d16">Init</a> ()</td></tr>
+<tr class="memdesc:a9dc11a4a50e28ad858f665b7c42f8d16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializing the Picoscope interface.  <a href="classPicoUnit.html#a9dc11a4a50e28ad858f665b7c42f8d16">More...</a><br /></td></tr>
 <tr class="separator:a9dc11a4a50e28ad858f665b7c42f8d16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f92d2256d04dca26fe9178fdc67bd11"><td class="memItemLeft" align="right" valign="top"><a id="a6f92d2256d04dca26fe9178fdc67bd11" name="a6f92d2256d04dca26fe9178fdc67bd11"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>VoltageRangeMax</b> () const</td></tr>
-<tr class="separator:a6f92d2256d04dca26fe9178fdc67bd11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98240d3d0f2ec02446c72768df0a56ad"><td class="memItemLeft" align="right" valign="top"><a id="a98240d3d0f2ec02446c72768df0a56ad" name="a98240d3d0f2ec02446c72768df0a56ad"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>VoltageRangeMin</b> () const</td></tr>
-<tr class="separator:a98240d3d0f2ec02446c72768df0a56ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad55129dfd713ecc58400048fc05f9224"><td class="memItemLeft" align="right" valign="top"><a id="ad55129dfd713ecc58400048fc05f9224" name="ad55129dfd713ecc58400048fc05f9224"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetVoltageRange</b> (const int16_t channel, const int newrange)</td></tr>
-<tr class="separator:ad55129dfd713ecc58400048fc05f9224"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c3224fe57ac5dfe68c59087916e6e71"><td class="memItemLeft" align="right" valign="top"><a id="a0c3224fe57ac5dfe68c59087916e6e71" name="a0c3224fe57ac5dfe68c59087916e6e71"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetTrigger</b> (const int16_t channel, const int16_t direction, const float level, const unsigned delay, const int16_t maxwait)</td></tr>
+<tr class="memitem:a0c3224fe57ac5dfe68c59087916e6e71"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPicoUnit.html#a0c3224fe57ac5dfe68c59087916e6e71">SetTrigger</a> (const int16_t channel, const int16_t direction, const float level, const unsigned delay, const int16_t maxwait)</td></tr>
+<tr class="memdesc:a0c3224fe57ac5dfe68c59087916e6e71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Trigger settings.  <a href="classPicoUnit.html#a0c3224fe57ac5dfe68c59087916e6e71">More...</a><br /></td></tr>
 <tr class="separator:a0c3224fe57ac5dfe68c59087916e6e71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3ff257af1c95edb69a7524b971ccff1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPicoUnit.html#ad3ff257af1c95edb69a7524b971ccff1">SetBlockNums</a> (const unsigned ncaps, const unsigned postsamples, const unsigned presamples)</td></tr>
 <tr class="memdesc:ad3ff257af1c95edb69a7524b971ccff1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting the number of captures for perform in a single lumi-block run, as well as the number of samples to collected before and after the trigger instance.  <a href="classPicoUnit.html#ad3ff257af1c95edb69a7524b971ccff1">More...</a><br /></td></tr>
@@ -115,9 +110,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>SetTrigger</b> (const
 void&#160;</td><td class="memItemRight" valign="bottom"><b>WaitTillReady</b> ()</td></tr>
 <tr class="memdesc:a49f117fe6e89f2f1158e9ae01e1a0cad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suspending the main thread indefinitely until the rapid block collection is complete. Notice that this flush the data to buffer when the function exits. <br /></td></tr>
 <tr class="separator:a49f117fe6e89f2f1158e9ae01e1a0cad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a117f27b4a04291ffcf225d4d20af963a"><td class="memItemLeft" align="right" valign="top"><a id="a117f27b4a04291ffcf225d4d20af963a" name="a117f27b4a04291ffcf225d4d20af963a"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>IsReady</b> ()</td></tr>
-<tr class="memdesc:a117f27b4a04291ffcf225d4d20af963a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if rapidblock collection has completed. If yes, flush the data in the picoscope internal memory to device and return true. Simple return false otherwise. <br /></td></tr>
+<tr class="memitem:a117f27b4a04291ffcf225d4d20af963a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPicoUnit.html#a117f27b4a04291ffcf225d4d20af963a">IsReady</a> ()</td></tr>
+<tr class="memdesc:a117f27b4a04291ffcf225d4d20af963a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if rapidblock collection has completed.  <a href="classPicoUnit.html#a117f27b4a04291ffcf225d4d20af963a">More...</a><br /></td></tr>
 <tr class="separator:a117f27b4a04291ffcf225d4d20af963a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09d233d75d0f37cfed84de96c69c1fb9"><td class="memItemLeft" align="right" valign="top"><a id="a09d233d75d0f37cfed84de96c69c1fb9" name="a09d233d75d0f37cfed84de96c69c1fb9"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>FlushToBuffer</b> ()</td></tr>
@@ -127,13 +121,11 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>FlushToBuffer</b> ()<
 int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetBuffer</b> (const int channel, const unsigned cap, const unsigned sample) const</td></tr>
 <tr class="memdesc:a8ef09162758f45f7394c1b6581115561"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting the raw readout results as a 16bit signed integer. <br /></td></tr>
 <tr class="separator:a8ef09162758f45f7394c1b6581115561"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad804611bb03a352070039b8c4917339d"><td class="memItemLeft" align="right" valign="top"><a id="ad804611bb03a352070039b8c4917339d" name="ad804611bb03a352070039b8c4917339d"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>adc2mv</b> (const int16_t channel, const int16_t adc) const</td></tr>
-<tr class="memdesc:ad804611bb03a352070039b8c4917339d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converting the ADC value to millivolts according to the current range settings of a certain channel. Notice that the ADC value should be passed into this function as obtained from the GetBuffer method, even if the last 8 bits of the GetBuffer method is effectively redundent. <br /></td></tr>
+<tr class="memitem:ad804611bb03a352070039b8c4917339d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPicoUnit.html#ad804611bb03a352070039b8c4917339d">adc2mv</a> (const int16_t channel, const int16_t adc) const</td></tr>
+<tr class="memdesc:ad804611bb03a352070039b8c4917339d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converting the ADC value to millivolts according to the current range settings of a certain channel.  <a href="classPicoUnit.html#ad804611bb03a352070039b8c4917339d">More...</a><br /></td></tr>
 <tr class="separator:ad804611bb03a352070039b8c4917339d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35f324112ba9dff72db139a1a3aa2c18"><td class="memItemLeft" align="right" valign="top"><a id="a35f324112ba9dff72db139a1a3aa2c18" name="a35f324112ba9dff72db139a1a3aa2c18"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>DumpBuffer</b> () const</td></tr>
-<tr class="memdesc:a35f324112ba9dff72db139a1a3aa2c18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Printing the first 6 captures waveforms in a table on the screen. Very verbose method for debugging purposes. <br /></td></tr>
+<tr class="memitem:a35f324112ba9dff72db139a1a3aa2c18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPicoUnit.html#a35f324112ba9dff72db139a1a3aa2c18">DumpBuffer</a> () const</td></tr>
+<tr class="memdesc:a35f324112ba9dff72db139a1a3aa2c18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Printing the first 6 captures waveforms in a table on the screen.  <a href="classPicoUnit.html#a35f324112ba9dff72db139a1a3aa2c18">More...</a><br /></td></tr>
 <tr class="separator:a35f324112ba9dff72db139a1a3aa2c18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:affea4d742fa56b81b7e7637e5c3c9a78"><td class="memItemLeft" align="right" valign="top"><a id="affea4d742fa56b81b7e7637e5c3c9a78" name="affea4d742fa56b81b7e7637e5c3c9a78"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>PrintInfo</b> () const</td></tr>
@@ -156,6 +148,19 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>rangeA</b> () const</t
 <tr class="memitem:a1fba98e4a6cdcd806857f13fce5c5ce7"><td class="memItemLeft" align="right" valign="top"><a id="a1fba98e4a6cdcd806857f13fce5c5ce7" name="a1fba98e4a6cdcd806857f13fce5c5ce7"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>rangeB</b> () const</td></tr>
 <tr class="separator:a1fba98e4a6cdcd806857f13fce5c5ce7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:a6f92d2256d04dca26fe9178fdc67bd11"><td class="memItemLeft" align="right" valign="top"><a id="a6f92d2256d04dca26fe9178fdc67bd11" name="a6f92d2256d04dca26fe9178fdc67bd11"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>VoltageRangeMax</b> () const</td></tr>
+<tr class="memdesc:a6f92d2256d04dca26fe9178fdc67bd11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstraction for voltage range and voltage range settings. <br /></td></tr>
+<tr class="separator:a6f92d2256d04dca26fe9178fdc67bd11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98240d3d0f2ec02446c72768df0a56ad"><td class="memItemLeft" align="right" valign="top"><a id="a98240d3d0f2ec02446c72768df0a56ad" name="a98240d3d0f2ec02446c72768df0a56ad"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>VoltageRangeMin</b> () const</td></tr>
+<tr class="memdesc:a98240d3d0f2ec02446c72768df0a56ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstraction for voltage range and voltage range settings. <br /></td></tr>
+<tr class="separator:a98240d3d0f2ec02446c72768df0a56ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad55129dfd713ecc58400048fc05f9224"><td class="memItemLeft" align="right" valign="top"><a id="ad55129dfd713ecc58400048fc05f9224" name="ad55129dfd713ecc58400048fc05f9224"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>SetVoltageRange</b> (const int16_t channel, const int newrange)</td></tr>
+<tr class="memdesc:ad55129dfd713ecc58400048fc05f9224"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstraction for voltage range and voltage range settings. <br /></td></tr>
+<tr class="separator:ad55129dfd713ecc58400048fc05f9224"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -243,6 +248,89 @@ static std::unique_ptr&lt; <a class="el" href="classPicoUnit.html">PicoUnit</a> 
 <tr class="separator:af4e36fd33ffc18cf8033c5b07b4effeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad804611bb03a352070039b8c4917339d" name="ad804611bb03a352070039b8c4917339d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad804611bb03a352070039b8c4917339d">&#9670;&nbsp;</a></span>adc2mv()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float PicoUnit::adc2mv </td>
+          <td>(</td>
+          <td class="paramtype">const int16_t&#160;</td>
+          <td class="paramname"><em>channel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int16_t&#160;</td>
+          <td class="paramname"><em>adc</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Notice that the ADC value should be passed into this function as obtained from the GetBuffer method, even if the last 8 bits of the GetBuffer method is effectively redundent. </p>
+
+</div>
+</div>
+<a id="a35f324112ba9dff72db139a1a3aa2c18" name="a35f324112ba9dff72db139a1a3aa2c18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35f324112ba9dff72db139a1a3aa2c18">&#9670;&nbsp;</a></span>DumpBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PicoUnit::DumpBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Very verbose method for debugging purposes. </p>
+
+</div>
+</div>
+<a id="a9dc11a4a50e28ad858f665b7c42f8d16" name="a9dc11a4a50e28ad858f665b7c42f8d16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9dc11a4a50e28ad858f665b7c42f8d16">&#9670;&nbsp;</a></span>Init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PicoUnit::Init </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Currently there is no what to specify the which device is being used by the underlying driver. On the python level, there are ways to not initialize the device based on the device path given, but that is currently the only method to "change" the working device should such a requirement be needed. </p>
+
+</div>
+</div>
+<a id="a117f27b4a04291ffcf225d4d20af963a" name="a117f27b4a04291ffcf225d4d20af963a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a117f27b4a04291ffcf225d4d20af963a">&#9670;&nbsp;</a></span>IsReady()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PicoUnit::IsReady </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >If yes, flush the data in the picoscope internal memory to device and return true. Simple return false otherwise. </p>
+
+</div>
+</div>
 <a id="ad3ff257af1c95edb69a7524b971ccff1" name="ad3ff257af1c95edb69a7524b971ccff1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad3ff257af1c95edb69a7524b971ccff1">&#9670;&nbsp;</a></span>SetBlockNums()</h2>
 
@@ -275,6 +363,68 @@ static std::unique_ptr&lt; <a class="el" href="classPicoUnit.html">PicoUnit</a> 
       </table>
 </div><div class="memdoc">
 <p >Also resizes the arrays used for receive the block results. </p>
+
+</div>
+</div>
+<a id="a0c3224fe57ac5dfe68c59087916e6e71" name="a0c3224fe57ac5dfe68c59087916e6e71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c3224fe57ac5dfe68c59087916e6e71">&#9670;&nbsp;</a></span>SetTrigger()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PicoUnit::SetTrigger </td>
+          <td>(</td>
+          <td class="paramtype">const int16_t&#160;</td>
+          <td class="paramname"><em>channel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int16_t&#160;</td>
+          <td class="paramname"><em>direction</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const unsigned&#160;</td>
+          <td class="paramname"><em>newdelay</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int16_t&#160;</td>
+          <td class="paramname"><em>maxwait</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >The channel, direction, analog trigger level (if applicable) , and delay time, and the maximum trigger wait time needs to be all be provided.</p>
+<p >A few comments on the input:</p><ul>
+<li>Despite only having 2 data channels, the external trigger channel is placed on channel "4". This is for compatibility with similar models in the picoscope product line.</li>
+<li>The ADC level input in this functions is in values of mV. It will automatically be translated to ADC values in this function.</li>
+<li>The trigger delay is units of 10 time steps (so 20ns in the default settings of the calibration system) As this is a very coarse settings that is difficult to reflect, no conversion will be provided for the delay settings.</li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">channel</td><td></td></tr>
+    <tr><td class="paramname">direction</td><td></td></tr>
+    <tr><td class="paramname">level</td><td></td></tr>
+    <tr><td class="paramname">newdelay</td><td></td></tr>
+    <tr><td class="paramname">maxwait</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

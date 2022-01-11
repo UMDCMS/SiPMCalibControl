@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['zscan_5fsamples_0',['zscan_samples',['../classserver_1_1sockets_1_1Session.html#a1f3ba154e96c80c4ed370f9ab3fe381b',1,'server::sockets::Session']]]
+  ['vx_0',['vx',['../classGCoder.html#aef1ce3e570fbfbde2f6ff8607af68d1b',1,'GCoder']]]
 ];

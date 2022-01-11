@@ -89,10 +89,7 @@ $(function() {
 <div class="textblock"><code>#include &quot;visual.hpp&quot;</code><br />
 <code>#include &lt;opencv2/core/utils/logger.hpp&gt;</code><br />
 </div><a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><dl class="section author"><dt>Author</dt><dd>Yi-Mu Chen</dd></dl>
-<p>The visual system will works as the following. A thread will be started whenever a visual system is declared, which will constantly flush the contents of the camera interface to a buffer, process the standardized image processing routine, and store the processed image and extracted variables, and repeat until some termination code is received. This looped thread will be briefly paused when the user request the image, to ensure the integrity of the transferred data.</p>
-<p >For the management of the interface communication and thread handling, see the <a class="el" href="classVisual.html" title="This will be the one class that we will note be declaring as a singleton instance,...">Visual</a>::*Thread functions.</p>
-<p >For the visual processing functions, see the <code><a class="el" href="classVisual.html#a26e3909e5a8c3e9c34e318b88ef79564" title="Given image in cv::Mat format. Compute the visual algorithm results and stored in a processed version...">Visual::FindDetector</a></code> and related functions. </p>
+<div class="textblock"><dl class="section author"><dt>Author</dt><dd>Yi-Mu Chen </dd></dl>
 </div></div><!-- contents -->
 <!-- HTML footer for doxygen 1.8.14-->
 <!-- start footer part -->

@@ -84,7 +84,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>This is the handling of the <a class="el" href="classGPIO.html">GPIO</a> interface of a raspberry PI that the control program is suppose to run on.  
+<p>This is the handling of the <a class="el" href="classGPIO.html" title="Interface to the GPIO hardware interfaces.">GPIO</a> interface of a raspberry PI that the control program is suppose to run on.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;gpio.hpp&quot;</code><br />
 <code>#include &lt;cmath&gt;</code><br />
@@ -101,14 +101,7 @@ $(function() {
 <code>#include &lt;queue&gt;</code><br />
 <code>#include &lt;stdexcept&gt;</code><br />
 </div><a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><dl class="section author"><dt>Author</dt><dd>Yi-Mu Chen</dd></dl>
-<p>To reduce the number of external dependencies, we will be using the UNIX /sys interface for direct access of the underlying system. This will mean that the additional system permission will need to be setup manually, rather than through the packages. See the /external/rules files to learn more about how the permission need to be setup.</p>
-<p >Three sub-interfaces are implemented in this file:</p><ul>
-<li>A direct <a class="el" href="classGPIO.html">GPIO</a> interface for simple 1/0 outputs, such as for the trigger and sub-system switches.</li>
-<li>The I2C interface used to handle a 16bit ADC converter for DC readout.</li>
-<li>The PWM system for voltage control systems.</li>
-</ul>
-<p >The <a class="el" href="classGPIO.html">GPIO</a> class will assume that all systems are present, if any one system fails, then all interfaces should be shutdown. </p>
+<div class="textblock"><dl class="section author"><dt>Author</dt><dd>Yi-Mu Chen </dd></dl>
 </div></div><!-- contents -->
 <!-- HTML footer for doxygen 1.8.14-->
 <!-- start footer part -->

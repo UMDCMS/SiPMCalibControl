@@ -83,7 +83,7 @@ $(function() {
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p >Here is a list of commands that will typically be used for the individual SiPM analysis flow, here we assume that the various setup commands has already been given to you, either by another maintainer or via the other calibration commands discussed below. Before going into what individual command, note that all analysis-level commands listed here will have the common output format of an ASCII file with a various number of columns. The columns will represent the following (for more documentation of output formats see the <a href="@ref
- ctlcmd.cmdbase.savefilecmd"><code>savefilecmd</code></a> class)</p>
+ctlcmd.cmdbase.savefilecmd"><code>savefilecmd</code></a> class)</p>
 <ul>
 <li><code>time</code>: The time stamp at which the line of data is collection. Time is measured relative to the initialization of the command.</li>
 <li><code>detid</code>: The detector ID number that the measurement is supposed to be performed on (this many not be used).</li>
@@ -104,24 +104,29 @@ $(function() {
       related settings" section below.</li>
 <li><code>2</code>: Treating the ADC readout value as a photodetector readout. Notice that right now, most channels of the ADC chip is used for system status monitoring, so be sure that the readout channel is actually reading a real photodectector.</li>
 <li><code>3</code>: The DRS4 screen-less oscilloscope. For additional settings, see the "DRS related settings" section below.</li>
+<li><code>-1</code>: Loading a predefined model, this is useful for the debugging analysis sequences while not actually being attached to the system.</li>
 </ul>
 </li>
 <li><code>--channel [int]</code>: The channel of the readout system to take for the data. Good practice to double-check that the readout system is connected to the channel of interest.</li>
-<li><code>--samples [int]</code>: The number of waveforms to take before for the readout average. </li>
+<li><code>--samples [int]</code>: The number of waveforms to take before for the readout average.</li>
 </ul>
 </li>
 </ul>
-<table class="memberdecls">
+<hr  />
+ <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1motioncmd_1_1lowlightcollect.html">ctlcmd.motioncmd.lowlightcollect</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collection of low light data at a single gantry position, collecting data as fast as possible no waiting.  <a href="classctlcmd_1_1motioncmd_1_1lowlightcollect.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collection of low light data at a single gantry position, data will be collected without averaging.  <a href="classctlcmd_1_1motioncmd_1_1lowlightcollect.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1motioncmd_1_1halign.html">ctlcmd.motioncmd.halign</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Running horizontal alignment procedure by luminosity readout v.s.  <a href="classctlcmd_1_1motioncmd_1_1halign.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Running horizontal alignment procedure by luminosity readout vs and xy grid scan motion.  <a href="classctlcmd_1_1motioncmd_1_1halign.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1motioncmd_1_1zscan.html">ctlcmd.motioncmd.zscan</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performing the intensity scan give a list of scanning z coordinates and the list of biassing power.  <a href="classctlcmd_1_1motioncmd_1_1zscan.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1motioncmd_1_1timescan.html">ctlcmd.motioncmd.timescan</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a log of the readout in terms relative to time.  <a href="classctlcmd_1_1motioncmd_1_1timescan.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1viscmd_1_1visualhscan.html">ctlcmd.viscmd.visualhscan</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performing horizontal scan with camera system.  <a href="classctlcmd_1_1viscmd_1_1visualhscan.html#details">More...</a><br /></td></tr>

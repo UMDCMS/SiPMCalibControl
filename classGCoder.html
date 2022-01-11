@@ -123,6 +123,9 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>GetSettings</b
 <tr class="memitem:aec4a8271b868941912b138870f25da14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#aec4a8271b868941912b138870f25da14">MoveToRaw</a> (float x=std::nanf(&quot;&quot;), float y=std::nanf(&quot;&quot;), float z=std::nanf(&quot;&quot;), const bool verbose=false)</td></tr>
 <tr class="memdesc:aec4a8271b868941912b138870f25da14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sending the command for linear motion.  <a href="classGCoder.html#aec4a8271b868941912b138870f25da14">More...</a><br /></td></tr>
 <tr class="separator:aec4a8271b868941912b138870f25da14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4600ef412f7c8b351cdca96282f9da7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html#aa4600ef412f7c8b351cdca96282f9da7">~GCoder</a> ()</td></tr>
+<tr class="memdesc:aa4600ef412f7c8b351cdca96282f9da7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructing the GCoder::GCoder object.  <a href="classGCoder.html#aa4600ef412f7c8b351cdca96282f9da7">More...</a><br /></td></tr>
+<tr class="separator:aa4600ef412f7c8b351cdca96282f9da7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -210,6 +213,25 @@ Static Private Attributes</h2></td></tr>
 static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_instance</b> = nullptr</td></tr>
 <tr class="separator:a2e796ec143cb8ce9dddfb52c958a1c81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aa4600ef412f7c8b351cdca96282f9da7" name="aa4600ef412f7c8b351cdca96282f9da7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4600ef412f7c8b351cdca96282f9da7">&#9670;&nbsp;</a></span>~GCoder()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GCoder::~GCoder </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Intensionally adding a verbose system such that the user can debug issue during shutdown. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a9d3e4704be17c626698aebdb87761d7a" name="a9d3e4704be17c626698aebdb87761d7a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9d3e4704be17c626698aebdb87761d7a">&#9670;&nbsp;</a></span>DisableStepper()</h2>
@@ -277,7 +299,7 @@ static std::unique_ptr&lt; <a class="el" href="classGCoder.html">GCoder</a> &gt;
         </tr>
       </table>
 </div><div class="memdoc">
-<p >This should be used after the readout has been completed. </p>
+<p >This should be used after the readout has been completed to ereduce the changes of gantry position drifting. </p>
 
 </div>
 </div>

@@ -91,39 +91,80 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >The control command is the base interface for defining a command in the terminal class, the instance do, callhelp and complete functions corresponds to the functions do_&lt;cmd&gt;, help_&lt;cmd&gt; and complete_&lt;cmd&gt; functions in the vallina python cmd class. Here we will be using the argparse class by default to call for the help and complete functions.</p>
-<p >In addition, the class will also contain a <code>LOG</code> instance which is used to prettify the output of the printerr methods. This should be overridden in all subsequent classes.</p>
+<div class="textblock"><p >The control command is the base interface for defining a command in the terminal class, the instance do, callhelp and complete functions corresponds to the functions <code>do_&lt;cmd&gt;</code>, <code>help_&lt;cmd&gt;</code> and <code>complete_&lt;cmd&gt;</code> functions in the vallina python cmd class. Here we will be using the argparse class by default to call for the help and complete functions. To see how the <code>do_&lt;cmd&gt;</code> method will be broken down, see the detailed documentation for the <code>do</code> method of this class.</p>
 <p >One big part of this class the the consistent construction of argument elements and the parsing of elements. This is how the creation and parsing of the arguments are performed:</p><ul>
 <li>Arguments will be added in the inverse order listed in the <code>__mro__</code> method via the <code>add_args</code> method that meta-command classes and command classes should overload.</li>
-<li>Arguments will be also be parsed in the order inversely listed in the <code>__mro__</code> method via the <code>parse</code> argument. Because of this, the input args object in the <code>parse</code> argument in inherited classes should simply assume that the <code>parse</code> of parent classes' has already been assumed, and should not attempt to call the parent class's parse method. </li>
+<li>Arguments will be also be parsed in the order inversely listed in the <code>__mro__</code> method via the <code>parse</code> argument. Because of this, the input args object in the <code>parse</code> argument in inherited classes should simply assume that the <code>parse</code> of parent classes' has already been assumed, and should not attempt to call the parent class's parse method.</li>
 </ul>
-</div><table class="memberdecls">
+<p >The <code>do_cmd</code> method of the parent cmd instance will be directed to the do method of this class, which handles the usual parsing/execution/clean-up flow, the method that should be overloaded by the subsequent children classes to define the execution routine is now <code>run</code>.</p>
+<p >In addition, the class will also contain a <code>LOG</code> instance which is used to prettify the output of the printerr methods. This should be overridden in all subsequent classes that want to use the display functions. The function also provides a higher level abstraction to help with common on-screen progress display methods, to help reduce user code verbosity. </p>
+</div><div class="dynheader">
+Inheritance diagram for ctlcmd.cmdbase.controlcmd:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classctlcmd_1_1cmdbase_1_1controlcmd.png" usemap="#ctlcmd.cmdbase.controlcmd_map" alt=""/>
+  <map id="ctlcmd.cmdbase.controlcmd_map" name="ctlcmd.cmdbase.controlcmd_map">
+<area href="classctlcmd_1_1cmdbase_1_1readoutcmd.html" title="Commands that should have a single readout mode." alt="ctlcmd.cmdbase.readoutcmd" shape="rect" coords="207,112,404,136"/>
+<area href="classctlcmd_1_1cmdbase_1_1savefilecmd.html" title="commands that will save to a file" alt="ctlcmd.cmdbase.savefilecmd" shape="rect" coords="207,168,404,192"/>
+<area href="classctlcmd_1_1cmdbase_1_1singlexycmd.html" title="Commands that require the motion around a single x-y position." alt="ctlcmd.cmdbase.singlexycmd" shape="rect" coords="207,224,404,248"/>
+<area href="classctlcmd_1_1cmdbase_1_1zscancmd.html" title="Commands that will scan over a range of z positions." alt="ctlcmd.cmdbase.zscancmd" shape="rect" coords="207,280,404,304"/>
+<area href="classctlcmd_1_1digicmd_1_1lightoff.html" title="This is a test." alt="ctlcmd.digicmd.lightoff" shape="rect" coords="207,336,404,360"/>
+<area href="classctlcmd_1_1digicmd_1_1lighton.html" title="Turning the LED lights on." alt="ctlcmd.digicmd.lighton" shape="rect" coords="207,392,404,416"/>
+<area href="classctlcmd_1_1digicmd_1_1pulse.html" title="Running the trigger for a certain about of pulses with alternative wait options." alt="ctlcmd.digicmd.pulse" shape="rect" coords="207,448,404,472"/>
+<area href="classctlcmd_1_1digicmd_1_1pwm.html" title="Changing the pwm duty cycle and frequency." alt="ctlcmd.digicmd.pwm" shape="rect" coords="207,504,404,528"/>
+<area href="classctlcmd_1_1digicmd_1_1setadcref.html" title="Setting the reference voltage of the ADC readout for temperature conversion." alt="ctlcmd.digicmd.setadcref" shape="rect" coords="207,560,404,584"/>
+<area href="classctlcmd_1_1digicmd_1_1showadc.html" title="Printing the ADC values that are stored in memory." alt="ctlcmd.digicmd.showadc" shape="rect" coords="207,616,404,640"/>
+<area href="classctlcmd_1_1drscmd_1_1drscalib.html" title="Running the DRS calibration process." alt="ctlcmd.drscmd.drscalib" shape="rect" coords="207,672,404,696"/>
+<area href="classctlcmd_1_1drscmd_1_1drsset.html" title="Setting DRS4 readout operation parameters." alt="ctlcmd.drscmd.drsset" shape="rect" coords="207,728,404,752"/>
+<area href="classctlcmd_1_1getset_1_1exit.html" title="Command for exiting the main session." alt="ctlcmd.getset.exit" shape="rect" coords="207,784,404,808"/>
+<area href="classctlcmd_1_1getset_1_1get.html" title="Printing out the session parameters, and equipment settings." alt="ctlcmd.getset.get" shape="rect" coords="207,840,404,864"/>
+<area href="classctlcmd_1_1getset_1_1history.html" title="Getting the input history." alt="ctlcmd.getset.history" shape="rect" coords="207,896,404,920"/>
+<area href="classctlcmd_1_1getset_1_1loadcalib.html" title="Loading calibration information from a json file." alt="ctlcmd.getset.loadcalib" shape="rect" coords="207,952,404,976"/>
+<area href="classctlcmd_1_1getset_1_1promptaction.html" title="Displaying message that requires manual intervention." alt="ctlcmd.getset.promptaction" shape="rect" coords="207,1008,404,1032"/>
+<area href="classctlcmd_1_1getset_1_1runfile.html" title="Running a file with a list of commands." alt="ctlcmd.getset.runfile" shape="rect" coords="207,1064,404,1088"/>
+<area href="classctlcmd_1_1getset_1_1savecalib.html" title="Saving current calibration information into a json file." alt="ctlcmd.getset.savecalib" shape="rect" coords="207,1120,404,1144"/>
+<area href="classctlcmd_1_1getset_1_1set.html" title="Setting calibration system devices." alt="ctlcmd.getset.set" shape="rect" coords="207,1176,404,1200"/>
+<area href="classctlcmd_1_1getset_1_1wait.html" title="Suspending the interactive session for N seconds." alt="ctlcmd.getset.wait" shape="rect" coords="207,1232,404,1256"/>
+<area href="classctlcmd_1_1motioncmd_1_1disablestepper.html" title="Manual disabling of stepper motor." alt="ctlcmd.motioncmd.disablestepper" shape="rect" coords="207,1288,404,1312"/>
+<area href="classctlcmd_1_1motioncmd_1_1enablestepper.html" title="Manual re-enabling of stepper motor." alt="ctlcmd.motioncmd.enablestepper" shape="rect" coords="207,1344,404,1368"/>
+<area href="classctlcmd_1_1motioncmd_1_1getcoord.html" title="Printing current gantry coordinates." alt="ctlcmd.motioncmd.getcoord" shape="rect" coords="207,1400,404,1424"/>
+<area href="classctlcmd_1_1motioncmd_1_1movespeed.html" title="Setting the motion speed of the gantry x-y-z motors." alt="ctlcmd.motioncmd.movespeed" shape="rect" coords="207,1456,404,1480"/>
+<area href="classctlcmd_1_1motioncmd_1_1rungcode.html" title="Running a raw command gcode command." alt="ctlcmd.motioncmd.rungcode" shape="rect" coords="207,1512,404,1536"/>
+<area href="classctlcmd_1_1motioncmd_1_1sendhome.html" title="Sending the gantry system home and reset in the internal coordinate." alt="ctlcmd.motioncmd.sendhome" shape="rect" coords="207,1568,404,1592"/>
+<area href="classctlcmd_1_1picocmd_1_1picorange.html" title="Automatically setting the voltage range of the picoscope based on a few set waveforms of data." alt="ctlcmd.picocmd.picorange" shape="rect" coords="207,1624,404,1648"/>
+<area href="classctlcmd_1_1picocmd_1_1picoset.html" title="Setting picoscope operation parameters." alt="ctlcmd.picocmd.picoset" shape="rect" coords="207,1680,404,1704"/>
+<area href="classctlcmd_1_1viscmd_1_1visualmeta.html" title="Meta class for additional options needed for visual operations." alt="ctlcmd.viscmd.visualmeta" shape="rect" coords="207,1736,404,1760"/>
+<area href="classctlcmd_1_1viscmd_1_1visualsaveframe.html" title="Saving the current image to some path." alt="ctlcmd.viscmd.visualsaveframe" shape="rect" coords="207,1792,404,1816"/>
+<area href="classctlcmd_1_1viscmd_1_1visualset.html" title="Defining the parameters used for finding the detector in the field of view." alt="ctlcmd.viscmd.visualset" shape="rect" coords="207,1848,404,1872"/>
+  </map>
+</div></div>
+<table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a074d0e3798f524909f450a6de363962d"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a074d0e3798f524909f450a6de363962d">__init__</a> (self, cmdsession)</td></tr>
-<tr class="memdesc:a074d0e3798f524909f450a6de363962d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializer declares an argument parser class with the class name as the program name and the class doc string as the description string.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a074d0e3798f524909f450a6de363962d">More...</a><br /></td></tr>
+<tr class="memdesc:a074d0e3798f524909f450a6de363962d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializing the parser class and creating a reference to the control instances.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a074d0e3798f524909f450a6de363962d">More...</a><br /></td></tr>
 <tr class="separator:a074d0e3798f524909f450a6de363962d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac548f6e7a6a50135189ea2709e4056c9"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#ac548f6e7a6a50135189ea2709e4056c9">add_args</a> (self)</td></tr>
-<tr class="memdesc:ac548f6e7a6a50135189ea2709e4056c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to be overridden for adding additional argument to the containing <code>parser</code> object.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#ac548f6e7a6a50135189ea2709e4056c9">More...</a><br /></td></tr>
+<tr class="memdesc:ac548f6e7a6a50135189ea2709e4056c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adding arguments to the command.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#ac548f6e7a6a50135189ea2709e4056c9">More...</a><br /></td></tr>
 <tr class="separator:ac548f6e7a6a50135189ea2709e4056c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac160e305f30123f1e9fb9ddcce1d309f"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#ac160e305f30123f1e9fb9ddcce1d309f">parse_line</a> (self, line)</td></tr>
-<tr class="memdesc:ac160e305f30123f1e9fb9ddcce1d309f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parsing the arguments from the input line using the argparse.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#ac160e305f30123f1e9fb9ddcce1d309f">More...</a><br /></td></tr>
+<tr class="memdesc:ac160e305f30123f1e9fb9ddcce1d309f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parsing the arguments from the input line using the argparse method.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#ac160e305f30123f1e9fb9ddcce1d309f">More...</a><br /></td></tr>
 <tr class="separator:ac160e305f30123f1e9fb9ddcce1d309f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb0595565b66b2958fc97b8f0fb2e97e"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#acb0595565b66b2958fc97b8f0fb2e97e">do</a> (self, line)</td></tr>
+<tr class="memdesc:acb0595565b66b2958fc97b8f0fb2e97e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method called by the parent controlterm class.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#acb0595565b66b2958fc97b8f0fb2e97e">More...</a><br /></td></tr>
+<tr class="separator:acb0595565b66b2958fc97b8f0fb2e97e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe8bb7123627a12172c0a5b5033a6331"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#abe8bb7123627a12172c0a5b5033a6331">parse</a> (self, args)</td></tr>
 <tr class="memdesc:abe8bb7123627a12172c0a5b5033a6331"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method that should be overwritten for additional argument parsing.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#abe8bb7123627a12172c0a5b5033a6331">More...</a><br /></td></tr>
 <tr class="separator:abe8bb7123627a12172c0a5b5033a6331"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26f59cff6875e9df97599bade435e25d"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a26f59cff6875e9df97599bade435e25d">run</a> (self, args)</td></tr>
-<tr class="memdesc:a26f59cff6875e9df97599bade435e25d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Functions that require command specific definitions, should be overwritten in the descendent classes.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a26f59cff6875e9df97599bade435e25d">More...</a><br /></td></tr>
+<tr class="memdesc:a26f59cff6875e9df97599bade435e25d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method of execution to be overloaded.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a26f59cff6875e9df97599bade435e25d">More...</a><br /></td></tr>
 <tr class="separator:a26f59cff6875e9df97599bade435e25d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7461f81564db788ad1de4355e54cebd8"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a7461f81564db788ad1de4355e54cebd8">post_run</a> (self)</td></tr>
 <tr class="memdesc:a7461f81564db788ad1de4355e54cebd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Routines to run after the run argument is called.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a7461f81564db788ad1de4355e54cebd8">More...</a><br /></td></tr>
 <tr class="separator:a7461f81564db788ad1de4355e54cebd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb0595565b66b2958fc97b8f0fb2e97e"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#acb0595565b66b2958fc97b8f0fb2e97e">do</a> (self, line)</td></tr>
-<tr class="memdesc:acb0595565b66b2958fc97b8f0fb2e97e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execution of the commands is now split up into following steps:  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#acb0595565b66b2958fc97b8f0fb2e97e">More...</a><br /></td></tr>
-<tr class="separator:acb0595565b66b2958fc97b8f0fb2e97e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0291bcfa5fc3473673b6754f4221159a"><td class="memItemLeft" align="right" valign="top"><a id="a0291bcfa5fc3473673b6754f4221159a" name="a0291bcfa5fc3473673b6754f4221159a"></a>
 def&#160;</td><td class="memItemRight" valign="bottom"><b>callhelp</b> (self)</td></tr>
-<tr class="memdesc:a0291bcfa5fc3473673b6754f4221159a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Printing the help message via the ArgumentParse in built functions. <br /></td></tr>
+<tr class="memdesc:a0291bcfa5fc3473673b6754f4221159a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Printing the help message via the ArgumentParser in built functions. <br /></td></tr>
 <tr class="separator:a0291bcfa5fc3473673b6754f4221159a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc49fde743da1a77480af0041e84b319"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#adc49fde743da1a77480af0041e84b319">complete</a> (self, text, line, start_index, end_index)</td></tr>
 <tr class="memdesc:adc49fde743da1a77480af0041e84b319"><td class="mdescLeft">&#160;</td><td class="mdescRight">Auto completion of the functions.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#adc49fde743da1a77480af0041e84b319">More...</a><br /></td></tr>
@@ -145,17 +186,16 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>printwarn</b> (self, t
 <tr class="memdesc:a6de51a70f8de040a9d67665b579ba638"><td class="mdescLeft">&#160;</td><td class="mdescRight">Printing a warning message with a standard yellow "WARNING" header. <br /></td></tr>
 <tr class="separator:a6de51a70f8de040a9d67665b579ba638"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8445d822d8bb3c5c8f0a3db925404eb"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#ab8445d822d8bb3c5c8f0a3db925404eb">print_tracestack</a> (self, err)</td></tr>
-<tr class="memdesc:ab8445d822d8bb3c5c8f0a3db925404eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function for a prettier trackstack printout.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#ab8445d822d8bb3c5c8f0a3db925404eb">More...</a><br /></td></tr>
+<tr class="memdesc:ab8445d822d8bb3c5c8f0a3db925404eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Better trackstack printing function.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#ab8445d822d8bb3c5c8f0a3db925404eb">More...</a><br /></td></tr>
 <tr class="separator:ab8445d822d8bb3c5c8f0a3db925404eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96cd82f992430453f9291cd020cbd67e"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a96cd82f992430453f9291cd020cbd67e">update_progress</a> (self, progress=None, coordinates=None, temperature=None, display_data={})</td></tr>
-<tr class="memdesc:a96cd82f992430453f9291cd020cbd67e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for displaying a progress update for the data.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a96cd82f992430453f9291cd020cbd67e">More...</a><br /></td></tr>
+<tr class="memdesc:a96cd82f992430453f9291cd020cbd67e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Standard progress report line.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a96cd82f992430453f9291cd020cbd67e">More...</a><br /></td></tr>
 <tr class="separator:a96cd82f992430453f9291cd020cbd67e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a14d4a7ccb7fa1f3fa76acda1e33c44a0"><td class="memItemLeft" align="right" valign="top"><a id="a14d4a7ccb7fa1f3fa76acda1e33c44a0" name="a14d4a7ccb7fa1f3fa76acda1e33c44a0"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>check_handle</b> (self)</td></tr>
-<tr class="memdesc:a14d4a7ccb7fa1f3fa76acda1e33c44a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checking the status of the signal handle, closing files and raising an exception if a termination signal was ever set by the user. <br /></td></tr>
+<tr class="memitem:a14d4a7ccb7fa1f3fa76acda1e33c44a0"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a14d4a7ccb7fa1f3fa76acda1e33c44a0">check_handle</a> (self)</td></tr>
+<tr class="memdesc:a14d4a7ccb7fa1f3fa76acda1e33c44a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function for handling signals.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a14d4a7ccb7fa1f3fa76acda1e33c44a0">More...</a><br /></td></tr>
 <tr class="separator:a14d4a7ccb7fa1f3fa76acda1e33c44a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a74703b72742aa4d52ee94514a169a47b"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a74703b72742aa4d52ee94514a169a47b">move_gantry</a> (self, x, y, z, verbose)</td></tr>
-<tr class="memdesc:a74703b72742aa4d52ee94514a169a47b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for gantry motion command, suppresses the exception raised for in case that the gantry isn't connected so that one can test with pre-defined models.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a74703b72742aa4d52ee94514a169a47b">More...</a><br /></td></tr>
+<tr class="memdesc:a74703b72742aa4d52ee94514a169a47b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for gantry motion to be called by children method.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a74703b72742aa4d52ee94514a169a47b">More...</a><br /></td></tr>
 <tr class="separator:a74703b72742aa4d52ee94514a169a47b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8176d76f92623eb1ea75fe33497248b"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#ac8176d76f92623eb1ea75fe33497248b">prompt_yn</a> (self, question, default='no')</td></tr>
 <tr class="memdesc:ac8176d76f92623eb1ea75fe33497248b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ask a yes/no question and prompt a question to the user and return their answer.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#ac8176d76f92623eb1ea75fe33497248b">More...</a><br /></td></tr>
@@ -165,6 +205,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>check_handle</b> (self
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ab88498f5e8890878c8af961c2f975e3b"><td class="memItemLeft" align="right" valign="top"><a id="ab88498f5e8890878c8af961c2f975e3b" name="ab88498f5e8890878c8af961c2f975e3b"></a>
 def&#160;</td><td class="memItemRight" valign="bottom"><b>globcomp</b> (text)</td></tr>
+<tr class="memdesc:ab88498f5e8890878c8af961c2f975e3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function for getting globbed files for autocompletion. <br /></td></tr>
 <tr class="separator:ab88498f5e8890878c8af961c2f975e3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
@@ -224,9 +265,8 @@ string&#160;</td><td class="memItemRight" valign="bottom"><b>LOG</b> = &quot;DUM
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a1a04810d8dd30936a08f3e91963892d9"><td class="memItemLeft" align="right" valign="top"><a id="a1a04810d8dd30936a08f3e91963892d9" name="a1a04810d8dd30936a08f3e91963892d9"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>__run_mro_method</b> (self, method, args=None)</td></tr>
-<tr class="memdesc:a1a04810d8dd30936a08f3e91963892d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Running over the the list of parent classes in inverted <b>mro</b> order, extracting which everclass has an explicitly defined method, and running the method with the provided arguments. <br /></td></tr>
+<tr class="memitem:a1a04810d8dd30936a08f3e91963892d9"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a1a04810d8dd30936a08f3e91963892d9">__run_mro_method</a> (self, method, args=None)</td></tr>
+<tr class="memdesc:a1a04810d8dd30936a08f3e91963892d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Running some method in inverted <b>mro</b> order,.  <a href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a1a04810d8dd30936a08f3e91963892d9">More...</a><br /></td></tr>
 <tr class="separator:a1a04810d8dd30936a08f3e91963892d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -255,13 +295,56 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__run_mro_method</b> (
         </tr>
       </table>
 </div><div class="memdoc">
-<p >This greatly reduces the verbosity of writing custom commands. Each command will have accession to the cmd session, and by extension, every interface object the could potentially be used. </p>
+<p >The argument parser class is initialized with the class name as the program name and the class doc string as the description string. This greatly reduces the verbosity of writing custom commands. Each command will have accession to the cmd session, and by extension, every interface object the could potentially be used. </p>
 
 <p>Reimplemented in <a class="el" href="classctlcmd_1_1cmdbase_1_1savefilecmd.html#a776ae40beb61805055c41ca2389265a5">ctlcmd.cmdbase.savefilecmd</a>, <a class="el" href="classctlcmd_1_1cmdbase_1_1singlexycmd.html#ad19c2fe6107d67826fe546dcaead5f8b">ctlcmd.cmdbase.singlexycmd</a>, <a class="el" href="classctlcmd_1_1cmdbase_1_1hscancmd.html#a139b6e754e884aea97134c77b2897545">ctlcmd.cmdbase.hscancmd</a>, <a class="el" href="classctlcmd_1_1cmdbase_1_1zscancmd.html#ac724aea7b1c7d02b2971d6de4cbb2982">ctlcmd.cmdbase.zscancmd</a>, <a class="el" href="classctlcmd_1_1cmdbase_1_1readoutcmd.html#a86e68d559648b90f1ba37ee8aaa5957d">ctlcmd.cmdbase.readoutcmd</a>, <a class="el" href="classctlcmd_1_1digicmd_1_1pulse.html#aab715e83981b978c94bc5d9200e5e4c4">ctlcmd.digicmd.pulse</a>, <a class="el" href="classctlcmd_1_1digicmd_1_1pwm.html#aa2f05bdd0a4cfcfe44482b445f9fce96">ctlcmd.digicmd.pwm</a>, <a class="el" href="classctlcmd_1_1digicmd_1_1setadcref.html#ad44cb44879020adb28e7657968a4ceff">ctlcmd.digicmd.setadcref</a>, <a class="el" href="classctlcmd_1_1digicmd_1_1showadc.html#af72f3c51a0ca0d36d04729214e085f58">ctlcmd.digicmd.showadc</a>, <a class="el" href="classctlcmd_1_1digicmd_1_1lighton.html#a8c31ce63ba67cdaf0d93b8212e929158">ctlcmd.digicmd.lighton</a>, <a class="el" href="classctlcmd_1_1digicmd_1_1lightoff.html#a136d7230905027b2fa94c64bbab7033a">ctlcmd.digicmd.lightoff</a>, <a class="el" href="classctlcmd_1_1drscmd_1_1drsset.html#a3464298e449f42fc8279c4c3e0f3016e">ctlcmd.drscmd.drsset</a>, <a class="el" href="classctlcmd_1_1drscmd_1_1drscalib.html#a14b529a263ba9b6f6414621ec6da220c">ctlcmd.drscmd.drscalib</a>, <a class="el" href="classctlcmd_1_1drscmd_1_1drsrun.html#a8421b4015a59b79554ebb2f7372e8125">ctlcmd.drscmd.drsrun</a>, <a class="el" href="classctlcmd_1_1getset_1_1exit.html#a5f612334d10c7d3b19bea01ea58cd136">ctlcmd.getset.exit</a>, <a class="el" href="classctlcmd_1_1getset_1_1set.html#a160ba009f6cc0bb47e77685b573d3b3f">ctlcmd.getset.set</a>, <a class="el" href="classctlcmd_1_1getset_1_1get.html#a09834396147c80dd6e81919115b3154f">ctlcmd.getset.get</a>, <a class="el" href="classctlcmd_1_1getset_1_1savecalib.html#a4e11f64081bc2dce5bccab9e9f2490a6">ctlcmd.getset.savecalib</a>, <a class="el" href="classctlcmd_1_1getset_1_1loadcalib.html#a63188d5c8187868fddbb4dcf99ac82db">ctlcmd.getset.loadcalib</a>, <a class="el" href="classctlcmd_1_1getset_1_1promptaction.html#af0fbd21179d57412ab6cf2982003b5d4">ctlcmd.getset.promptaction</a>, <a class="el" href="classctlcmd_1_1getset_1_1history.html#a3c628c35f36a4dc8a8c76758d6632295">ctlcmd.getset.history</a>, <a class="el" href="classctlcmd_1_1getset_1_1wait.html#a2ae23e9a56402e67668c20762eb685d6">ctlcmd.getset.wait</a>, <a class="el" href="classctlcmd_1_1getset_1_1runfile.html#aef4b33f2513591978b3bf5430e156765">ctlcmd.getset.runfile</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1rungcode.html#a626e9300626b84a10f08a61b5cc7600a">ctlcmd.motioncmd.rungcode</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1moveto.html#a99e7bf192d41ea34a1d9f424dc860683">ctlcmd.motioncmd.moveto</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1getcoord.html#a796d26f86a21ad0109419f8c61ab6a93">ctlcmd.motioncmd.getcoord</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1disablestepper.html#ab08db7e52ff14e2dbe0f042368eb5d6b">ctlcmd.motioncmd.disablestepper</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1enablestepper.html#a7ef16616226107f91b6ff1251bd0de2c">ctlcmd.motioncmd.enablestepper</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1movespeed.html#aa82070435d6fab944212d6f2d77fe72f">ctlcmd.motioncmd.movespeed</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1sendhome.html#a4be3a870616e14a239768df8f560d051">ctlcmd.motioncmd.sendhome</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1halign.html#a635227465cb3f6e04bb81455fe46a73b">ctlcmd.motioncmd.halign</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1zscan.html#a59d4e6a512ff53945ca99ab33e871eac">ctlcmd.motioncmd.zscan</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1lowlightcollect.html#a76aa787cf4c16ea1d0c0631024125772">ctlcmd.motioncmd.lowlightcollect</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1timescan.html#a959b62471be4c47f35b6fde6834052b7">ctlcmd.motioncmd.timescan</a>, <a class="el" href="classctlcmd_1_1picocmd_1_1picoset.html#a55c5c499ea8682b1481cfc66af344c53">ctlcmd.picocmd.picoset</a>, <a class="el" href="classctlcmd_1_1picocmd_1_1picorunblock.html#a2a8dd82a30491523890432a5d309d3b6">ctlcmd.picocmd.picorunblock</a>, <a class="el" href="classctlcmd_1_1picocmd_1_1picorange.html#adc37129a806ccd251643a59783ef37da">ctlcmd.picocmd.picorange</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualset.html#a185be7242d42d408e55b47aab6c706c0">ctlcmd.viscmd.visualset</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualhscan.html#a47b14259ab732cb10f09c7742c05d367">ctlcmd.viscmd.visualhscan</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualcenterdet.html#a0aa9854e994e89e94cb0508f20959fdd">ctlcmd.viscmd.visualcenterdet</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualmaxsharp.html#a454bda6efed2462e9000c8e196a32d41">ctlcmd.viscmd.visualmaxsharp</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualsaveframe.html#afe21d9991c9daa9563eb9e3c1acd3fb5">ctlcmd.viscmd.visualsaveframe</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualzscan.html#a833a61894ad51a0cdb8b9ad9e60373df">ctlcmd.viscmd.visualzscan</a>, and <a class="el" href="classctlcmd_1_1viscmd_1_1visualshowdet.html#ac84b9b35b6c8ec57f111b0da152a9fc5">ctlcmd.viscmd.visualshowdet</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a1a04810d8dd30936a08f3e91963892d9" name="a1a04810d8dd30936a08f3e91963892d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a04810d8dd30936a08f3e91963892d9">&#9670;&nbsp;</a></span>__run_mro_method()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">def ctlcmd.cmdbase.controlcmd.__run_mro_method </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>method</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>args</em> = <code>None</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Notice that the method needs to be explcitly defined for the class to be ran, as this avoids doubling running the same methods of child classes without new method definition. </p>
+
+</div>
+</div>
 <a id="ac548f6e7a6a50135189ea2709e4056c9" name="ac548f6e7a6a50135189ea2709e4056c9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac548f6e7a6a50135189ea2709e4056c9">&#9670;&nbsp;</a></span>add_args()</h2>
 
@@ -277,8 +360,28 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__run_mro_method</b> (
         </tr>
       </table>
 </div><div class="memdoc">
+<p >Method to be overridden for adding additional argument to the containing <code>parser</code> object. This can be added at any level of subsequently defined command classes. </p>
 
 <p>Reimplemented in <a class="el" href="classctlcmd_1_1cmdbase_1_1savefilecmd.html#aef27ba3e666d5170c6a6fc988b3db3c7">ctlcmd.cmdbase.savefilecmd</a>, <a class="el" href="classctlcmd_1_1cmdbase_1_1singlexycmd.html#aaaf2c2157aa9c7e333a866b0da673e38">ctlcmd.cmdbase.singlexycmd</a>, <a class="el" href="classctlcmd_1_1cmdbase_1_1hscancmd.html#a0c0c5407bbb5f6d07ca2cdeb86574070">ctlcmd.cmdbase.hscancmd</a>, <a class="el" href="classctlcmd_1_1cmdbase_1_1zscancmd.html#a7109663d3162e9eb5b901f19655d14f5">ctlcmd.cmdbase.zscancmd</a>, <a class="el" href="classctlcmd_1_1cmdbase_1_1readoutcmd.html#a3eae0dd3a90697d06e686007950d21d1">ctlcmd.cmdbase.readoutcmd</a>, <a class="el" href="classctlcmd_1_1digicmd_1_1pulse.html#a0d076ef8b4a0765d713a4f44793d79a5">ctlcmd.digicmd.pulse</a>, <a class="el" href="classctlcmd_1_1digicmd_1_1pwm.html#acf9e0dc4bf884c21256c0bf27e84ef6a">ctlcmd.digicmd.pwm</a>, <a class="el" href="classctlcmd_1_1digicmd_1_1setadcref.html#a2f14b14463e8e15ef4c66f14d13763f2">ctlcmd.digicmd.setadcref</a>, <a class="el" href="classctlcmd_1_1digicmd_1_1showadc.html#a25594248cc8e03db44af2e0906669404">ctlcmd.digicmd.showadc</a>, <a class="el" href="classctlcmd_1_1drscmd_1_1drsset.html#ac78bf49beabf2b0eddc4b6bd08513b6e">ctlcmd.drscmd.drsset</a>, <a class="el" href="classctlcmd_1_1drscmd_1_1drscalib.html#a825c6243f4424d02bbb8972aae512654">ctlcmd.drscmd.drscalib</a>, <a class="el" href="classctlcmd_1_1drscmd_1_1drsrun.html#a5a1044e934e268bf2ed961be50d6002e">ctlcmd.drscmd.drsrun</a>, <a class="el" href="classctlcmd_1_1getset_1_1set.html#aa16e20d5ca221b3c440e8c1e0eedc21b">ctlcmd.getset.set</a>, <a class="el" href="classctlcmd_1_1getset_1_1get.html#a4abb00324d5f5360518b62da0d7afb76">ctlcmd.getset.get</a>, <a class="el" href="classctlcmd_1_1getset_1_1savecalib.html#a48d837ab30ab34a0343b51e25feff495">ctlcmd.getset.savecalib</a>, <a class="el" href="classctlcmd_1_1getset_1_1loadcalib.html#a5de46db226527f88f08a00091645ba7d">ctlcmd.getset.loadcalib</a>, <a class="el" href="classctlcmd_1_1getset_1_1promptaction.html#af1abf4d15754aa94ebcc726a2a4396f1">ctlcmd.getset.promptaction</a>, <a class="el" href="classctlcmd_1_1getset_1_1wait.html#ac556f75c2fe933c8be3a8d2ee09ab3a0">ctlcmd.getset.wait</a>, <a class="el" href="classctlcmd_1_1getset_1_1runfile.html#a34cd5102b6ed7153636b45a2036ffe1b">ctlcmd.getset.runfile</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1rungcode.html#a9a43e5dd13013d4dfdb5384735a0bcc9">ctlcmd.motioncmd.rungcode</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1moveto.html#a7dff431515331e3717481db7c906ddc9">ctlcmd.motioncmd.moveto</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1disablestepper.html#a0f076ad7b951a4b0ec0424d18fe38eef">ctlcmd.motioncmd.disablestepper</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1enablestepper.html#a79931f0776eb22e4070f09b5a778d2f0">ctlcmd.motioncmd.enablestepper</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1movespeed.html#a486e8902cc9d2ca8569a78a670fabc0d">ctlcmd.motioncmd.movespeed</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1sendhome.html#a4e29192792febad3b873ecd42840e6eb">ctlcmd.motioncmd.sendhome</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1halign.html#a8933fe0ce99f45cc76e03eaac0887326">ctlcmd.motioncmd.halign</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1zscan.html#ae580c3be0bbc0fbc9339575aa61bcd81">ctlcmd.motioncmd.zscan</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1lowlightcollect.html#a19a31428682f85d920779b97183241c6">ctlcmd.motioncmd.lowlightcollect</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1timescan.html#ae46ce9817d28adef9afabf5b29d57497">ctlcmd.motioncmd.timescan</a>, <a class="el" href="classctlcmd_1_1picocmd_1_1picoset.html#aad4f6b2fa56618ecbfd51e1e274479f7">ctlcmd.picocmd.picoset</a>, <a class="el" href="classctlcmd_1_1picocmd_1_1picorunblock.html#a2a22ae177a588b25455db46483320164">ctlcmd.picocmd.picorunblock</a>, <a class="el" href="classctlcmd_1_1picocmd_1_1picorange.html#a9474a16bb7cd471ec38cf951cbc69a7d">ctlcmd.picocmd.picorange</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualmeta.html#ab8bffabb117886dfcf78b3cbb63b1cdb">ctlcmd.viscmd.visualmeta</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualset.html#ae9277820ce04db93201d4e1026f49903">ctlcmd.viscmd.visualset</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualhscan.html#a1878b40c53bcbdf4179473c74a38d175">ctlcmd.viscmd.visualhscan</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualcenterdet.html#a462528988d6eeec1cda0290b1095fe19">ctlcmd.viscmd.visualcenterdet</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualmaxsharp.html#a8e69558faa4c702c3b4140e86b57a39d">ctlcmd.viscmd.visualmaxsharp</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualsaveframe.html#af890b30fdebf3a60c4ec3ae6a42de1a1">ctlcmd.viscmd.visualsaveframe</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualzscan.html#a589e7551a72553d3268dd87b85d39bb0">ctlcmd.viscmd.visualzscan</a>, and <a class="el" href="classctlcmd_1_1viscmd_1_1visualshowdet.html#aaf0f829eb0d66a9d89d2302dd33b909f">ctlcmd.viscmd.visualshowdet</a>.</p>
+
+</div>
+</div>
+<a id="a14d4a7ccb7fa1f3fa76acda1e33c44a0" name="a14d4a7ccb7fa1f3fa76acda1e33c44a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14d4a7ccb7fa1f3fa76acda1e33c44a0">&#9670;&nbsp;</a></span>check_handle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def ctlcmd.cmdbase.controlcmd.check_handle </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Checking the status of the signal handle, raising an exception if a termination signal was ever set by the user. </p>
 
 </div>
 </div>
@@ -361,6 +464,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__run_mro_method</b> (
         </tr>
       </table>
 </div><div class="memdoc">
+<p >Execution of the commands is now split up into following steps:</p>
 <ul>
 <li>Parsing the command line using the standard argparse library</li>
 <li>Results of the parsing will passed the run method (to be overloaded)</li>
@@ -413,7 +517,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__run_mro_method</b> (
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Notice that the stepper motor disable will not be handled here, as it should only be disabled for readout. See the readoutcmd class to see how the readout is handled. </p>
+<p >Suppresses the exception raised for in case that the gantry isn't connected so that one can test with pre-defined models. Notice that the stepper motor disable will not be handled here, as it should only be disabled for readout. See the readoutcmd class to see how the readout handles the motor disabling routine. </p>
 
 </div>
 </div>
@@ -442,6 +546,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__run_mro_method</b> (
         </tr>
       </table>
 </div><div class="memdoc">
+<p >Notice that the return of this method must be the augmented argument container instance. </p>
 
 <p>Reimplemented in <a class="el" href="classctlcmd_1_1cmdbase_1_1savefilecmd.html#a74bb803bc04bb9529e788e4e0b4f19e5">ctlcmd.cmdbase.savefilecmd</a>, <a class="el" href="classctlcmd_1_1cmdbase_1_1singlexycmd.html#a72123579a2d60e7177833c644d30e080">ctlcmd.cmdbase.singlexycmd</a>, <a class="el" href="classctlcmd_1_1cmdbase_1_1hscancmd.html#a84db0aa22b30fdf1e7214ba122317865">ctlcmd.cmdbase.hscancmd</a>, <a class="el" href="classctlcmd_1_1cmdbase_1_1zscancmd.html#a5e8fd7f1bd15cf1429bfa28af7d81f32">ctlcmd.cmdbase.zscancmd</a>, <a class="el" href="classctlcmd_1_1cmdbase_1_1readoutcmd.html#a51f593cbfdef1ae5df581864fa21490e">ctlcmd.cmdbase.readoutcmd</a>, <a class="el" href="classctlcmd_1_1getset_1_1savecalib.html#abc328db85ab50309ec260634d3a32dcd">ctlcmd.getset.savecalib</a>, <a class="el" href="classctlcmd_1_1getset_1_1loadcalib.html#a4dabb0f39e7914881d3acb4adb042d6b">ctlcmd.getset.loadcalib</a>, <a class="el" href="classctlcmd_1_1getset_1_1runfile.html#aec07ab4817ca1fc6b6d6d590028ac693">ctlcmd.getset.runfile</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1rungcode.html#a544e16bda1ca2ba2ca1cd411ef9dbb5b">ctlcmd.motioncmd.rungcode</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1moveto.html#a5060daf0c0102b547f5d87511f341ccb">ctlcmd.motioncmd.moveto</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1movespeed.html#a3a69a8209e4668d95ab734c2ff8863e6">ctlcmd.motioncmd.movespeed</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1sendhome.html#aec43377070aa1b1cbb7e471b2849e0dd">ctlcmd.motioncmd.sendhome</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1halign.html#a9ac27ecaac9c10374a508a21617f61f0">ctlcmd.motioncmd.halign</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1zscan.html#a45653df07e71336945e4d20bd43e87b8">ctlcmd.motioncmd.zscan</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1lowlightcollect.html#a368e58d92d4d8b377fd01d8338e9eb25">ctlcmd.motioncmd.lowlightcollect</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1timescan.html#a9c98e9214e3b4278144959a9bdb19d28">ctlcmd.motioncmd.timescan</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualcenterdet.html#aa8672fab0bb4db887ae51a14bddae7c4">ctlcmd.viscmd.visualcenterdet</a>, and <a class="el" href="classctlcmd_1_1viscmd_1_1visualshowdet.html#a0d5af499eea189b7f28733fb19f5439d">ctlcmd.viscmd.visualshowdet</a>.</p>
 
@@ -472,7 +577,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__run_mro_method</b> (
         </tr>
       </table>
 </div><div class="memdoc">
-<p >argument parsing method. As this is a very standard method for parsing objects, this part should not be over written. Additional parsing the the resulting arguments (complicated parsing of default values... etc) should be handled by the <code>parse</code> method. </p>
+<p >As this is a very standard method for parsing objects, this part should not be overwritten. Additional parsing the the resulting arguments (complicated parsing of default values... etc) should be handled by the <code>parse</code> method. </p>
 
 </div>
 </div>
@@ -556,8 +661,8 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__run_mro_method</b> (
         </tr>
       </table>
 </div><div class="memdoc">
-<p >'question' is a string that is presented to the user. 'default' is the presumed answer if the user just hits &lt;Enter&gt;. It must be 'yes' (the default), 'no' or None (meaning an answer is required of the user).</p>
-<p >The 'answer' return value is True for 'yes' or False for 'no'. </p>
+<p >The input 'question' is a string that is presented to the user. 'default' is the presumed answer if the user just hits &lt;Enter&gt;. It must be 'yes' (the default), 'no' or None (meaning an answer is required of the user).</p>
+<p >The return value is True for 'yes' or False for 'no'. </p>
 
 </div>
 </div>
@@ -586,6 +691,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__run_mro_method</b> (
         </tr>
       </table>
 </div><div class="memdoc">
+<p >Functions that require command specific definitions, should be overwritten in the descendent classes </p>
 
 <p>Reimplemented in <a class="el" href="classctlcmd_1_1digicmd_1_1pulse.html#a55dcfe00ab529ea2b3fb2bc7a513e4fa">ctlcmd.digicmd.pulse</a>, <a class="el" href="classctlcmd_1_1digicmd_1_1pwm.html#ab92b8a995faa0794aaa3ed04f9253f31">ctlcmd.digicmd.pwm</a>, <a class="el" href="classctlcmd_1_1digicmd_1_1setadcref.html#a5e46bb4ed4bfa146eb1823496067e6dd">ctlcmd.digicmd.setadcref</a>, <a class="el" href="classctlcmd_1_1digicmd_1_1showadc.html#adca9ecf48d23297df06af5061b177fb0">ctlcmd.digicmd.showadc</a>, <a class="el" href="classctlcmd_1_1digicmd_1_1lighton.html#a545cc3b8e83744c0d84aaf7b6e9ecd9d">ctlcmd.digicmd.lighton</a>, <a class="el" href="classctlcmd_1_1drscmd_1_1drsset.html#a44575d4a796cf9b91678f82a3aa0d02a">ctlcmd.drscmd.drsset</a>, <a class="el" href="classctlcmd_1_1drscmd_1_1drscalib.html#af714c97f3b7e20bbf7eb3ed63cb1a740">ctlcmd.drscmd.drscalib</a>, <a class="el" href="classctlcmd_1_1drscmd_1_1drsrun.html#a6ff40e63641e2362116c12a9c1cae353">ctlcmd.drscmd.drsrun</a>, <a class="el" href="classctlcmd_1_1getset_1_1exit.html#a3fe1761280a03ffa1edf287f761bd746">ctlcmd.getset.exit</a>, <a class="el" href="classctlcmd_1_1getset_1_1set.html#a816f9548b062e8e5a7b24917b7f71cf0">ctlcmd.getset.set</a>, <a class="el" href="classctlcmd_1_1getset_1_1get.html#a0fdde3ffbde7336eed55c5d4d561130d">ctlcmd.getset.get</a>, <a class="el" href="classctlcmd_1_1getset_1_1savecalib.html#a62e0ab1241bbf4ef4d87ff4184420449">ctlcmd.getset.savecalib</a>, <a class="el" href="classctlcmd_1_1getset_1_1loadcalib.html#a2f501463ac7cae8be17865037c567fd3">ctlcmd.getset.loadcalib</a>, <a class="el" href="classctlcmd_1_1getset_1_1promptaction.html#a161c0f94277bffd8ab2d412e765b73f6">ctlcmd.getset.promptaction</a>, <a class="el" href="classctlcmd_1_1getset_1_1history.html#aa35d5065962327dbbc8dc7eaa7b1cfd6">ctlcmd.getset.history</a>, <a class="el" href="classctlcmd_1_1getset_1_1wait.html#a6109a8a63022ac3b895252ace02e5d93">ctlcmd.getset.wait</a>, <a class="el" href="classctlcmd_1_1getset_1_1runfile.html#ace05d4bf762b7771754c7c24f2db6fd2">ctlcmd.getset.runfile</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1rungcode.html#a129b8f4deccfc2233dcc73baf2afdabc">ctlcmd.motioncmd.rungcode</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1moveto.html#a4c0e078cd9fe379db85390301b3c4f99">ctlcmd.motioncmd.moveto</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1getcoord.html#a3ef8ecdb0bdb7a50105e55ab7d589621">ctlcmd.motioncmd.getcoord</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1disablestepper.html#ab6b22d2c11eea6d53af66c5cd8a6bb4a">ctlcmd.motioncmd.disablestepper</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1enablestepper.html#a6c1324b8c224bf372164ff8722124bf4">ctlcmd.motioncmd.enablestepper</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1movespeed.html#a4e7c77a634e3de672402d19902c50e6b">ctlcmd.motioncmd.movespeed</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1sendhome.html#a08fadd50e1820c527806449348b1df47">ctlcmd.motioncmd.sendhome</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1halign.html#ad452036884210a8423a521b044638dc8">ctlcmd.motioncmd.halign</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1zscan.html#aab3cedc340cba48fef238de3a2cfcf3b">ctlcmd.motioncmd.zscan</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1lowlightcollect.html#ad92c3830f9485b5f7fb5e44b1c4f4c4f">ctlcmd.motioncmd.lowlightcollect</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1timescan.html#a98baa0fc8624dc55369753c389303522">ctlcmd.motioncmd.timescan</a>, <a class="el" href="classctlcmd_1_1picocmd_1_1picoset.html#a35cf3aa522c20efffb57ab30b8896fd3">ctlcmd.picocmd.picoset</a>, <a class="el" href="classctlcmd_1_1picocmd_1_1picorunblock.html#a26260f1cf4e2c31cc9945b239b3691e4">ctlcmd.picocmd.picorunblock</a>, <a class="el" href="classctlcmd_1_1picocmd_1_1picorange.html#a029b4ac391a64f6ebdc92f9300ad0c33">ctlcmd.picocmd.picorange</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualset.html#a52dfcdef21f91cc02618acc201f997b1">ctlcmd.viscmd.visualset</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualhscan.html#ac9991e60e1709fbe63a6112cc8ec3b73">ctlcmd.viscmd.visualhscan</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualcenterdet.html#a08eca230552c8b4026de16c816dffff0">ctlcmd.viscmd.visualcenterdet</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualmaxsharp.html#a1a3ef675ddfd74a5268f373580681783">ctlcmd.viscmd.visualmaxsharp</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualsaveframe.html#a0281b60e9b208644877397487f4c7804">ctlcmd.viscmd.visualsaveframe</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualzscan.html#ad05bff65cad7f3692e3e238f019d30fb">ctlcmd.viscmd.visualzscan</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualshowdet.html#a04333cd9ed7ba6838520daa2af677851">ctlcmd.viscmd.visualshowdet</a>, and <a class="el" href="classctlcmd_1_1digicmd_1_1lightoff.html#a6a92158874334e70f57573c0e389edd0">ctlcmd.digicmd.lightoff</a>.</p>
 
@@ -634,8 +740,8 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__run_mro_method</b> (
         </tr>
       </table>
 </div><div class="memdoc">
-<p >The standard sequence would be (given the input variables)</p><ul>
-<li>progress: A two long iterable construct, indicating the number of iterations ran and the expected number of total iteration. A percent value will also be displayed for at a glance monitoring.</li>
+<p >Function for displaying a progress update for the data. The standard sequence would be (given the input variables)</p><ul>
+<li>progress: A 2-long iterable construct, indicating the number of iterations ran and the expected number of total iteration. A percent value will also be displayed for at-a-glance monitoring.</li>
 <li>coordinates: If set to true, add columns for gantry coordinates</li>
 <li>temperature: If set to true, add columns for temperature sensors</li>
 <li>display_data: the key is used to display the data, and the values should be a list of floats corresponding to the data to be displayed. Data will be truncated to the 2nd decimal place, so scale data accordingly. </li>
@@ -643,46 +749,6 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__run_mro_method</b> (
 
 </div>
 </div>
-<div class="dynheader">
-Inheritance diagram for ctlcmd.cmdbase.controlcmd:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="classctlcmd_1_1cmdbase_1_1controlcmd.png" usemap="#ctlcmd.cmdbase.controlcmd_map" alt=""/>
-  <map id="ctlcmd.cmdbase.controlcmd_map" name="ctlcmd.cmdbase.controlcmd_map">
-<area href="classctlcmd_1_1cmdbase_1_1readoutcmd.html" alt="ctlcmd.cmdbase.readoutcmd" shape="rect" coords="207,112,404,136"/>
-<area href="classctlcmd_1_1cmdbase_1_1savefilecmd.html" title="commands that will save to a file" alt="ctlcmd.cmdbase.savefilecmd" shape="rect" coords="207,168,404,192"/>
-<area href="classctlcmd_1_1cmdbase_1_1singlexycmd.html" title="Commands that require the motion around a single x-y position." alt="ctlcmd.cmdbase.singlexycmd" shape="rect" coords="207,224,404,248"/>
-<area href="classctlcmd_1_1cmdbase_1_1zscancmd.html" title="Commands that will scan over a range of z positions." alt="ctlcmd.cmdbase.zscancmd" shape="rect" coords="207,280,404,304"/>
-<area href="classctlcmd_1_1digicmd_1_1lightoff.html" title="This is a test." alt="ctlcmd.digicmd.lightoff" shape="rect" coords="207,336,404,360"/>
-<area href="classctlcmd_1_1digicmd_1_1lighton.html" title="Turning the LED lights on." alt="ctlcmd.digicmd.lighton" shape="rect" coords="207,392,404,416"/>
-<area href="classctlcmd_1_1digicmd_1_1pulse.html" title="Running the trigger for a certain about of pulses with alternative wait options." alt="ctlcmd.digicmd.pulse" shape="rect" coords="207,448,404,472"/>
-<area href="classctlcmd_1_1digicmd_1_1pwm.html" title="Changing the pwm duty cycle and frequency." alt="ctlcmd.digicmd.pwm" shape="rect" coords="207,504,404,528"/>
-<area href="classctlcmd_1_1digicmd_1_1setadcref.html" title="Setting the reference voltage of the ADC readout for temperature conversion." alt="ctlcmd.digicmd.setadcref" shape="rect" coords="207,560,404,584"/>
-<area href="classctlcmd_1_1digicmd_1_1showadc.html" title="Printing the ADC values that are stored in memory." alt="ctlcmd.digicmd.showadc" shape="rect" coords="207,616,404,640"/>
-<area href="classctlcmd_1_1drscmd_1_1drscalib.html" title="Running the DRS calibration process." alt="ctlcmd.drscmd.drscalib" shape="rect" coords="207,672,404,696"/>
-<area href="classctlcmd_1_1drscmd_1_1drsset.html" title="Setting DRS4 readout operation parameters." alt="ctlcmd.drscmd.drsset" shape="rect" coords="207,728,404,752"/>
-<area href="classctlcmd_1_1getset_1_1exit.html" title="Command for exiting the main session." alt="ctlcmd.getset.exit" shape="rect" coords="207,784,404,808"/>
-<area href="classctlcmd_1_1getset_1_1get.html" title="Printing out the session parameters, and equipment settings." alt="ctlcmd.getset.get" shape="rect" coords="207,840,404,864"/>
-<area href="classctlcmd_1_1getset_1_1history.html" title="Getting the input history." alt="ctlcmd.getset.history" shape="rect" coords="207,896,404,920"/>
-<area href="classctlcmd_1_1getset_1_1loadcalib.html" title="Loading calibration information from a json file." alt="ctlcmd.getset.loadcalib" shape="rect" coords="207,952,404,976"/>
-<area href="classctlcmd_1_1getset_1_1promptaction.html" title="Displaying message that requires manual intervention." alt="ctlcmd.getset.promptaction" shape="rect" coords="207,1008,404,1032"/>
-<area href="classctlcmd_1_1getset_1_1runfile.html" title="Running a file with a list of commands." alt="ctlcmd.getset.runfile" shape="rect" coords="207,1064,404,1088"/>
-<area href="classctlcmd_1_1getset_1_1savecalib.html" title="Saving current calibration information into a json file." alt="ctlcmd.getset.savecalib" shape="rect" coords="207,1120,404,1144"/>
-<area href="classctlcmd_1_1getset_1_1set.html" title="Setting calibration system devices." alt="ctlcmd.getset.set" shape="rect" coords="207,1176,404,1200"/>
-<area href="classctlcmd_1_1getset_1_1wait.html" title="Suspending the interactive session for N seconds." alt="ctlcmd.getset.wait" shape="rect" coords="207,1232,404,1256"/>
-<area href="classctlcmd_1_1motioncmd_1_1disablestepper.html" title="Manual disabling of stepper motor." alt="ctlcmd.motioncmd.disablestepper" shape="rect" coords="207,1288,404,1312"/>
-<area href="classctlcmd_1_1motioncmd_1_1enablestepper.html" title="Manual re-enabling of stepper motor." alt="ctlcmd.motioncmd.enablestepper" shape="rect" coords="207,1344,404,1368"/>
-<area href="classctlcmd_1_1motioncmd_1_1getcoord.html" title="Printing current gantry coordinates." alt="ctlcmd.motioncmd.getcoord" shape="rect" coords="207,1400,404,1424"/>
-<area href="classctlcmd_1_1motioncmd_1_1movespeed.html" title="Setting the motion speed of the gantry x-y-z motors." alt="ctlcmd.motioncmd.movespeed" shape="rect" coords="207,1456,404,1480"/>
-<area href="classctlcmd_1_1motioncmd_1_1rungcode.html" title="Running a raw command gcode command." alt="ctlcmd.motioncmd.rungcode" shape="rect" coords="207,1512,404,1536"/>
-<area href="classctlcmd_1_1motioncmd_1_1sendhome.html" title="Sending the gantry system home." alt="ctlcmd.motioncmd.sendhome" shape="rect" coords="207,1568,404,1592"/>
-<area href="classctlcmd_1_1picocmd_1_1picorange.html" title="Automatically setting the voltage range of the picoscope based on a few set waveforms of data." alt="ctlcmd.picocmd.picorange" shape="rect" coords="207,1624,404,1648"/>
-<area href="classctlcmd_1_1picocmd_1_1picoset.html" title="Setting picoscope operation parameters." alt="ctlcmd.picocmd.picoset" shape="rect" coords="207,1680,404,1704"/>
-<area href="classctlcmd_1_1viscmd_1_1visualmeta.html" title="Meta class for additional options needed for visual operations." alt="ctlcmd.viscmd.visualmeta" shape="rect" coords="207,1736,404,1760"/>
-<area href="classctlcmd_1_1viscmd_1_1visualsaveframe.html" title="Saving the current image to some path." alt="ctlcmd.viscmd.visualsaveframe" shape="rect" coords="207,1792,404,1816"/>
-<area href="classctlcmd_1_1viscmd_1_1visualset.html" title="Defining the parameters used for finding the detector in the field of view." alt="ctlcmd.viscmd.visualset" shape="rect" coords="207,1848,404,1872"/>
-  </map>
-</div></div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>/github/workspace/ctlcmd/<a class="el" href="cmdbase_8py.html">cmdbase.py</a></li>
 </ul>

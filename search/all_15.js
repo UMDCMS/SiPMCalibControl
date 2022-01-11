@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['yellow_0',['YELLOW',['../group__Logger.html#gaba4e028a5dd00811634073ed50bae500',1,'YELLOW(const std::string &amp;str):&#160;logger.cc'],['../group__Logger.html#gaba4e028a5dd00811634073ed50bae500',1,'YELLOW(const std::string &amp;):&#160;logger.cc']]]
+  ['zscan_0',['zscan',['../classctlcmd_1_1motioncmd_1_1zscan.html',1,'ctlcmd::motioncmd']]],
+  ['zscan_5fsamples_1',['zscan_samples',['../classserver_1_1sockets_1_1Session.html#a1f3ba154e96c80c4ed370f9ab3fe381b',1,'server::sockets::Session']]],
+  ['zscancmd_2',['zscancmd',['../classctlcmd_1_1cmdbase_1_1zscancmd.html',1,'ctlcmd::cmdbase']]]
 ];

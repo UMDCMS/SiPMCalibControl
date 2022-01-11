@@ -90,16 +90,16 @@ $(function() {
 <p >As the <code>pybind11</code> section of the code is separated out into a separate directory. All interfaces should have their dedicated header file. The documentation within the header file should be kept to a minimum, with the detailed explanations placed next to the various functions. We will intentionally choose a different format compared with python, with both functions and class names in the <code>CamelCase</code> format.</p>
 <h2>Overview of technology for various interfaces</h2>
 <p >Here we go over the technology used in the various interface, as well as independent design philosophies used for the various interfaces. All libraries are compiled using <a href="https://pybind11.readthedocs.io/en/stable/">pybind11</a> for exposure to python interface.</p>
-<h3><a class="el" href="classGPIO.html">GPIO</a> interface for ADC, PWM and raw trigger control</h3>
+<h3><a class="el" href="classGPIO.html" title="Interface to the GPIO hardware interfaces.">GPIO</a> interface for ADC, PWM and raw trigger control</h3>
 <p >Files: <a href="gpio.cc">gpio.cc</a>, <a href="gpio.hpp">gpio.hpp</a></p>
-<p >Controls to the <a class="el" href="classGPIO.html">GPIO</a> interface uses raw <code>sysfs</code> interfaces to reduce external library dependencies, and to allow for fast switching for raw trigger controls (trigger can fire as fast a new nanosecond with a period of 1 microsecond).</p>
+<p >Controls to the <a class="el" href="classGPIO.html" title="Interface to the GPIO hardware interfaces.">GPIO</a> interface uses raw <code>sysfs</code> interfaces to reduce external library dependencies, and to allow for fast switching for raw trigger controls (trigger can fire as fast a new nanosecond with a period of 1 microsecond).</p>
 <ul>
 <li>For references of raw gpio controls (trigger and switches), see the <a href="https://elinux.org/GPIO">linux kernel documentation</a>.</li>
 <li>For references of PWM related controls, see <a href="https://jumpnowtek.com/rpi/Using-the-Raspberry-Pi-Hardware-PWM-timers.html">here</a></li>
 <li>For references of ADS1115s ADC det controls via i2c see <a href="http://www.bristolwatch.com/rpi/ads1115.html">here</a></li>
 <li>For additional PIN reference of the Raspberry Pi, look at the outputs of the <a href="http://wiringpi.com/">wiring-pi</a> library.</li>
 </ul>
-<h3><a class="el" href="classVisual.html" title="This will be the one class that we will note be declaring as a singleton instance,...">Visual</a> interface for visual processing</h3>
+<h3><a class="el" href="classVisual.html" title="Visual system interface class.">Visual</a> interface for visual processing</h3>
 <p >Files: <a href="visual.cc">visual.cc</a>, <a href="visual.hpp">visual.hpp</a></p>
 <p >We are using OpenCV to process the inputs of a video stream to find a detector element. It uses a relatively simple contouring algorithm and dark square finding algorithm define the photo-detector position. Details of the implementation are documented in the function itself.</p>
 <h3>Picoscope interface for SiPM data collection</h3>
@@ -117,8 +117,20 @@ Modules</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDRSContainer.html">DRSContainer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handling interfacing between the DRS readout system.  <a href="classDRSContainer.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCoder.html">GCoder</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handling the transmission of gcode motion commands.  <a href="classGCoder.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGPIO.html">GPIO</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interface to the <a class="el" href="classGPIO.html" title="Interface to the GPIO hardware interfaces.">GPIO</a> hardware interfaces.  <a href="classGPIO.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPicoUnit.html">PicoUnit</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interface for the picotech PICOSCOPE for data collection.  <a href="classPicoUnit.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisual.html">Visual</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classVisual.html" title="Visual system interface class.">Visual</a> system interface class.  <a href="classVisual.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->

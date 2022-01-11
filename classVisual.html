@@ -85,10 +85,48 @@ $(function() {
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classVisual-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">Visual Class Reference</div></div>
+  <div class="headertitle"><div class="title">Visual Class Reference<div class="ingroups"><a class="el" href="group__hardware.html">Hardware Interface</a></div></div></div>
 </div><!--header-->
 <div class="contents">
-<table class="memberdecls">
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >As the visual process has a long startup time, a thread will be started whenever a visual system is declared, which will constantly flush the contents of the camera interface to a buffer, process the standardized image processing routine, and store the processed image and extracted variables, and repeat until some termination code is received. This looped thread will be briefly paused when the user request the image, to ensure the integrity of the transferred data. The core of the image processing functions is photodetector finding: finding the optimal "dark rectangle" within the image, and calculated in the center of this rectange in terms of pixel coordinates.</p>
+<p >This will be the one interface functions that does not start use a singleton notation, as the system can potentially have more than 1 camera running similar algorithms.</p>
+<h2><a class="el" href="classVisual.html" title="Visual system interface class.">Visual</a> processing thread management.</h2>
+<p >There are 3 data members in the <a class="el" href="classVisual.html" title="Visual system interface class.">Visual</a> class used for managing the thread.</p><ul>
+<li>std::thread loop_thead: the thread object for handling the loop function</li>
+<li>std::atomic&lt;bool&gt; run_loop: the thread-safe flag variable to indicate whether the loop should continue.</li>
+<li>std::mutex loop_mutex: Mutex lock required for data manipulation of the image containers.</li>
+</ul>
+<p >The main loop will basically loop over the following:</p><ul>
+<li>Check if run_loop is true. Exit the loop if not.</li>
+<li>Wait to lock the mutex.</li>
+<li>Extract image and perform image processes</li>
+<li>unlock the mutex.</li>
+<li>Wait a fixed pause period.</li>
+</ul>
+<p >Under this model, the image extraction functions has windows in which it can choose to lock the mutex while it perform data extraction. The starting and stopping of the loop is also a simple check on the value of the <code>run_loop</code> variable.</p>
+<h2><a class="el" href="classVisual.html" title="Visual system interface class.">Visual</a> processing algorithm for finding a photo detecting element</h2>
+<p >The algorithm uses as much inbuilt OpenCV functions as possible to avoid being over taxing on the lowe power processing system the calibration stand is expected to run on. The algorithm is as follows:</p>
+<ul>
+<li>Convert the image into a binary image by some grayscale threshold value.</li>
+<li>Use the binary image to generate a contours of the high-contrast features in the image.</li>
+<li>For the found contours, the following filters is applied:<ul>
+<li>The size (bounding box area), must be greater than some value (this removes noise speckles).</li>
+<li>The ratio of the edges of the bounding box must be sufficiently similar (the photo detecting element is expected to be square.)</li>
+<li>The internal area of the original image within the contour must be sufficiently dark (as photodetecting elements are expected to be gray)</li>
+<li>The convex hull of the contour must be able to be approximated as a rectangle.</li>
+</ul>
+</li>
+<li>The convex hull of the remaining contours will be used. The use of convex hulls is to eliminate reflection artifacts that might appear on the detector face.</li>
+<li>The convex hull with the largest area will be assumed to be the detector element of interest, then the following parameters will be determined and stored in the VisualResults class:<ul>
+<li>The average pixel position of the convex hull in (x,y)</li>
+<li>The pixel position of the convex hull after polygon approximation</li>
+<li>The sharpness measure of the surrounding image.</li>
+</ul>
+</li>
+</ul>
+<p >Functions should beable to receive a cv::Mat object as the input, to allow for arbitrary levels of debugging and feature demonstration. </p>
+</div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structVisual_1_1VisResult.html">VisResult</a></td></tr>
@@ -126,20 +164,19 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>FrameHeight</b> (
 <tr class="separator:af7735b790d77eaf33bfe3dd49e84c167"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3eccc554e6ac1c6b82ba8abe9fed5909"><td class="memItemLeft" align="right" valign="top"><a id="a3eccc554e6ac1c6b82ba8abe9fed5909" name="a3eccc554e6ac1c6b82ba8abe9fed5909"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>SaveImage</b> (const std::string &amp;, const bool raw)</td></tr>
-<tr class="memdesc:a3eccc554e6ac1c6b82ba8abe9fed5909"><td class="mdescLeft">&#160;</td><td class="mdescRight">saving the image to some path. <br /></td></tr>
+<tr class="memdesc:a3eccc554e6ac1c6b82ba8abe9fed5909"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saving the image to some path. <br /></td></tr>
 <tr class="separator:a3eccc554e6ac1c6b82ba8abe9fed5909"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa6fa7214ef7b72a441af3274ffc07cc5"><td class="memItemLeft" align="right" valign="top"><a id="aa6fa7214ef7b72a441af3274ffc07cc5" name="aa6fa7214ef7b72a441af3274ffc07cc5"></a>
-std::vector&lt; uchar &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>GetImageBytes</b> ()</td></tr>
+<tr class="memitem:aa6fa7214ef7b72a441af3274ffc07cc5"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uchar &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisual.html#aa6fa7214ef7b72a441af3274ffc07cc5">GetImageBytes</a> ()</td></tr>
+<tr class="memdesc:aa6fa7214ef7b72a441af3274ffc07cc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returning the image as a JPEG encoded string.  <a href="classVisual.html#aa6fa7214ef7b72a441af3274ffc07cc5">More...</a><br /></td></tr>
 <tr class="separator:aa6fa7214ef7b72a441af3274ffc07cc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91676c34eb02387862935c452bcff0b0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; ContourList &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisual.html#a91676c34eb02387862935c452bcff0b0">FindContours</a> (const cv::Mat &amp;) const</td></tr>
 <tr class="memdesc:a91676c34eb02387862935c452bcff0b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given an base image, find the contours and group them according to the various selection criteria.  <a href="classVisual.html#a91676c34eb02387862935c452bcff0b0">More...</a><br /></td></tr>
 <tr class="separator:a91676c34eb02387862935c452bcff0b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a067821b0c0b442f442757059365a74de"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structVisual_1_1VisResult.html">VisResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisual.html#a067821b0c0b442f442757059365a74de">MakeResult</a> (const cv::Mat &amp;, const Contour_t &amp;) const</td></tr>
-<tr class="memdesc:a067821b0c0b442f442757059365a74de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given the original image in cv::Mat format, and the candidate convexhull contour, compute all the information:  <a href="classVisual.html#a067821b0c0b442f442757059365a74de">More...</a><br /></td></tr>
+<tr class="memdesc:a067821b0c0b442f442757059365a74de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given the original image in cv::Mat format, and the candidate convex contour, calculate the summary results.  <a href="classVisual.html#a067821b0c0b442f442757059365a74de">More...</a><br /></td></tr>
 <tr class="separator:a067821b0c0b442f442757059365a74de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e93641ff63d0c20c124baf9019bf8d3"><td class="memItemLeft" align="right" valign="top"><a id="a5e93641ff63d0c20c124baf9019bf8d3" name="a5e93641ff63d0c20c124baf9019bf8d3"></a>
-cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><b>MakeDisplay</b> (const cv::Mat &amp;, const std::vector&lt; ContourList &gt; &amp;) const</td></tr>
-<tr class="memdesc:a5e93641ff63d0c20c124baf9019bf8d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given the original image in cv::Mat format, and the sorted list of countors found, display the processed image, with each different fail mode displayed in a different color for debugging. <br /></td></tr>
+<tr class="memitem:a5e93641ff63d0c20c124baf9019bf8d3"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisual.html#a5e93641ff63d0c20c124baf9019bf8d3">MakeDisplay</a> (const cv::Mat &amp;, const std::vector&lt; ContourList &gt; &amp;) const</td></tr>
+<tr class="memdesc:a5e93641ff63d0c20c124baf9019bf8d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given the original image in cv::Mat format, and the sorted list of countors found, generate a processed image with contours,.  <a href="classVisual.html#a5e93641ff63d0c20c124baf9019bf8d3">More...</a><br /></td></tr>
 <tr class="separator:a5e93641ff63d0c20c124baf9019bf8d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade5f606904c07440f14dc25d93c986a6"><td class="memItemLeft" align="right" valign="top">ContourList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisual.html#ade5f606904c07440f14dc25d93c986a6">GetRawContours</a> (const cv::Mat &amp;) const</td></tr>
 <tr class="memdesc:ade5f606904c07440f14dc25d93c986a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The thresholding and contouring algorithm.  <a href="classVisual.html#ade5f606904c07440f14dc25d93c986a6">More...</a><br /></td></tr>
@@ -212,11 +249,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>EndLoopThread</b> ()<
 <tr class="memdesc:ad7489217caf63d7afa323b7e051f935a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The method used for running the loop.  <a href="classVisual.html#ad7489217caf63d7afa323b7e051f935a">More...</a><br /></td></tr>
 <tr class="separator:ad7489217caf63d7afa323b7e051f935a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8277835225cbbf994bc502e5d5b127c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisual.html#ac8277835225cbbf994bc502e5d5b127c">InitVarDefault</a> ()</td></tr>
-<tr class="memdesc:ac8277835225cbbf994bc502e5d5b127c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default values of the algorithm.  <a href="classVisual.html#ac8277835225cbbf994bc502e5d5b127c">More...</a><br /></td></tr>
+<tr class="memdesc:ac8277835225cbbf994bc502e5d5b127c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default settings values of the algorithm.  <a href="classVisual.html#ac8277835225cbbf994bc502e5d5b127c">More...</a><br /></td></tr>
 <tr class="separator:ac8277835225cbbf994bc502e5d5b127c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26e3909e5a8c3e9c34e318b88ef79564"><td class="memItemLeft" align="right" valign="top"><a id="a26e3909e5a8c3e9c34e318b88ef79564" name="a26e3909e5a8c3e9c34e318b88ef79564"></a>
-<a class="el" href="structVisual_1_1VisResult.html">VisResult</a>&#160;</td><td class="memItemRight" valign="bottom"><b>FindDetector</b> (const cv::Mat &amp;)</td></tr>
-<tr class="memdesc:a26e3909e5a8c3e9c34e318b88ef79564"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given image in cv::Mat format. Compute the visual algorithm results and stored in a processed version of the image in the internal buffer. <br /></td></tr>
+<tr class="memitem:a26e3909e5a8c3e9c34e318b88ef79564"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structVisual_1_1VisResult.html">VisResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisual.html#a26e3909e5a8c3e9c34e318b88ef79564">FindDetector</a> (const cv::Mat &amp;)</td></tr>
+<tr class="memdesc:a26e3909e5a8c3e9c34e318b88ef79564"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given image in cv::Mat format. Compute the visual algorithm results and stored in a processed version of the image in the internal buffer.  <a href="classVisual.html#a26e3909e5a8c3e9c34e318b88ef79564">More...</a><br /></td></tr>
 <tr class="separator:a26e3909e5a8c3e9c34e318b88ef79564"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
@@ -259,7 +295,41 @@ std::mutex&#160;</td><td class="memItemRight" valign="bottom"><b>loop_mutex</b><
         </tr>
       </table>
 </div><div class="memdoc">
-<p >The convex hull of all contours passing the selection criteria would be sorted by size (bounding box area). All contours found other than those that fail the size constrains will be returned, as they are useful for debugging parameters. </p>
+<p >Storing outputs of the opencv contouring algorithm according to where they pass the selection:</p><ul>
+<li>If they fail the minimal size requirements, these contours are discarded as these are typically imaging "speckles" that comes from image sensor noise.</li>
+<li>All other selection criteria (rectangular approximation, luminosity requirements, size requirements... etc) should always be store, as failed contours is a good indication for which parameters need to be tuned for when the algorithm apparently fails. </li>
+</ul>
+
+</div>
+</div>
+<a id="a26e3909e5a8c3e9c34e318b88ef79564" name="a26e3909e5a8c3e9c34e318b88ef79564"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26e3909e5a8c3e9c34e318b88ef79564">&#9670;&nbsp;</a></span>FindDetector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structVisual_1_1VisResult.html">Visual::VisResult</a> Visual::FindDetector </td>
+          <td>(</td>
+          <td class="paramtype">const cv::Mat &amp;&#160;</td>
+          <td class="paramname"><em>img</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >This handles the main control flow of:</p><ul>
+<li>Extracting the image.</li>
+<li>Running the contouring algorithm</li>
+<li>Morphing the results into the standard <a class="el" href="structVisual_1_1VisResult.html">VisResult</a> format. </li>
+</ul>
 
 </div>
 </div>
@@ -278,7 +348,25 @@ std::mutex&#160;</td><td class="memItemRight" valign="bottom"><b>loop_mutex</b><
         </tr>
       </table>
 </div><div class="memdoc">
-<p >In the rare event that the frame is empty (either because the camera was never properly initialized, or that there was an issue with the image transfer proces), a blank (all 0 value image) with the correct dimensions will be returned. </p>
+<p >In the rare event that the frame is empty (either because the camera was never properly initialized, or that there was an issue with the image transfer process), a blank (all 0 value image) with the correct dimensions will be returned to ensure that all subsequent functions will function nominally. </p>
+
+</div>
+</div>
+<a id="aa6fa7214ef7b72a441af3274ffc07cc5" name="aa6fa7214ef7b72a441af3274ffc07cc5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6fa7214ef7b72a441af3274ffc07cc5">&#9670;&nbsp;</a></span>GetImageBytes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; uchar &gt; Visual::GetImageBytes </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >This method is required by the GUI interface to allow for streaming of data via HTTP image requests. </p>
 
 </div>
 </div>
@@ -349,7 +437,7 @@ std::mutex&#160;</td><td class="memItemRight" valign="bottom"><b>loop_mutex</b><
 <p >In addition: we will ensure the following settings on the camera device:</p><ul>
 <li>Fix the resolution as 1280x1024. This ensures that the visual processing algorithm will perform in realtime</li>
 <li>Reduce the buffer to 0. This ensures that the image received from the camera will be as close to real time as possible.</li>
-<li>Switch of any known image processing. This is so that image processing artifacts does not skew the image processing algorithms we use.</li>
+<li>Switch <b>off</b> any known image processing. This is so that image processing artifacts does not skew the image processing algorithms we use.</li>
 </ul>
 <p >A thread will be started as soon as the devices is known to be availabe. </p>
 
@@ -381,6 +469,35 @@ std::mutex&#160;</td><td class="memItemRight" valign="bottom"><b>loop_mutex</b><
 
 </div>
 </div>
+<a id="a5e93641ff63d0c20c124baf9019bf8d3" name="a5e93641ff63d0c20c124baf9019bf8d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e93641ff63d0c20c124baf9019bf8d3">&#9670;&nbsp;</a></span>MakeDisplay()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Mat Visual::MakeDisplay </td>
+          <td>(</td>
+          <td class="paramtype">const cv::Mat &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; ContourList &gt; &amp;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Each different fail mode displayed in a different color for debugging simple debugging. The return is the processed image in a standard opencv::Mat data format. </p>
+
+</div>
+</div>
 <a id="a067821b0c0b442f442757059365a74de" name="a067821b0c0b442f442757059365a74de"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a067821b0c0b442f442757059365a74de">&#9670;&nbsp;</a></span>MakeResult()</h2>
 
@@ -406,10 +523,10 @@ std::mutex&#160;</td><td class="memItemRight" valign="bottom"><b>loop_mutex</b><
         </tr>
       </table>
 </div><div class="memdoc">
-<ul>
-<li>The average position in pixels</li>
-<li>The sharpness measure (2nd and 4th order)</li>
-<li>The area of the hull</li>
+<p >The summary results include:</p><ul>
+<li>The average position in pixels in the area covered by the contour.</li>
+<li>The sharpness measure (2nd and 4th order), calculated in a bounding rectangle twice the size of the original bounding rectangle.</li>
+<li>The area (in pixels) of the convex hull</li>
 <li>The maximum distance fo two points in the contour</li>
 <li>The 8 coordinates of the corners after polygon approximation. </li>
 </ul>
@@ -439,8 +556,7 @@ std::mutex&#160;</td><td class="memItemRight" valign="bottom"><b>loop_mutex</b><
   </tr>
 </table>
 </div><div class="memdoc">
-<p >The atomic object needs to be passed in as a argument to function properly.</p>
-<p >In between loop iterations, a fixed 5 millisecond paused is used to ensure that other processes has a chance to extract image and processing results when requested. Notice that this pause must be faster than the camera refresh rate to have a real-time like iamge presentation in the GUI program. </p>
+<p >The atomic object needs to be passed in as a argument to function properly. In between loop iterations, a fixed 5 millisecond paused is used to ensure that other processes has a chance to extract image and processing results when requested. This pause must be faster than the camera refresh rate to have a real-time like iamge presentation in the GUI program. </p>
 
 </div>
 </div>
@@ -473,8 +589,6 @@ std::mutex&#160;</td><td class="memItemRight" valign="bottom"><b>loop_mutex</b><
 
 </div>
 </div>
-
-<p><code>#include &lt;<a class="el" href="visual_8hpp_source.html">visual.hpp</a>&gt;</code></p>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/github/workspace/src/<a class="el" href="visual_8hpp_source.html">visual.hpp</a></li>
 <li>/github/workspace/src/<a class="el" href="visual_8cc.html">visual.cc</a></li>

@@ -92,7 +92,13 @@ $(function() {
 <div class="textblock"><p >Since a bunch of the manipulation of the data member is heavily tied with the calibration processes, this fill will only contain a list the data members. The actual manipulation of the data members will be written in the action.py file behind the calibration part.</p>
 <p >In addition, so pass the full functionality of the underlying cmd class to the GUI terminal, we will be using the following file descriptors to interact with the cmd class. Two descriptors will be opened for each of the file input output sessions as reading and writing will need two different descriptor values. For the sake of having semi-servicable terminal interactions, a string buffer and buffer index is also used to keep track of the current line.</p>
 <p >This class is strictly a container class, with minimal amounts of data manipulation. All manipulations of the global container instance 'session' is handled by the various function methods in the .py files. </p>
-</div><table class="memberdecls">
+</div><div class="dynheader">
+Inheritance diagram for server.sockets.Session:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classserver_1_1sockets_1_1Session.png" alt=""/>
+ </div></div>
+<table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a64b02f4c625da7d51784ce6dc0d8f7b3"><td class="memItemLeft" align="right" valign="top"><a id="a64b02f4c625da7d51784ce6dc0d8f7b3" name="a64b02f4c625da7d51784ce6dc0d8f7b3"></a>
@@ -240,12 +246,6 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>SESSION_TYPE_SYSTEM</b
 int&#160;</td><td class="memItemRight" valign="bottom"><b>SESSION_TYPE_STANDARD</b> = 2</td></tr>
 <tr class="separator:af36b5534e6738d9cefcb88bb2ed4cd5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<div class="dynheader">
-Inheritance diagram for server.sockets.Session:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="classserver_1_1sockets_1_1Session.png" alt=""/>
- </div></div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>/github/workspace/server/sockets/__init__.py</li>
 </ul>
