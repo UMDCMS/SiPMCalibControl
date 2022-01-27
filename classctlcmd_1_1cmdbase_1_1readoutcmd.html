@@ -91,11 +91,11 @@ $(function() {
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >This typically assumes that the readout device (ADC/picoscope/drs4 or otherwise) has been properly set up with the correct range and settings, and this class will provide the new "self.readout" method to subsequent commands such that the the return can be a singular number representing the readout value of triggers.</p>
-<p >Modifications to the readout includes:</p><ul>
-<li>The integration window: specified in terms of the ADC timing bin indices. If both are left to be 0, then the entire timing range is used.</li>
+<p >Modifications to the readout includes: - The integration window: specified in terms of the ADC timing bin indices. If both are left to be 0, then the entire timing range is used.</p><ul>
 <li>The windows used to determine pedestal subtraction: specified in terms of ADC timing bin indices. If both are left to be 0, the no pedestal subtraction is performed.</li>
-<li>The number of waveforms to perform data collection. Notice that depending on the data collection routine of interest, the samples specified will either be stored as is, or be the number of samples used for averaging. In the case of scope like readouts, averaged values will have the uncertainty divided by the square root of the number of waveforms used (to account for intrinsice Poisson uncertainties) </li>
+<li>The number of waveforms to perform data collection. Notice that depending on the data collection routine of interest, the samples specified will either be stored as is, or be the number of samples used for averaging. In the case of scope like readouts, averaged values will have the uncertainty divided by the square root of the number of waveforms used (to account for intrinsice Poisson uncertainties)</li>
 </ul>
+<p >In addition to the readout modifications, there is the option to pause the system before taking the data, this allows either for the system to physically settle to a stable/clean state, or act as a artificial throttle to the throughput for scheduling reasons. </p>
 </div><div class="dynheader">
 Inheritance diagram for ctlcmd.cmdbase.readoutcmd:</div>
 <div class="dyncontent">
@@ -515,7 +515,8 @@ string&#160;</td><td class="memItemRight" valign="bottom"><b>LOG</b> = &quot;DUM
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Abstracting the readout method for child classes. The <code>average</code> flag will be used to indicate whether the list return value should be the list of readout values of length (args.samples) or be a 2-tuple indicating the avearge and (reduced) standard deviation of the raw list. </p>
+<p >Abstracting the readout method for child classes. The <code>average</code> flag will be used to indicate whether the list return value should be the list of readout values of length (args.samples) or be a 2-tuple indicating the avearge and (reduced) standard deviation of the raw list.</p>
+<p >For pausing the system we will be splitting the wait into 0.1 second interval to allow for the system to detect interuption signals to halt the system even during the wait period. </p>
 
 </div>
 </div>
