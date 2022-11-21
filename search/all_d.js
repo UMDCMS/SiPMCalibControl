@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['quad_5fmodel_0',['quad_model',['../classctlcmd_1_1viscmd_1_1visualmaxsharp_1_1quad__model.html',1,'ctlcmd::viscmd::visualmaxsharp']]]
+  ['oneline_5fstring_0',['oneline_string',['../group__Logging.html#gac27671d5efc462796a3d5c499e03c490',1,'cmod::fmt']]]
 ];

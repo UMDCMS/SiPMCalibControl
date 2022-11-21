@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['vx_0',['vx',['../classGCoder.html#aef1ce3e570fbfbde2f6ff8607af68d1b',1,'GCoder']]]
+  ['monitor_0',['MONITOR',['../group__Logging.html#gaa78761287868225c0a1abfde41724369',1,'cmod::fmt']]]
 ];

@@ -26,7 +26,7 @@ var menudata={children:[
 {text:"Main Page",url:"index.html"},
 {text:"CLI manual",url:"group__cli.html"},
 {text:"CLI design",url:"group__cli__design.html"},
-{text:"GUI manual",url:"gui.html"},
+{text:"GUI manual",url:"md__github_workspace_server_manual.html#gui"},
 {text:"GUI design",url:"group__gui__design.html"},
 {text:"Hardware implementations",url:"group__hardware.html"},
 {text:"Classes",url:"annotated.html",children:[

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['last_5fcmd_0',['last_cmd',['../classctlcmd_1_1cmdbase_1_1controlterm.html#a2d3d9d61b3927ccbe7111394125bc286',1,'ctlcmd::cmdbase::controlterm']]]
+  ['hw_5fdebug_0',['HW_DEBUG',['../group__Logging.html#ga7da5ece7a653db4dbde17e502193c2bc',1,'cmod::fmt']]]
 ];

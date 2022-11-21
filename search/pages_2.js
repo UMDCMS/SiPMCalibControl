@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['gui_20manual_0',['GUI manual',['../gui.html',1,'']]]
+  ['installation_20instructions_0',['Installation instructions',['../md_install.html',1,'']]]
 ];

@@ -1,18 +1,16 @@
 var searchData=
 [
-  ['make_5fcmd_5flowlight_0',['make_cmd_lowlight',['../namespaceserver_1_1sockets_1_1format.html#adbf28d04aab5e4240076af41bbfb56fa',1,'server::sockets::format']]],
-  ['make_5fcmd_5flumialign_1',['make_cmd_lumialign',['../namespaceserver_1_1sockets_1_1format.html#acb0eb7176fd6599bda1a0e16917f1bee',1,'server::sockets::format']]],
-  ['make_5fcmd_5fvissave_2',['make_cmd_vissave',['../namespaceserver_1_1sockets_1_1format.html#af56ed88f57d88e19b34c044ac24d32d6',1,'server::sockets::format']]],
-  ['make_5fcmd_5fvisualalign_3',['make_cmd_visualalign',['../namespaceserver_1_1sockets_1_1format.html#a2431d4d7e729eca2ff3ad87a95d0b97d',1,'server::sockets::format']]],
-  ['make_5fcmd_5fvisualscan_4',['make_cmd_visualscan',['../namespaceserver_1_1sockets_1_1format.html#a81875d72db2bbc311619ef03d048e30d',1,'server::sockets::format']]],
-  ['make_5fcmd_5fzscan_5',['make_cmd_zscan',['../namespaceserver_1_1sockets_1_1format.html#ac6f4035eb024b657187f937c1cfffde1',1,'server::sockets::format']]],
-  ['make_5fjpeg_5fimage_5fbyte_6',['make_jpeg_image_byte',['../namespaceserver_1_1sockets_1_1parsing.html#ab4c6a1b9e8778199bc4c65c175d8488c',1,'server::sockets::parsing']]],
-  ['makedisplay_7',['MakeDisplay',['../classVisual.html#a5e93641ff63d0c20c124baf9019bf8d3',1,'Visual']]],
-  ['makeresult_8',['MakeResult',['../classVisual.html#a067821b0c0b442f442757059365a74de',1,'Visual']]],
-  ['matchcoord_9',['MatchCoord',['../classGCoder.html#ad25591d06ba002a2a8513deb24f830f8',1,'GCoder']]],
-  ['model_10',['model',['../classctlcmd_1_1motioncmd_1_1halign.html#a6c8af04e9483469214b165ace668568e',1,'ctlcmd::motioncmd::halign']]],
-  ['modifytargetcoordinate_11',['ModifyTargetCoordinate',['../classGCoder.html#a0fadfd83acbbe109079586b0448b6ebb',1,'GCoder']]],
-  ['move_5fgantry_12',['move_gantry',['../classctlcmd_1_1cmdbase_1_1controlcmd.html#a74703b72742aa4d52ee94514a169a47b',1,'ctlcmd::cmdbase::controlcmd']]],
-  ['moveto_13',['MoveTo',['../classGCoder.html#a57e0ec622a84c08f0d236b58ae63f9e8',1,'GCoder']]],
-  ['movetoraw_14',['MoveToRaw',['../classGCoder.html#aec4a8271b868941912b138870f25da14',1,'GCoder']]]
+  ['make_5fcolor_5ftext_0',['make_color_text',['../group__Logging.html#ga4f2143d8adf23a51a1f8bd823b71b342',1,'cmod::fmt']]],
+  ['make_5fdict_5fresponse_1',['make_dict_response',['../classviews_1_1FileDataParsing.html#aecc2afdad76b7c253d6878684e0d3c61',1,'views::FileDataParsing']]],
+  ['make_5fgeneric_5fprocessed_5fdata_2',['make_generic_processed_data',['../classviews_1_1FileDataParsing.html#a1b95a4573e70feaf421475ac2931de81',1,'views::FileDataParsing']]],
+  ['make_5fhist_5fprocessed_5fdata_3',['make_hist_processed_data',['../classviews_1_1FileDataParsing.html#aa1aa28be3f0b3f5d6146dbfb3ad72c5f',1,'views::FileDataParsing']]],
+  ['makedisplay_4',['MakeDisplay',['../classVisual.html#a5e93641ff63d0c20c124baf9019bf8d3',1,'Visual']]],
+  ['makeresult_5',['MakeResult',['../classVisual.html#a067821b0c0b442f442757059365a74de',1,'Visual']]],
+  ['matchcoord_6',['MatchCoord',['../classGCoder.html#ad25591d06ba002a2a8513deb24f830f8',1,'GCoder']]],
+  ['model_7',['model',['../classctlcmd_1_1motioncmd_1_1halign.html#a6c8af04e9483469214b165ace668568e',1,'ctlcmd::motioncmd::halign']]],
+  ['modifytargetcoordinate_8',['ModifyTargetCoordinate',['../classGCoder.html#a5d80871f351bc70b0346388e09392497',1,'GCoder']]],
+  ['move_5fgantry_9',['move_gantry',['../classctlcmd_1_1cmdbase_1_1controlcmd.html#ae536f5012b40d6a7f5284927e32bb523',1,'ctlcmd::cmdbase::controlcmd']]],
+  ['moveto_10',['MoveTo',['../classGCoder.html#aa81693186210c14acc552b30911ef218',1,'GCoder']]],
+  ['movetoraw_11',['MoveToRaw',['../classGCoder.html#a55e74e0a05f6a68183979ca57c782d6f',1,'GCoder']]],
+  ['mppc_5fbias_12',['MPPC_Bias',['../classcmod_1_1TBController_1_1I2CController.html#ab737e2bdc506df2f8680a100d057708b',1,'cmod::TBController::I2CController']]]
 ];

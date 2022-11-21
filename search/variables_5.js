@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['gcoder_0',['gcoder',['../classctlcmd_1_1cmdbase_1_1controlcmd.html#a44ee89515ea98bd95e82c8956e16c0de',1,'ctlcmd::cmdbase::controlcmd']]]
+  ['error_0',['ERROR',['../group__Logging.html#ga46f4be836a3b56f7c7f9f45c35449ab0',1,'cmod::fmt']]]
 ];

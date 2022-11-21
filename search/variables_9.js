@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['zscan_5fsamples_0',['zscan_samples',['../classserver_1_1sockets_1_1Session.html#a1f3ba154e96c80c4ed370f9ab3fe381b',1,'server::sockets::Session']]]
+  ['notset_0',['NOTSET',['../group__Logging.html#ga3f579658999f6e894a84f8f99599a0d9',1,'cmod::fmt']]]
 ];

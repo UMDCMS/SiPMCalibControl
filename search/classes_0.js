@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['actionlist_0',['ActionList',['../classcmod_1_1actionlist_1_1ActionList.html',1,'cmod::actionlist']]]
+  ['actionrequest_0',['ActionRequest',['../classsockets_1_1ActionRequest.html',1,'sockets']]],
+  ['argumentparser_1',['ArgumentParser',['../classcmod_1_1fmt_1_1ArgumentParser.html',1,'cmod::fmt']]]
 ];
