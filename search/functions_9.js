@@ -1,16 +1,16 @@
 var searchData=
 [
   ['make_5fcolor_5ftext_0',['make_color_text',['../group__Logging.html#ga4f2143d8adf23a51a1f8bd823b71b342',1,'cmod::fmt']]],
-  ['make_5fdeep_1',['make_deep',['../classcmod_1_1TBController_1_1TBController.html#a3147052313ca9318026f95136831035a',1,'cmod::TBController::TBController']]],
-  ['make_5fdict_5fresponse_2',['make_dict_response',['../classviews_1_1FileDataParsing.html#aecc2afdad76b7c253d6878684e0d3c61',1,'views::FileDataParsing']]],
-  ['make_5fgeneric_5fprocessed_5fdata_3',['make_generic_processed_data',['../classviews_1_1FileDataParsing.html#a1b95a4573e70feaf421475ac2931de81',1,'views::FileDataParsing']]],
-  ['make_5fhist_5fprocessed_5fdata_4',['make_hist_processed_data',['../classviews_1_1FileDataParsing.html#aa1aa28be3f0b3f5d6146dbfb3ad72c5f',1,'views::FileDataParsing']]],
+  ['make_5fdeep_1',['make_deep',['../classcmod_1_1TBController_1_1TBController.html#a82a8b7d89d6c560dd06da2d706001215',1,'cmod::TBController::TBController']]],
+  ['make_5fdict_5fresponse_2',['make_dict_response',['../classviews_1_1FileDataParsing.html#ac00648fc4c94276c81d644be2a649063',1,'views::FileDataParsing']]],
+  ['make_5fgeneric_5fprocessed_5fdata_3',['make_generic_processed_data',['../classviews_1_1FileDataParsing.html#ae59519aaf8c10cc0d600d9f9e6bc8519',1,'views::FileDataParsing']]],
+  ['make_5fhist_5fprocessed_5fdata_4',['make_hist_processed_data',['../classviews_1_1FileDataParsing.html#ad0c27dd9372e6f2fe6746e9644474259',1,'views::FileDataParsing']]],
   ['makedisplay_5',['MakeDisplay',['../classVisual.html#a5e93641ff63d0c20c124baf9019bf8d3',1,'Visual']]],
   ['makeresult_6',['MakeResult',['../classVisual.html#a067821b0c0b442f442757059365a74de',1,'Visual']]],
   ['matchcoord_7',['MatchCoord',['../classGCoder.html#ad25591d06ba002a2a8513deb24f830f8',1,'GCoder']]],
-  ['model_8',['model',['../classctlcmd_1_1motioncmd_1_1halign.html#a6c8af04e9483469214b165ace668568e',1,'ctlcmd::motioncmd::halign']]],
+  ['model_8',['model',['../classctlcmd_1_1motioncmd_1_1halign.html#a9ec95a29fc9138feab9eacb58582026e',1,'ctlcmd::motioncmd::halign']]],
   ['modifytargetcoordinate_9',['ModifyTargetCoordinate',['../classGCoder.html#a5d80871f351bc70b0346388e09392497',1,'GCoder']]],
-  ['move_5fgantry_10',['move_gantry',['../classctlcmd_1_1cmdbase_1_1controlcmd.html#ae536f5012b40d6a7f5284927e32bb523',1,'ctlcmd::cmdbase::controlcmd']]],
+  ['move_5fgantry_10',['move_gantry',['../classctlcmd_1_1cmdbase_1_1controlcmd.html#a3368b28d8545b024fb27862fc82082c6',1,'ctlcmd::cmdbase::controlcmd']]],
   ['moveto_11',['MoveTo',['../classGCoder.html#aa81693186210c14acc552b30911ef218',1,'GCoder']]],
   ['movetoraw_12',['MoveToRaw',['../classGCoder.html#a55e74e0a05f6a68183979ca57c782d6f',1,'GCoder']]],
   ['mppc_5fbias_13',['MPPC_Bias',['../classcmod_1_1TBController_1_1I2CController.html#ab737e2bdc506df2f8680a100d057708b',1,'cmod::TBController::I2CController']]]

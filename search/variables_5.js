@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['error_0',['ERROR',['../group__Logging.html#ga46f4be836a3b56f7c7f9f45c35449ab0',1,'cmod::fmt']]]
+  ['hw_5fdebug_0',['HW_DEBUG',['../group__Logging.html#ga7da5ece7a653db4dbde17e502193c2bc',1,'cmod::fmt']]]
 ];

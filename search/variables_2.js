@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['board_0',['board',['../namespacecmod_1_1board.html#a851a749483dd60dc8bd226a04a6ed7c7',1,'cmod::board']]]
+  ['cmd_5fhist_0',['CMD_HIST',['../group__Logging.html#ga4efc495b57bf7d8de045940121481693',1,'cmod::fmt']]],
+  ['critical_1',['CRITICAL',['../group__Logging.html#gaa341380952028bfbe1fe209d4e5b708f',1,'cmod::fmt']]],
+  ['cx_2',['cx',['../classGCoder.html#ab216457715e907c472ddad6ffbd8e3c0',1,'GCoder']]]
 ];

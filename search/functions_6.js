@@ -1,7 +1,7 @@
 var searchData=
 [
   ['get_5fcurrent_5fdacb_0',['get_current_dacb',['../classctlcmd_1_1tbcmd_1_1tb__levelped.html#a75de002d75320223dacc1ae5bff8c2df',1,'ctlcmd::tbcmd::tb_levelped']]],
-  ['get_5fnames_1',['get_names',['../classctlcmd_1_1cmdbase_1_1controlterm.html#a25c7a6a5519310533014633cafab320e',1,'ctlcmd::cmdbase::controlterm']]],
+  ['get_5fnames_1',['get_names',['../classctlcmd_1_1cmdbase_1_1controlterm.html#addce8ec6c3f0c0559e39a07a5c024e7c',1,'ctlcmd::cmdbase::controlterm']]],
   ['getbuffer_2',['GetBuffer',['../classPicoUnit.html#a8ef09162758f45f7394c1b6581115561',1,'PicoUnit']]],
   ['getcontourmaxmeasure_3',['GetContourMaxMeasure',['../classVisual.html#a0b621b6354183f884d307b8538826acf',1,'Visual']]],
   ['getcontoursize_4',['GetContourSize',['../classVisual.html#a47a9253434e50f2f18fd89ddefad91bd',1,'Visual']]],
@@ -18,7 +18,7 @@ var searchData=
   ['gettimearray_15',['GetTimeArray',['../classDRSContainer.html#a109129be88b319cf5e34388e1420cf98',1,'DRSContainer']]],
   ['getvisresult_16',['GetVisResult',['../classVisual.html#ab6a5d4b57d0adee00eba0a68a822386b',1,'Visual']]],
   ['getwaveform_17',['GetWaveform',['../classDRSContainer.html#ad7fdbaabf1241621b75b5d989a29464e',1,'DRSContainer']]],
-  ['globcomp_18',['globcomp',['../classctlcmd_1_1cmdbase_1_1controlcmd.html#ab88498f5e8890878c8af961c2f975e3b',1,'ctlcmd::cmdbase::controlcmd']]],
+  ['globcomp_18',['globcomp',['../classctlcmd_1_1cmdbase_1_1controlcmd.html#aa2ea04e2c2ab53815b7cdb64af527cc4',1,'ctlcmd::cmdbase::controlcmd']]],
   ['gpio_19',['GPIO',['../classGPIO.html#ab443a641cef81b1a9ec0211c5aa9c1ac',1,'GPIO']]],
   ['gpioread_20',['GPIORead',['../classGPIO.html#a0cc048d46544bc9be95f22bb7f670a12',1,'GPIO']]],
   ['gpiowrite_21',['GPIOWrite',['../classGPIO.html#a960201daa506963d5764ce64a0542441',1,'GPIO']]]
