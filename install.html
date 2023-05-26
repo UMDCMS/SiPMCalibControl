@@ -201,7 +201,7 @@ $(function() {
 <h4>Docker instructions</h4>
 <p>This is mainly used for testing interface development. While the docker script will copy the hardware interface packages for compilation, the interactive interface is set up such that it will still operate if the various control components are not available.</p>
 <p>To build a docker image and start the docker image.</p>
-<div class="fragment"><div class="line">docker build --tag sipmcalib_control --rm ./</div>
+<div class="fragment"><div class="line">docker build --tag sipmcalib_control --platform linux/amd64 --rm ./</div>
 <div class="line">docker run -it -p 9100:9100 sipmcalib_control:latest</div>
 </div><!-- fragment --><p>This should start an interactive bash session, where once can then start the CLI/GUI interfaces with the python commands</p>
 <div class="fragment"><div class="line">python control.py</div>
