@@ -88,7 +88,7 @@ $(function() {
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="md_mainpage"></a> This official documentation of the SiPM calibaration control program. This documentation covers both the user-level manual and the software design aspects. The official code is hosted on <a href="https://github.com/UMDCMS/SiPMCalibControl">GitHub</a>, the analysis of the data collected by this package is performed by a separate software package that can be found <a href="https://github.com/UMDCMS/SiPMCalib">here</a>.</p>
 <h2>General start-up instructions for system users</h2>
-<p>For security reasons, the details for connecting to the various machines will not be listed in this manual, and should ask the system administrators if there are connection issues. There are two UNIX-like machines in the system and the user is responsible to making sure they are using the correct commands on the correct machine.</p>
+<p>For security reasons, the details for connecting to the various machines will not be listed in this manual, and should ask the system administrators if there are connection issues. There are two UNIX-like machines in the system and the user is responsible to making sure they are using the correct commands on the correct machine. The instructions works only after <a class="el" href="install.html">installation</a> of the various system permissions.</p>
 <h3>Power on</h3>
 <p>Power on all low voltage systems required for gantry calibrations, this includes:</p>
 <ul>
@@ -96,16 +96,16 @@ $(function() {
 <li>The 5V power distribution board.</li>
 <li>The tileboard controller (the tileboard receives power through the tileboard controller.)</li>
 <li>The analog pulse generator.</li>
-<li>The Picoscope digital oscilloscope.</li>
-<li>The DRS4 digital oscilloscope.</li>
-<li>Additional monitoring scope outside the main dark room.</li>
+<li>The Picoscope digital oscilloscope (optional).</li>
+<li>The DRS4 digital oscilloscope (optional).</li>
+<li>Additional monitoring scope outside the main dark room (optional).</li>
 </ul>
 <p>At this stage, do <em>not</em> turn on the high voltage power supply at this point in time, as this can potentially damage the SiPMs by exposing them to high intensity background light.</p>
 <h3>Permission checks and service start-up</h3>
 <p>Log into the control Raspberry Pi (contact administrators for how to do this), and make sure you are on an account with the permission to the key control devices.</p>
 <div class="fragment"><div class="line">[user@rpi]$ groups</div>
 <div class="line">drs pico i2c gpio video # Output should contain at least these 5 groups.</div>
-</div><!-- fragment --><p>After this, log into the tileboard controller, and start the relevant services using the following 2 commands:</p>
+</div><!-- fragment --><p>After this, log into the tileboard controller (again, contact administrators for how to do this), and start the relevant services using the following 2 commands:</p>
 <div class="fragment"><div class="line">[user@TBController]$ $HOME/scripts/startup.sh</div>
 <div class="line">[user@TBController]$ $HOME/scripts/serverup.sh</div>
 </div><!-- fragment --><p>The first script would prompt you for a password, while the second script should be complete without any outputs. Notice the second script starts the services in the background and should not be executed a second time. If you are unsure whether the services are already running, run the following commands:</p>
@@ -122,15 +122,17 @@ $(function() {
 <ul>
 <li>The <a class="el" href="group__cli.html">command line interface</a>. This is mainly for the development of calibration sequences, individual subsystem controls schemes as well for debugging potential issues (or if you are simply more comfortable with a CLI interface). The main manual for using the CLI interface can be found at <a class="el" href="group__cli.html">here</a>. If you are attempting to develop a certain calibration sequence, be sure to also console the <a class="el" href="group__cli__design.html">CLI design</a> pages for more detailed information on how to do so. You can start a CLI control program instance using the following commands on the control Raspberry Pi:</li>
 </ul>
-<div class="fragment"><div class="line">[user@RPi]$ cd $HOME/SiPMCalibControl</div>
-<div class="line">[user@RPi]$ python3 control.py</div>
+<div class="fragment"><div class="line">[user@RPi]$ cd $HOME/SiPMCalibControl/</div>
+<div class="line">[user@RPi]$ DEVICES=1 ./deploy.sh # This will spawn a docker session</div>
+<div class="line">[root@&lt;hash&gt;]$ python3 control.py</div>
 </div><!-- fragment --><ul>
 <li>The <a class="el" href="gui.html">graphical user interface</a>(currently under constructions): This interface is mainly for batch processing of SiPM calibration during production, with additional niceties such as on-the-fly plotting for rudimentary data quality management and other progress visualization tools. You can start the GUI control program by running the Raspberry Pi, then use your favorite web browser to go to the URL: <code>&lt;RPi.ip.address&gt;:9100</code>.</li>
 </ul>
 <div class="fragment"><div class="line">[user@RPi]$ cd $HOME/SiPMCalibControl</div>
-<div class="line">[user@RPi]$ python3 gui_control.py</div>
+<div class="line">[user@RPi]$ DEVICES=1 ./deploy.sh # This will spawn a docker session</div>
+<div class="line">[root@&lt;hash&gt;]$ python3 gui_control.py</div>
 </div><!-- fragment --><h2>Development instructions</h2>
-<p>For developers, these following pages mainly aims to highlight the main design and development philosophies used for the various systems. Due to how the Doxygen prefering to generate docs pages of individual objects into a single page, which may cost you more clicks, developers might want to use these pages as a starting point, and browse the documentations in the various doc strings and comments directly.</p>
+<p>For developers, these following pages aim to highlight the main design and development philosophies used for the various systems. Due to how the Doxygen preferring to generate docs pages of individual objects into a single page, which costs more clicks, developers might want to use these pages as a starting point, and browse the documentations in the various doc strings and comments directly.</p>
 <ul>
 <li>CLI interface objects and design main reference can be found on this page <a class="el" href="group__cli__design.html">here</a>.</li>
 <li>GUI interface server/client model as well as additional references can be found on this <a class="el" href="group__gui__design.html">page</a></li>
