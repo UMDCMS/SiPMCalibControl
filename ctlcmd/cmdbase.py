@@ -771,6 +771,32 @@ class controlcmd(object):
     globlist = [file + '/' if os.path.isdir(file) else file for file in globlist]
     return globlist
 
+ 
+class rootfilecmd(controlcmd):
+  """
+  @brief commands that control saving to root file
+  
+  @ingroup cli_design
+  
+  @details Commands for data which needs to be saved to a root file, this is an 
+  update to the old savefilecmd class which only wrote to a text file. All functions
+  that wish to have their default save location overridden should simply change the 
+  DEFAULT_SAVEFILE static variable.
+  
+  The data of timestamp (ms), detector id, gantry coordinates (mm), measured bias voltage (mv),
+  measured SiPM temp (C), and measured pulser board temp (C) will always be in the root file. 
+  Extra branches with more data will be added based on the commands run. 
+  
+  The save file string can also include placeholder strings to have the filename
+  automatically be modified according other input arguments and/or the state of
+  the system. This allows the same command to be used for different
+  configurations while still have the results be saved in distinct files.
+  Placeholders will be specified in the angle braced. For the full list of
+  special placeholders, as well as how the file parsing is handled, see the
+  detailed documentation in the `ctlcmd.cmdbase.savefilecmd.parse` method.
+  """
+  DEFAULT_SAVEFILE = 'SAVEFILE_<TIMESTAMP>'
+  
 
 class savefilecmd(controlcmd):
   """
