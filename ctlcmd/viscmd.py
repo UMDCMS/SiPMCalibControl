@@ -159,6 +159,7 @@ class visualhscan(cmdbase.hscancmd, cmdbase.savefilecmd, visualmeta):
         reco_x.append(center.x)
         reco_y.append(center.y)
 
+      ##Update with root, Saves x center and y center data 
       self.write_standard_line((center.x, center.y), det_id=args.detid)
       self.pbar_data(center=f'({center.x:.0f}, {center.y:.0f})',
                      sharp=f'({center.s2:1f}, {center.s4:.1f})')
