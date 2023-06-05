@@ -483,7 +483,7 @@ class visualzscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.savefilecmd,
       reco_y.append(center.y)
       reco_a.append(center.area)
       reco_d.append(center.maxmeas)
-
+      ## Update to root, saves sharpness laplace, center x, center y, center area, and center of maxmeas and det_id
       self.write_standard_line(
           (laplace[-1], center.x, center.y, center.area, center.maxmeas),
           det_id=args.detid)
