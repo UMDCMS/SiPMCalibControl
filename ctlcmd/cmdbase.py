@@ -852,7 +852,8 @@ class rootfilecmd(controlcmd):
                           filename,
                           flags=re.IGNORECASE)
         self.openroot(filename)
-        return args
+    
+    return args
       
   ##TODO: add in options for the types of data we want to store, later
   ##TODO: add in columns for the data added every single row
