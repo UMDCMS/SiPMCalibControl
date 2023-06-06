@@ -872,7 +872,7 @@ class rootfilecmd(controlcmd):
                              "readout":np.float64}, title=functiontype)
       self.array1 = []
       self.rootfile = file
-     elif functiontype == "timescan":
+    elif functiontype == "timescan":
       file.mktree("DataTree", {"time":np.float32,"det_id":np.int_,"gantry x":np.float32,"gantry y":np.float32,
                              "gantry z":np.float32, "LED bias voltage":np.float32, "LED temp":np.float32, "SiPM temp":np.float32,
                              "lumival":np.float64,"uncval":np.float64,"S2":np.float64,"S4":np.float64}, title=functiontype)
