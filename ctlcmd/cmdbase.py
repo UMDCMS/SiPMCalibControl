@@ -854,7 +854,7 @@ class rootfilecmd(controlcmd):
     self.openroot(filename)
     return args
       
-  def openroot(self,filename):
+  def openroot(self,filename,functiontype):
     print("openroot rootfilecmd")
     file = uproot.recreate(filename)
     file.mktree("DataTree", {"time":np.float32,"det_id":np.int_,"gantry x":np.float32,"gantry y":np.float32,
@@ -863,9 +863,13 @@ class rootfilecmd(controlcmd):
     self.rootfile = file
     
     self.standardarr = []
+    
     self.array1 = []
     self.array2 = []
+    
+    
     self.n=1
+  
   
   def fillroot(self,var1,var2,time=0.0,det_id=-100):
     print("fillroot rootfilecmd")
