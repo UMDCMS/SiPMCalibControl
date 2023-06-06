@@ -858,6 +858,7 @@ class rootfilecmd(controlcmd):
   def openroot(self,functiontype):
     print("openroot rootfilecmd")
     file = uproot.recreate(self.filename)
+    self.functiontype=functiontype
     
     ##go back through and make sure that the names of everything make sense
     if functiontype == "halign"or"zscan":
@@ -907,15 +908,33 @@ class rootfilecmd(controlcmd):
     self.standardarr = []
     self.n=1
   
-  
-  def fillroot(self,var1,var2,time=0.0,det_id=-100):
+  ##need to consider how the collection of data will work! maybe use default values
+  def fillroot(self,time=0.0,det_id=-100,var1=0,var2=0,var3=0,var4=0,var5=0):
     print("fillroot rootfilecmd")
+    
+    ##make it so only some arrays get filled based on the functiontype
     self.array1.append(var1)
     self.array2.append(var2)
     self.standardarr.append([time,det_id,self.gcoder.opx,self.gcoder.opy,self.gcoder.opz,
                             self.gpio.adc_read(2),self.gpio.ntc_read(0),self.gpio.rtd_read(1)])
     if self.n%10 ==0:
       rotated = list(zip(*self.standardarr))
+      
+      if self.functiontype == "halign"or"zscan":
+        self.rootfile["DataTree"].extend({"time":rotated[0],"det_id":rotated[1],"gantry x":rotated[2],"gantry y":rotated[3],
+                                        "gantry z":rotated[4], "LED bias voltage":rotated[5], "LED temp":rotated[6], 
+                                        "SiPM temp":rotated[7],"humival":self.array1,"uncval":self.array2})
+      elif self.functiontype == "lowlight collect":
+        self.rootfile["DataTree"].extend({"time":rotated[0],"det_id":rotated[1],"gantry x":rotated[2],"gantry y":rotated[3],
+                                        "gantry z":rotated[4], "LED bias voltage":rotated[5], "LED temp":rotated[6], 
+                                        "SiPM temp":rotated[7],"readout":self.array1})
+      elif self.functiontype == "timescan":
+        self.rootfile["DataTree"].extend({"time":rotated[0],"det_id":rotated[1],"gantry x":rotated[2],"gantry y":rotated[3],
+                                        "gantry z":rotated[4], "LED bias voltage":rotated[5], "LED temp":rotated[6], 
+                                        "SiPM temp":rotated[7],"lumival":self.array1,"uncval":self.array2,"S2":self.array3,"S4":self.array4})
+      elif self.functiontype == "tb_levelped":
+      elif self.functiontype == "visualzscan":
+      
       
       
       self.rootfile["DataTree"].extend({"time":rotated[0],"det_id":rotated[1],"gantry x":rotated[2],"gantry y":rotated[3],
