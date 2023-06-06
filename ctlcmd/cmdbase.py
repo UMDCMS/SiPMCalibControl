@@ -870,7 +870,7 @@ class rootfilecmd(controlcmd):
     self.array2 = []
     self.n=1
   
-  def fillroot(self,time=0.0,det_id,=-100,var1,var2,):
+  def fillroot(self,var1,var2,time=0.0,det_id=-100):
     print("fillroot rootfilecmd")
     self.array1.append(var1)
     self.array2.append(var2)
