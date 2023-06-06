@@ -881,7 +881,7 @@ class rootfilecmd(controlcmd):
     if self.n%10 ==0:
       for s in self.standardarr:
         print(*s)
-      rotated = list(zip(*self.standardarr))
+      rotated = [list(x) for x in zip(*self.standardarr)]
       for s in rotated:
         print(*s)
       
