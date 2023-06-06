@@ -801,7 +801,6 @@ class rootfilecmd(controlcmd):
   def __init__(self, cmd):
     print("initialize rootfilecmd")
     controlcmd.__init__(self, cmd)
-    self.openroot()
     
   def add_args(self):
     print("add_args in rootfilecmd")
@@ -813,22 +812,62 @@ class rootfilecmd(controlcmd):
                        default=self.DEFAULT_SAVEFILE,
                        help="""File path to save (placeholders in angle braces).
                        default=%(default)s""")
+ 
+  def parse(self,args):
+    if not args.saveroot:  # Early exit if savefile is not set
+      self.savefile = None
+      return args
+    filename = args.saveroot
+
+    # Adding time stamp filenames
+    timestring = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+    filename = re.sub('<TIMESTAMP>', timestring, filename, flags=re.IGNORECASE)
+
+    # Adding boardid to the settings
+    filename = re.sub('<BOARDID>',
+                      str(self.board.boardid),
+                      filename,
+                      flags=re.IGNORECASE)
+    # Adding boardtype to the settings
+    filename = re.sub('<BOARDTYPE>',
+                      str(self.board.boardtype),
+                      filename,
+                      flags=re.IGNORECASE)
+
+    # Substituting tokens for argument values
+    for action in self.parser._actions:
+      for string in action.option_strings:
+        string = string.strip('-')
+        if not hasattr(args, string): continue
+        val = ''
+        try:
+          val = action.type(getattr(args, string))
+        except:
+          pass
+        substring = '{0}{1}'.format(string, val)
+        substring = re.sub(r'\.', 'p', substring)
+        filename = re.sub('\\<{0}\\>'.format(string),
+                          substring,
+                          filename,
+                          flags=re.IGNORECASE)
+        self.openroot(filename)
+        return args
+      
   ##TODO: add in options for the types of data we want to store, later
   ##TODO: add in columns for the data added every single row
-  def openroot(self):
+  def openroot(self,filename):
     print("openroot rootfilecmd")
-    filename = self.makefilename()
     file = uproot.recreate(filename)
     file.mktree("DataTree", {"test1": "var * int64", "test2": "var * int64"}, title="Title")
-    
+    self.rootfile = file
   
   ##TODO: need to change this so that it is not filling individual entries 
   ##but is instead filling entire vectors/arrays, otherwise takes up too much time
   def fillroot(self,var1,var2):
     print("fillroot rootfilecmd")
-    file["DataTree"].extend({"test1":var1,"test2":var2})
+    self.rootfile["DataTree"].extend({"test1":var1,"test2":var2})
     
-  ##TODO: update this function to take into account time & user input  
+  ##TODO: update this function to take into account time & user input, possibly redundant with parse
   def makefilename(self):
     print("makefilename rootfilecmd")
     filename = self.DEFAULT_SAVEFILE
