@@ -798,6 +798,7 @@ class rootfilecmd(controlcmd):
   """
   ##TODO: update this to make the file location customizable
   DEFAULT_SAVEFILE = 'SAVEFILE_TEST'
+  FILENAME = DEFAULT_SAVEFILE
   def __init__(self, cmd):
     print("initialize rootfilecmd")
     controlcmd.__init__(self, cmd)
@@ -851,11 +852,12 @@ class rootfilecmd(controlcmd):
                           substring,
                           filename,
                           flags=re.IGNORECASE)
+    self.filename=filename
     return args
       
-  def openroot(self,filename,functiontype):
+  def openroot(self,functiontype):
     print("openroot rootfilecmd")
-    file = uproot.recreate(filename)
+    file = uproot.recreate(self.filename)
     
     ##go back through and make sure that the names of everything make sense
     if functiontype == "halign"or"zscan":
