@@ -806,8 +806,7 @@ class rootfilecmd(controlcmd):
     group = self.parser.add_argument_group(
         "root file saving options", """Options for changing the root file location.
         For more details, see the official documentation.""")
-    group.add_argument('-sr',
-                       '--saveroot',
+    group.add_argument('--saveroot',
                        type=str,
                        default=self.DEFAULT_SAVEFILE,
                        help="""File path to save (placeholders in angle braces).
