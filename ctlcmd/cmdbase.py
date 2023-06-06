@@ -882,6 +882,7 @@ class rootfilecmd(controlcmd):
       self.array4 = []
       self.rootfile = file
     elif functiontype == "tb_levelped":
+      print("Haven't made the root tree for tb_levelped yet, will not work")
       ##TODO: determine types of data
     elif functiontype == "visualhscan":
       file.mktree("DataTree", {"time":np.float32,"det_id":np.int_,"gantry x":np.float32,"gantry y":np.float32,
