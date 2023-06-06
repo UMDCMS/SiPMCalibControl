@@ -858,7 +858,7 @@ class rootfilecmd(controlcmd):
   def openroot(self,filename):
     print("openroot rootfilecmd")
     file = uproot.recreate(filename)
-    file.mktree("DataTree", {"test1":"i1","test2":"i1"}, title="Title")
+    file.mktree("DataTree", {"test1":"int64[]","test2":"int64[]"}, title="Title")
     self.rootfile = file
   
   ##TODO: need to change this so that it is not filling individual entries 
