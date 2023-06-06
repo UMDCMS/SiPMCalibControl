@@ -227,6 +227,7 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.savefilecmd, cmdbase.
     test1 = []
     test2 = []
     ## Running over mesh.
+    self.openroot("halign")
     for xval, yval in self.start_pbar(zip(args.x, args.y)):
       self.check_handle()
       self.move_gantry(xval, yval, args.scanz)
