@@ -864,13 +864,13 @@ class rootfilecmd(controlcmd):
     self.rootfile = file
     self.array1 = []
     self.array2 = []
-    self.n = 1
+    self.n=1
   
   def fillroot(self,var1,var2):
     print("fillroot rootfilecmd")
     self.array1.append(var1)
     self.array2.append(var2)
-    if n%10 ==0:
+    if self.n%10 ==0:
       self.rootfile["DataTree"].extend({"test1":self.array1,"test2":self.array2})
       array1.clear()
       array2.clear()
