@@ -817,10 +817,12 @@ class rootfilecmd(controlcmd):
   def openroot(self):
     filename = self.makefilename()
     file = uproot.recreate(filename)
-    file.mktree("DataTree", {"centerx": "var * int64", "centery": "var * int64"}, title="Title")
-   
-  ##def fillroot(self,var1,var2):
-  ##  file["DataTree"].extend
+    file.mktree("DataTree", {"test1": "var * int64", "test2": "var * int64"}, title="Title")
+  
+  ##TODO: need to change this so that it is not filling individual entries 
+  ##but is instead filling entire vectors/arrays, otherwise takes up too much time
+  def fillroot(self,var1,var2):
+    file["DataTree"].extend({"test1":var1,"test2",var2})
     
   ##TODO: update this function to take into account time & user input  
   def makefilename(self):
