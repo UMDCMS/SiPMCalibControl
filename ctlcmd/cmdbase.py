@@ -814,6 +814,7 @@ class rootfilecmd(controlcmd):
                        default=%(default)s""")
  
   def parse(self,args):
+    print("parse in rootfilecmd")
     if not args.saveroot:  # Early exit if savefile is not set
       self.savefile = None
       return args
@@ -860,19 +861,21 @@ class rootfilecmd(controlcmd):
     file = uproot.recreate(filename)
     file.mktree("DataTree", {"test1":np.float64,"test2":np.float64}, title="Title")
     self.rootfile = file
+    self.array1 = []
+    self.array2 = []
+    self.n = 1
   
-  ##TODO: need to change this so that it is not filling individual entries 
-  ##but is instead filling entire vectors/arrays, otherwise takes up too much time
   def fillroot(self,var1,var2):
     print("fillroot rootfilecmd")
-    self.rootfile["DataTree"].extend({"test1":var1,"test2":var2})
-    
-  ##TODO: update this function to take into account time & user input, possibly redundant with parse
-  def makefilename(self):
-    print("makefilename rootfilecmd")
-    filename = self.DEFAULT_SAVEFILE
-    return filename
-    
+    self.array1.append(var1)
+    self.array2.append(var2)
+    if n%10 ==0:
+      self.rootfile["DataTree"].extend({"test1":self.array1,"test2":self.array2})
+      array1.clear()
+      array2.clear()
+      self.n=1
+    self.n+=1
+  
 class savefilecmd(controlcmd):
   """
   @brief commands that will save to a file
