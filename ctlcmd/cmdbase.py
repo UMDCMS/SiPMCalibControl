@@ -872,8 +872,8 @@ class rootfilecmd(controlcmd):
     self.array2.append(var2)
     if self.n%10 ==0:
       self.rootfile["DataTree"].extend({"test1":self.array1,"test2":self.array2})
-      array1.clear()
-      array2.clear()
+      self.array1.clear()
+      self.array2.clear()
       self.n=1
     self.n+=1
   
