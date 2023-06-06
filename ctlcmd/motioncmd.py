@@ -222,13 +222,23 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.savefilecmd, cmdbase.
     lumi = []
     unc = []
     total = len(args.x)
-
+    
+    n = 0
+    test1 = []
+    test2 = []
     ## Running over mesh.
     for xval, yval in self.start_pbar(zip(args.x, args.y)):
       self.check_handle()
       self.move_gantry(xval, yval, args.scanz)
       lumival, uncval = self.readout(args, average=True)
-      self.fillroot(lumival,uncval)
+      test1.append[lumival]
+      test2.append[lumival]
+      n+=1
+      if n%10==0:
+        self.fillroot(test1,test2)
+        n=0
+        test1.clear()
+        test2.clear()
       ##self.write_standard_line((lumival, uncval), det_id=args.detid)
       self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}')
       lumi.append(abs(lumival))
