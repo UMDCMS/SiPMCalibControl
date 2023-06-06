@@ -851,8 +851,7 @@ class rootfilecmd(controlcmd):
                           substring,
                           filename,
                           flags=re.IGNORECASE)
-        self.openroot(filename)
-    
+    self.openroot(filename)
     return args
       
   ##TODO: add in options for the types of data we want to store, later
