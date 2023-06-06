@@ -184,7 +184,8 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.savefilecmd):
 
   def __init__(self, cmd):
     cmdbase.controlcmd.__init__(self, cmd)
-
+    self.openroot()
+    
   def add_args(self):
     """
     @brief Adding the overwrite and power settings
@@ -228,7 +229,8 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.savefilecmd):
       self.check_handle()
       self.move_gantry(xval, yval, args.scanz)
       lumival, uncval = self.readout(args, average=True)
-      self.write_standard_line((lumival, uncval), det_id=args.detid)
+      self.fillroot(lumival,uncval)
+      ##self.write_standard_line((lumival, uncval), det_id=args.detid)
       self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}')
       lumi.append(abs(lumival))
       unc.append(uncval)
@@ -365,8 +367,7 @@ class zscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.readoutcmd,
       lumi.append(lumival)
       unc.append(uncval)
 
-      self.fillroot(lumival,uncval)
-      ##self.write_standard_line((lumival, uncval), det_id=args.detid)
+      self.write_standard_line((lumival, uncval), det_id=args.detid)
       self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}')
 
 
