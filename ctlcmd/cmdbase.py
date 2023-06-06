@@ -864,7 +864,10 @@ class rootfilecmd(controlcmd):
                              "test1":np.float64,"test2":np.float64}, title="Title")
     self.rootfile = file
     
-    self.standardarr = [[]]
+    self.standardarr = []
+    print("Test self.standardarr")
+    for s in self.standardarr:
+        print(*s)
     
     self.array1 = []
     self.array2 = []
