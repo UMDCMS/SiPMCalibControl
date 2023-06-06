@@ -859,23 +859,38 @@ class rootfilecmd(controlcmd):
   def openroot(self,filename):
     print("openroot rootfilecmd")
     file = uproot.recreate(filename)
-    file.mktree("DataTree", {"test1":np.float64,"test2":np.float64}, title="Title")
+    file.mktree("DataTree", {"time":np.float32,"det_id":np.int_,"gantry x":np.float32,"gantry y":np.float32,
+                             "gantry z":np.float32, "LED bias voltage":np.float32, "LED temp":np.float32, "SiPM temp":np.float32,
+                             "test1":np.float64,"test2":np.float64}, title="Title")
     self.rootfile = file
+    
+    self.standardarr = [[]]
+    
     self.array1 = []
     self.array2 = []
     self.n=1
   
-  def fillroot(self,var1,var2):
+  def fillroot(self,time=0.0,det_id,=-100,var1,var2,):
     print("fillroot rootfilecmd")
     self.array1.append(var1)
     self.array2.append(var2)
+    
+    self.standardarr.append(time:.2f,det_id,self.gcoder.opx:.1f,self.gcoder.opy:.1f,self.gcoder.opz:.1f,
+                            self.gpio.adc_read(2):.2f,self.gpio.ntc_read(0):.3f,self.gpio.rtd_read(1):.3f)
+    
+    
     if self.n%10 ==0:
-      self.rootfile["DataTree"].extend({"test1":self.array1,"test2":self.array2})
+      rotated = list(zip(*self.standardarr))
+      self.rootfile["DataTree"].extend({"time":rotated[0],"det_id":rotated[1],"gantry x":rotated[2],"gantry y":rotated[3],
+                                        "gantry z":rotated[4], "LED bias voltage":rotated[5], "LED temp":rotated[6], 
+                                        "SiPM temp":rotated[7],"test1":self.array1,"test2":self.array2})
       self.array1.clear()
       self.array2.clear()
+      self.standardarr.clear()
       self.n=1
     self.n+=1
   
+
 class savefilecmd(controlcmd):
   """
   @brief commands that will save to a file
