@@ -851,7 +851,6 @@ class rootfilecmd(controlcmd):
                           substring,
                           filename,
                           flags=re.IGNORECASE)
-    self.openroot(filename)
     return args
       
   def openroot(self,filename,functiontype):
