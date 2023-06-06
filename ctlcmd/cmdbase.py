@@ -859,7 +859,7 @@ class rootfilecmd(controlcmd):
     file = uproot.recreate(filename)
     
     ##go back through and make sure that the names of everything make sense
-    if functiontype == "halign" || "zscan":
+    if functiontype == "halign"or"zscan":
       file.mktree("DataTree", {"time":np.float32,"det_id":np.int_,"gantry x":np.float32,"gantry y":np.float32,
                              "gantry z":np.float32, "LED bias voltage":np.float32, "LED temp":np.float32, "SiPM temp":np.float32,
                              "humival":np.float64,"uncval":np.float64}, title=functiontype)
