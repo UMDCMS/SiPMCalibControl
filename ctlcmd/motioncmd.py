@@ -365,7 +365,8 @@ class zscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.readoutcmd,
       lumi.append(lumival)
       unc.append(uncval)
 
-      self.write_standard_line((lumival, uncval), det_id=args.detid)
+      self.fillroot(lumival,uncval)
+      ##self.write_standard_line((lumival, uncval), det_id=args.detid)
       self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}')
 
 
