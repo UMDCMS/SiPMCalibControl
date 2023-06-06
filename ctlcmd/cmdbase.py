@@ -857,17 +857,52 @@ class rootfilecmd(controlcmd):
   def openroot(self,filename,functiontype):
     print("openroot rootfilecmd")
     file = uproot.recreate(filename)
-    file.mktree("DataTree", {"time":np.float32,"det_id":np.int_,"gantry x":np.float32,"gantry y":np.float32,
+    
+    ##go back through and make sure that the names of everything make sense
+    if functiontype == "halign" || "zscan":
+      file.mktree("DataTree", {"time":np.float32,"det_id":np.int_,"gantry x":np.float32,"gantry y":np.float32,
                              "gantry z":np.float32, "LED bias voltage":np.float32, "LED temp":np.float32, "SiPM temp":np.float32,
-                             "test1":np.float64,"test2":np.float64}, title="Title")
-    self.rootfile = file
-    
+                             "humival":np.float64,"uncval":np.float64}, title=functiontype)
+      self.array1 = []
+      self.array2 = []
+      self.rootfile = file
+    elif functiontype == "lowlight collect":
+      file.mktree("DataTree", {"time":np.float32,"det_id":np.int_,"gantry x":np.float32,"gantry y":np.float32,
+                             "gantry z":np.float32, "LED bias voltage":np.float32, "LED temp":np.float32, "SiPM temp":np.float32,
+                             "readout":np.float64}, title=functiontype)
+      self.array1 = []
+      self.rootfile = file
+     elif functiontype == "timescan":
+      file.mktree("DataTree", {"time":np.float32,"det_id":np.int_,"gantry x":np.float32,"gantry y":np.float32,
+                             "gantry z":np.float32, "LED bias voltage":np.float32, "LED temp":np.float32, "SiPM temp":np.float32,
+                             "lumival":np.float64,"uncval":np.float64,"S2":np.float64,"S4":np.float64}, title=functiontype)
+      self.array1 = []
+      self.array2 = []
+      self.array3 = []
+      self.array4 = []
+      self.rootfile = file
+    elif functiontype == "tb_levelped":
+      ##TODO: determine types of data
+    elif functiontype == "visualhscan":
+      file.mktree("DataTree", {"time":np.float32,"det_id":np.int_,"gantry x":np.float32,"gantry y":np.float32,
+                             "gantry z":np.float32, "LED bias voltage":np.float32, "LED temp":np.float32, "SiPM temp":np.float32,
+                             "center x":np.float64,"center y":np.float64}, title=functiontype)
+      self.array1 = []
+      self.array2 = []
+      self.rootfile = file
+    elif functiontype == "visualzscan":
+      file.mktree("DataTree", {"time":np.float32,"det_id":np.int_,"gantry x":np.float32,"gantry y":np.float32,
+                             "gantry z":np.float32, "LED bias voltage":np.float32, "LED temp":np.float32, "SiPM temp":np.float32,
+                             "laplace":np.float64,"center x":np.float64,"center y":np.float64,"center area":np.float64,"center maxmeas":np.float64}, title=functiontype)
+      self.array1 = []
+      self.array2 = []
+      self.array3 = []
+      self.array4 = []
+      self.array5 = []
+      self.rootfile = file
+    else:
+      print("ERROR: Root data will not save")
     self.standardarr = []
-    
-    self.array1 = []
-    self.array2 = []
-    
-    
     self.n=1
   
   
@@ -879,6 +914,7 @@ class rootfilecmd(controlcmd):
                             self.gpio.adc_read(2),self.gpio.ntc_read(0),self.gpio.rtd_read(1)])
     if self.n%10 ==0:
       rotated = list(zip(*self.standardarr))
+      
       
       self.rootfile["DataTree"].extend({"time":rotated[0],"det_id":rotated[1],"gantry x":rotated[2],"gantry y":rotated[3],
                                         "gantry z":rotated[4], "LED bias voltage":rotated[5], "LED temp":rotated[6], 
