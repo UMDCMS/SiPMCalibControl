@@ -184,7 +184,6 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.savefilecmd, cmdbase.
 
   def __init__(self, cmd):
     cmdbase.controlcmd.__init__(self, cmd)
-    self.openroot()
     
   def add_args(self):
     """
