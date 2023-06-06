@@ -799,10 +799,12 @@ class rootfilecmd(controlcmd):
   ##TODO: update this to make the file location customizable
   DEFAULT_SAVEFILE = 'SAVEFILE_TEST'
   def __init__(self, cmd):
+    print("initialize rootfilecmd")
     controlcmd.__init__(self, cmd)
     self.openroot()
     
   def add_args(self):
+    print("add_args in rootfilecmd")
     group = self.parser.add_argument_group(
         "root file saving options", """Options for changing the root file location.
         For more details, see the official documentation.""")
@@ -814,17 +816,21 @@ class rootfilecmd(controlcmd):
   ##TODO: add in options for the types of data we want to store, later
   ##TODO: add in columns for the data added every single row
   def openroot(self):
+    print("openroot rootfilecmd")
     filename = self.makefilename()
     file = uproot.recreate(filename)
     file.mktree("DataTree", {"test1": "var * int64", "test2": "var * int64"}, title="Title")
+    
   
   ##TODO: need to change this so that it is not filling individual entries 
   ##but is instead filling entire vectors/arrays, otherwise takes up too much time
   def fillroot(self,var1,var2):
+    print("fillroot rootfilecmd")
     file["DataTree"].extend({"test1":var1,"test2":var2})
     
   ##TODO: update this function to take into account time & user input  
   def makefilename(self):
+    print("makefilename rootfilecmd")
     filename = self.DEFAULT_SAVEFILE
     return filename
     
