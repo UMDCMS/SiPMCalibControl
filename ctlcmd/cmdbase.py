@@ -82,6 +82,7 @@ import enum
 import logging
 import tqdm
 import signal
+import uproot
 
 # Potentially missing package -- PICO
 try:
@@ -795,9 +796,37 @@ class rootfilecmd(controlcmd):
   special placeholders, as well as how the file parsing is handled, see the
   detailed documentation in the `ctlcmd.cmdbase.savefilecmd.parse` method.
   """
-  DEFAULT_SAVEFILE = 'SAVEFILE_<TIMESTAMP>'
-  
-
+  ##TODO: update this to make the file location customizable
+  DEFAULT_SAVEFILE = 'SAVEFILE_TEST'
+  def __init__(self, cmd):
+    controlcmd.__init__(self, cmd)
+    self.openroot()
+    
+  def add_args(self):
+    group = self.parser.add_argument_group(
+        "root file saving options", """Options for changing the root file location.
+        For more details, see the official documentation.""")
+    group.add_argument('-sr',
+                       '--saveroot',
+                       type=str,
+                       default=self.DEFAULT_SAVEFILE,
+                       help="""File path to save (placeholders in angle braces).
+                       default=%(default)s""")
+  ##TODO: add in options for the types of data we want to store, later
+  ##TODO: add in columns for the data added every single row
+  def openroot(self):
+    filename = self.makefilename()
+    file = uproot.recreate(filename)
+    file.mktree("DataTree", {"centerx": "var * int64", "centery": "var * int64"}, title="Title"))
+   
+  ##def fillroot(self,var1,var2):
+  ##  file["DataTree"].extend
+    
+  ##TODO: update this function to take into account time & user input  
+  def makefilename(self):
+    filename = self.DEFAULT_SAVEFILE
+    return filename
+    
 class savefilecmd(controlcmd):
   """
   @brief commands that will save to a file
