@@ -822,7 +822,7 @@ class rootfilecmd(controlcmd):
   ##TODO: need to change this so that it is not filling individual entries 
   ##but is instead filling entire vectors/arrays, otherwise takes up too much time
   def fillroot(self,var1,var2):
-    file["DataTree"].extend({"test1":var1,"test2",var2})
+    file["DataTree"].extend({"test1":var1,"test2":var2})
     
   ##TODO: update this function to take into account time & user input  
   def makefilename(self):
