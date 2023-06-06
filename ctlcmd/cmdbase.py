@@ -878,16 +878,20 @@ class rootfilecmd(controlcmd):
     self.standardarr.append([time,det_id,self.gcoder.opx,self.gcoder.opy,self.gcoder.opz,
                             self.gpio.adc_read(2),self.gpio.ntc_read(0),self.gpio.rtd_read(1)])
     
-    
     if self.n%10 ==0:
+      for s in self.standardarr:
+        print(*s)
       rotated = list(zip(*self.standardarr))
+      for s in rotated:
+        print(*s)
+      
       self.rootfile["DataTree"].extend({"time":rotated[0],"det_id":rotated[1],"gantry x":rotated[2],"gantry y":rotated[3],
                                         "gantry z":rotated[4], "LED bias voltage":rotated[5], "LED temp":rotated[6], 
                                         "SiPM temp":rotated[7],"test1":self.array1,"test2":self.array2})
       self.array1.clear()
       self.array2.clear()
       self.standardarr.clear()
-      self.n=1
+      self.n=0
     self.n+=1
   
 
