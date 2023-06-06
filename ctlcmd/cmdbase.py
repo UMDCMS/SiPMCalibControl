@@ -817,7 +817,7 @@ class rootfilecmd(controlcmd):
   def openroot(self):
     filename = self.makefilename()
     file = uproot.recreate(filename)
-    file.mktree("DataTree", {"centerx": "var * int64", "centery": "var * int64"}, title="Title"))
+    file.mktree("DataTree", {"centerx": "var * int64", "centery": "var * int64"}, title="Title")
    
   ##def fillroot(self,var1,var2):
   ##  file["DataTree"].extend
