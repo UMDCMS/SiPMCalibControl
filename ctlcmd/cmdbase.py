@@ -875,8 +875,8 @@ class rootfilecmd(controlcmd):
     self.array1.append(var1)
     self.array2.append(var2)
     
-    self.standardarr.append(time:.2f,det_id,self.gcoder.opx:.1f,self.gcoder.opy:.1f,self.gcoder.opz:.1f,
-                            self.gpio.adc_read(2):.2f,self.gpio.ntc_read(0):.3f,self.gpio.rtd_read(1):.3f)
+    self.standardarr.append(time,det_id,self.gcoder.opx,self.gcoder.opy,self.gcoder.opz,
+                            self.gpio.adc_read(2),self.gpio.ntc_read(0),self.gpio.rtd_read(1))
     
     
     if self.n%10 ==0:
