@@ -174,7 +174,7 @@ class sendhome(cmdbase.controlcmd):
     self.gcoder.sendhome(args.x, args.y, args.z)
 
 
-class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.savefilecmd, cmdbase.rootfilecmd):
+class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.rootfilecmd):
   """
   @brief Running horizontal alignment procedure by luminosity readout vs and xy
   grid scan motion.
