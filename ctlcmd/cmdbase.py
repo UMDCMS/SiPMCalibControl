@@ -856,7 +856,7 @@ class rootfilecmd(controlcmd):
       
   def openroot(self,functiontype):
     print("openroot rootfilecmd")
-    file = uproot.recreate(self.filename)
+    file = uproot.recreate(self.saveroot)
     self.functiontype=functiontype
     
     halign_titles=["humival","uncval"]
