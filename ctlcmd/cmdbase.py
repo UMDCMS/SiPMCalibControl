@@ -953,6 +953,16 @@ class rootfilecmd(controlcmd):
       self.n=0
     self.n+=1
   
+  def post_run(self):
+    """
+    @brief Additional steps to run before the completing the command.
+
+    @details Dump any data that did not yet get saved, also print out a message to the user for the location of the saved root file.
+    """
+    if not self.saveroot: return  # Early exit for if saveroot is not set
+    fillroot([-1000])
+    print("ROOT file saved at "+self.saveroot)
+  
 class savefilecmd(controlcmd):
   """
   @brief commands that will save to a file
@@ -1078,6 +1088,7 @@ class savefilecmd(controlcmd):
     message to notify the user of where the save file is. This function also
     handles that the save files are closed nominally.
     """
+    print("self.savefile "+self.savefile)
     if not self.savefile: return  # Early exit for if savefile is not set
     self.printmsg(f"Saving results to file [{self.savefile.name}]")
     self.savefile.flush()
