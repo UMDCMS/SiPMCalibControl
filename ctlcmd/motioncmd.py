@@ -305,7 +305,7 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.savefilecmd, cmdbase.
 
 
 class zscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.readoutcmd,
-            cmdbase.savefilecmd):
+            cmdbase.savefilecmd,cmdbase.rootfilecmd):
   """
   Performing the intensity scan give a list of scanning z coordinates and the
   list of biassing power.
@@ -341,7 +341,7 @@ class zscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.readoutcmd,
     """
     lumi = []
     unc = []
-
+    self.openroot("zscan")
     # Ordering is important! Grouping z values together as the bottle neck is in
     # motion speed
     for z, power in self.start_pbar(
@@ -369,10 +369,9 @@ class zscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.readoutcmd,
 
       lumi.append(lumival)
       unc.append(uncval)
-
-      self.write_standard_line((lumival, uncval), det_id=args.detid)
+      self.fillroot([lumival,uncval],det_id=args.detid)
       self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}')
-
+    self.fillroot([-1000])
 
 class lowlightcollect(cmdbase.singlexycmd, cmdbase.readoutcmd,
                       cmdbase.savefilecmd):
@@ -421,13 +420,13 @@ class lowlightcollect(cmdbase.singlexycmd, cmdbase.readoutcmd,
     """
     self.move_gantry(args.x, args.y, args.z)
     self.gpio.pwm(0, args.power, 1e5)
+    self.openroot("lowlight collect")
     for _ in self.start_pbar(range(args.nparts)):
       self.check_handle()
       readout = self.readout(args, average=False)
-      self.write_standard_line(readout, det_id=args.detid)
+      self.fillroot([readout],det_id=args.detid)
       self.pbar_data(Lumi=f'{readout[-1]:.2}')
-
-
+    self.fillroot([-1000])
 class timescan(cmdbase.readoutcmd, cmdbase.savefilecmd):
   """
   Generate a log of the readout in terms relative to time.
@@ -465,6 +464,7 @@ class timescan(cmdbase.readoutcmd, cmdbase.savefilecmd):
   def run(self, args):
     start_time = time.time_ns()
     pwmindex = 0
+    self.openroot("timescan")
 
     for it in self.start_pbar(args.nslice):
       self.check_handle()
@@ -477,9 +477,7 @@ class timescan(cmdbase.readoutcmd, cmdbase.savefilecmd):
       s4 = self.visual.get_latest().s4
       sample_time = time.time_ns()
       timestamp = (sample_time - start_time) / 1e9
-      self.write_standard_line((lumival, uncval, s2, s4),
-                               det_id=-100,
-                               time=timestamp)
+      self.fillroot([lumival,uncval,s2,s4],time=timestamp,det_id=-100)
       self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}',
                      Sharp=f'({s2:.1f}, {s4:.1f})')
       time.sleep(args.interval)
