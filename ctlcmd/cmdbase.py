@@ -960,7 +960,7 @@ class rootfilecmd(controlcmd):
     @details Dump any data that did not yet get saved, also print out a message to the user for the location of the saved root file.
     """
     if not self.saveroot: return  # Early exit for if saveroot is not set
-    fillroot([-1000])
+    self.fillroot([-1000])
     print("ROOT file saved at "+self.saveroot)
   
 class savefilecmd(controlcmd):
