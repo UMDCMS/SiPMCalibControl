@@ -180,8 +180,10 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.savefilecmd, cmdbase.
   grid scan motion.
   """
 
-  DEFAULT_SAVEFILE = 'halign_<BOARDTYPE>_<BOARDID>_<DETID>_<SCANZ>_<TIMESTAMP>.txt'
-
+  ##DEFAULT_SAVEFILE = 'halign_<BOARDTYPE>_<BOARDID>_<DETID>_<SCANZ>_<TIMESTAMP>.txt'
+  DEFAULT_ROOTFILE = 'halign_<BOARDTYPE>_<BOARDID>_<DETID>_<SCANZ>_<TIMESTAMP>.root'
+  print("DEFAULT_ROOTFILE "+DEFAULT_ROOTFILE)
+  
   def __init__(self, cmd):
     cmdbase.controlcmd.__init__(self, cmd)
     
