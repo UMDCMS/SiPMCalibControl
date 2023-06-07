@@ -143,7 +143,7 @@ class visualhscan(cmdbase.hscancmd, cmdbase.savefilecmd, visualmeta):
     gantry_y = []
     reco_x = []
     reco_y = []
-
+    self.openroot("visualhscan")
     ## Running over mesh.
     for xval, yval in self.start_pbar(zip(args.x, args.y)):
       self.check_handle()
@@ -159,11 +159,10 @@ class visualhscan(cmdbase.hscancmd, cmdbase.savefilecmd, visualmeta):
         reco_x.append(center.x)
         reco_y.append(center.y)
 
-      ##Update with root, Saves x center and y center data 
-      self.write_standard_line((center.x, center.y), det_id=args.detid)
+      self.fillroot([center.x,center.y],det_id=args.detid) 
       self.pbar_data(center=f'({center.x:.0f}, {center.y:.0f})',
                      sharp=f'({center.s2:1f}, {center.s4:.1f})')
-
+    self.fillroot([-1000])
     fitx, covar_x = curve_fit(visualhscan.model, np.vstack((gantry_x, gantry_y)),
                               reco_x)
     fity, covar_y = curve_fit(visualhscan.model, np.vstack((gantry_x, gantry_y)),
@@ -470,6 +469,7 @@ class visualzscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.savefilecmd,
     pass
 
   def run(self, args):
+    self.openroot("visualzscan")
     for z in self.start_pbar(args.zlist):
       # Checking termination signal
       self.check_handle()
@@ -483,10 +483,7 @@ class visualzscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.savefilecmd,
       reco_y.append(center.y)
       reco_a.append(center.area)
       reco_d.append(center.maxmeas)
-      ## Update to root, saves sharpness laplace, center x, center y, center area, and center of maxmeas and det_id
-      self.write_standard_line(
-          (laplace[-1], center.x, center.y, center.area, center.maxmeas),
-          det_id=args.detid)
+      self.fillroot([laplace[-1],center.x,center.y,center.area,center.maxmeas],det_id=args.detid)
       self.pbar_data(sharpness=f'({center.s2:.1f}, {center.s4:.1f})',
                      reco=f'({center.x:.0f}, {center.y:.0f})',
                      measure=f'({center.area:.0f}, {center.maxmeas:.0f})')
