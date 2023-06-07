@@ -775,7 +775,7 @@ class controlcmd(object):
  
 class rootfilecmd(controlcmd):
   """
-  @brief commands that control saving to root file
+  @brief commands that control saving data to the root file
   
   @ingroup cli_design
   
@@ -797,8 +797,7 @@ class rootfilecmd(controlcmd):
   detailed documentation in the `ctlcmd.cmdbase.savefilecmd.parse` method.
   """
   ##TODO: update this to make the file location customizable
-  DEFAULT_SAVEFILE = 'SAVEFILE_TEST'
-  FILENAME = DEFAULT_SAVEFILE
+  DEFAULT_ROOTFILE = 'SAVEROOT_<TIMESTAMP>'
   def __init__(self, cmd):
     print("initialize rootfilecmd")
     controlcmd.__init__(self, cmd)
@@ -810,14 +809,14 @@ class rootfilecmd(controlcmd):
         For more details, see the official documentation.""")
     group.add_argument('--saveroot',
                        type=str,
-                       default=self.DEFAULT_SAVEFILE,
+                       default=self.DEFAULT_ROOTFILE,
                        help="""File path to save (placeholders in angle braces).
                        default=%(default)s""")
  
   def parse(self,args):
     print("parse in rootfilecmd")
     if not args.saveroot:  # Early exit if savefile is not set
-      self.savefile = None
+      self.saveroot = None
       return args
     filename = args.saveroot
 
@@ -852,8 +851,8 @@ class rootfilecmd(controlcmd):
                           substring,
                           filename,
                           flags=re.IGNORECASE)
-    self.filename=filename
-    return args
+      self.saveroot=filename
+      return args
       
   def openroot(self,functiontype):
     print("openroot rootfilecmd")
