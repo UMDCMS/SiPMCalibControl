@@ -162,7 +162,6 @@ class visualhscan(cmdbase.hscancmd, cmdbase.savefilecmd, visualmeta):
       self.fillroot([center.x,center.y],det_id=args.detid) 
       self.pbar_data(center=f'({center.x:.0f}, {center.y:.0f})',
                      sharp=f'({center.s2:1f}, {center.s4:.1f})')
-    self.fillroot([-1000])
     fitx, covar_x = curve_fit(visualhscan.model, np.vstack((gantry_x, gantry_y)),
                               reco_x)
     fity, covar_y = curve_fit(visualhscan.model, np.vstack((gantry_x, gantry_y)),
@@ -487,7 +486,6 @@ class visualzscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.savefilecmd,
       self.pbar_data(sharpness=f'({center.s2:.1f}, {center.s4:.1f})',
                      reco=f'({center.x:.0f}, {center.y:.0f})',
                      measure=f'({center.area:.0f}, {center.maxmeas:.0f})')
-
 
 class visualshowdet(visualmeta):
   """@brief Display of detector position, until termination signal is obtained."""
