@@ -913,7 +913,7 @@ class rootfilecmd(controlcmd):
     print("fillroot rootfilecmd")
     
     ##set output data to [-1000] at the end of the run to dump the remaining data
-    if !data[0]==-1000:
+    if data[0]!=-1000:
       self.saveddata.append([time,det_id,self.gcoder.opx,self.gcoder.opy,self.gcoder.opz,
                              self.gpio.adc_read(2),self.gpio.ntc_read(0),self.gpio.rtd_read(1)]+data)
     if data[0]==-1000:
