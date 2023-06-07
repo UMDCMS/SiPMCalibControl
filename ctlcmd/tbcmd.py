@@ -132,6 +132,7 @@ class tb_levelped(cmdbase.savefilecmd):
                   -1 if default_dacb[ch] == dacb else \
                   0
       self.write_standard_line((dacb, ped, noise, check_val), ch)
+      print("dacb "+dacb+" ped "+ped+" noise "+noise+ " check_val "+check_val+" ch "+ch)
 
     print(corrected_dacb)
 
