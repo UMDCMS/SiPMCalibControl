@@ -943,7 +943,7 @@ class rootfilecmd(controlcmd):
                                           self.standardtitles[3]:rotated[3],self.standardtitles[4]:rotated[4], self.standardtitles[5]:rotated[5],
                                           self.standardtitles[6]:rotated[6], self.standardtitles[7]:rotated[7],self.titles[5][0]:rotated[8],
                                           self.titles[5][1]:rotated[9]})
-      saveddata.clear()
+      self.saveddata.clear()
       self.n=0
     self.n+=1
   
