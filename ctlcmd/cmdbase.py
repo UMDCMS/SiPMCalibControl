@@ -860,89 +860,89 @@ class rootfilecmd(controlcmd):
     file = uproot.recreate(self.filename)
     self.functiontype=functiontype
     
-    ##go back through and make sure that the names of everything make sense
+    halign_titles=["humival","uncval"]
+    lowlight_collect_titles=["readout"]
+    timescan_titles=["lumival","uncval","S2","S4"]
+    tb_levelped_titles=[""]
+    visualhscan_titles=["center x","center y"]
+    visualzscan_titles=["laplace","center x","center y","center area","center maxmeas"]
+    self.standardtitles=["time","det_id","gantry x","gantry y","gantry z","LED bias voltage","LED temp","SiPM temp"]
+    self.titles = [halign_titles,lowlight_collect_titles,timescan_titles,tb_levelped_titles,visualhscan_titles,visualzscan_titles]
+    
     if functiontype == "halign"or"zscan":
-      file.mktree("DataTree", {"time":np.float32,"det_id":np.int_,"gantry x":np.float32,"gantry y":np.float32,
-                             "gantry z":np.float32, "LED bias voltage":np.float32, "LED temp":np.float32, "SiPM temp":np.float32,
-                             "humival":np.float64,"uncval":np.float64}, title=functiontype)
-      self.array1 = []
-      self.array2 = []
+      file.mktree("DataTree", {self.standardtitles[0]:np.float32,self.standardtitles[1]:np.int_,self.standardtitles[2]:np.float32,
+                               self.standardtitles[3]:np.float32,self.standardtitles[4]:np.float32,self.standardtitles[5]:np.float32,
+                               self.standardtitles[6]:np.float32,self.standardtitles[7]:np.float32,
+                               self.titles[0][0]:np.float64,self.titles[0][1]:np.float64}, title=functiontype)
       self.rootfile = file
     elif functiontype == "lowlight collect":
-      file.mktree("DataTree", {"time":np.float32,"det_id":np.int_,"gantry x":np.float32,"gantry y":np.float32,
-                             "gantry z":np.float32, "LED bias voltage":np.float32, "LED temp":np.float32, "SiPM temp":np.float32,
-                             "readout":np.float64}, title=functiontype)
-      self.array1 = []
+      file.mktree("DataTree", {self.standardtitles[0]:np.float32,self.standardtitles[1]:np.int_,self.standardtitles[2]:np.float32,
+                               self.standardtitles[3]:np.float32,self.standardtitles[4]:np.float32,self.standardtitles[5]:np.float32,
+                               self.standardtitles[6]:np.float32,self.standardtitles[7]:np.float32,
+                               self.titles[1][0]:np.float64}, title=functiontype)
       self.rootfile = file
     elif functiontype == "timescan":
-      file.mktree("DataTree", {"time":np.float32,"det_id":np.int_,"gantry x":np.float32,"gantry y":np.float32,
-                             "gantry z":np.float32, "LED bias voltage":np.float32, "LED temp":np.float32, "SiPM temp":np.float32,
-                             "lumival":np.float64,"uncval":np.float64,"S2":np.float64,"S4":np.float64}, title=functiontype)
-      self.array1 = []
-      self.array2 = []
-      self.array3 = []
-      self.array4 = []
+      file.mktree("DataTree", {self.standardtitles[0]:np.float32,self.standardtitles[1]:np.int_,self.standardtitles[2]:np.float32,
+                               self.standardtitles[3]:np.float32,self.standardtitles[4]:np.float32,self.standardtitles[5]:np.float32,
+                               self.standardtitles[6]:np.float32,self.standardtitles[7]:np.float32,
+                               self.titles[2][0]:np.float64,self.titles[2][1]:np.float64,self.titles[2][2]:np.float64,
+                               self.titles[2][3]:np.float64}, title=functiontype)
       self.rootfile = file
     elif functiontype == "tb_levelped":
       print("Haven't made the root tree for tb_levelped yet, will not work")
       ##TODO: determine types of data
     elif functiontype == "visualhscan":
-      file.mktree("DataTree", {"time":np.float32,"det_id":np.int_,"gantry x":np.float32,"gantry y":np.float32,
-                             "gantry z":np.float32, "LED bias voltage":np.float32, "LED temp":np.float32, "SiPM temp":np.float32,
-                             "center x":np.float64,"center y":np.float64}, title=functiontype)
-      self.array1 = []
-      self.array2 = []
+      file.mktree("DataTree", {self.standardtitles[0]:np.float32,self.standardtitles[1]:np.int_,self.standardtitles[2]:np.float32,
+                               self.standardtitles[3]:np.float32,self.standardtitles[4]:np.float32,self.standardtitles[5]:np.float32,
+                               self.standardtitles[6]:np.float32,self.standardtitles[7]:np.float322,
+                               self.titles[4][0]:np.float64,self.titles[4][1]:np.float64}, title=functiontype)
       self.rootfile = file
     elif functiontype == "visualzscan":
-      file.mktree("DataTree", {"time":np.float32,"det_id":np.int_,"gantry x":np.float32,"gantry y":np.float32,
-                             "gantry z":np.float32, "LED bias voltage":np.float32, "LED temp":np.float32, "SiPM temp":np.float32,
-                             "laplace":np.float64,"center x":np.float64,"center y":np.float64,"center area":np.float64,"center maxmeas":np.float64}, title=functiontype)
-      self.array1 = []
-      self.array2 = []
-      self.array3 = []
-      self.array4 = []
-      self.array5 = []
+      file.mktree("DataTree", {self.standardtitles[0]:np.float32,self.standardtitles[1]:np.int_,self.standardtitles[2]:np.float32,
+                               self.standardtitles[3]:np.float32,self.standardtitles[4]:np.float32,self.standardtitles[5]:np.float32,
+                               self.standardtitles[6]:np.float32,self.standardtitles[7]:np.float32,
+                               self.titles[5][0]:np.float64,self.titles[5][1]:np.float64,self.titles[5][2]:np.float64,
+                               self.titles[5][3]:np.float64,self.titles[5][4]:np.float64}, title=functiontype)
       self.rootfile = file
     else:
       print("ERROR: Root data will not save")
-    self.standardarr = []
+    self.saveddata = []
     self.n=1
   
-  ##need to consider how the collection of data will work! maybe use default values
-  def fillroot(self,time=0.0,det_id=-100,var1=0,var2=0,var3=0,var4=0,var5=0):
+  def fillroot(self,data[],time=0.0,det_id=-100):
     print("fillroot rootfilecmd")
     
-    ##make it so only some arrays get filled based on the functiontype
-    self.array1.append(var1)
-    self.array2.append(var2)
-    self.standardarr.append([time,det_id,self.gcoder.opx,self.gcoder.opy,self.gcoder.opz,
-                            self.gpio.adc_read(2),self.gpio.ntc_read(0),self.gpio.rtd_read(1)])
+    self.saveddata.append([time,det_id,self.gcoder.opx,self.gcoder.opy,self.gcoder.opz,
+                            self.gpio.adc_read(2),self.gpio.ntc_read(0),self.gpio.rtd_read(1)]+data)
     if self.n%10 ==0:
-      rotated = list(zip(*self.standardarr))
+      rotated = list(zip(*self.saveddata))
       
       if self.functiontype == "halign"or"zscan":
-        self.rootfile["DataTree"].extend({"time":rotated[0],"det_id":rotated[1],"gantry x":rotated[2],"gantry y":rotated[3],
-                                        "gantry z":rotated[4], "LED bias voltage":rotated[5], "LED temp":rotated[6], 
-                                        "SiPM temp":rotated[7],"humival":self.array1,"uncval":self.array2})
+        self.rootfile["DataTree"].extend({self.standardtitles[0]:rotated[0],self.standardtitles[1]:rotated[1],self.standardtitles[2]:rotated[2],
+                                          self.standardtitles[3]:rotated[3],self.standardtitles[4]:rotated[4], self.standardtitles[5]:rotated[5],
+                                          self.standardtitles[6]:rotated[6], self.standardtitles[7]:rotated[7],
+                                          self.titles[0][0]:rotated[8],self.titles[0][1]:rotated[9]})
       elif self.functiontype == "lowlight collect":
-        self.rootfile["DataTree"].extend({"time":rotated[0],"det_id":rotated[1],"gantry x":rotated[2],"gantry y":rotated[3],
-                                        "gantry z":rotated[4], "LED bias voltage":rotated[5], "LED temp":rotated[6], 
-                                        "SiPM temp":rotated[7],"readout":self.array1})
+        self.rootfile["DataTree"].extend({self.standardtitles[0]:rotated[0],self.standardtitles[1]:rotated[1],self.standardtitles[2]:rotated[2],
+                                          self.standardtitles[3]:rotated[3],self.standardtitles[4]:rotated[4], self.standardtitles[5]:rotated[5],
+                                          self.standardtitles[6]:rotated[6], self.standardtitles[7]:rotated[7],self.titles[1][0]:rotated[8]})
       elif self.functiontype == "timescan":
-        self.rootfile["DataTree"].extend({"time":rotated[0],"det_id":rotated[1],"gantry x":rotated[2],"gantry y":rotated[3],
-                                        "gantry z":rotated[4], "LED bias voltage":rotated[5], "LED temp":rotated[6], 
-                                        "SiPM temp":rotated[7],"lumival":self.array1,"uncval":self.array2,"S2":self.array3,"S4":self.array4})
+        self.rootfile["DataTree"].extend({self.standardtitles[0]:rotated[0],self.standardtitles[1]:rotated[1],self.standardtitles[2]:rotated[2],
+                                          self.standardtitles[3]:rotated[3],self.standardtitles[4]:rotated[4], self.standardtitles[5]:rotated[5],
+                                          self.standardtitles[6]:rotated[6], self.standardtitles[7]:rotated[7],self.titles[2][0]:rotated[8],
+                                          self.titles[2][1]:rotated[9],self.titles[2][2]:rotated[10],self.titles[2][3]:rotated[11]})
       elif self.functiontype == "tb_levelped":
+      elif self.functiontype == "visualhscan":
+        self.rootfile["DataTree"].extend({self.standardtitles[0]:rotated[0],self.standardtitles[1]:rotated[1],self.standardtitles[2]:rotated[2],
+                                          self.standardtitles[3]:rotated[3],self.standardtitles[4]:rotated[4], self.standardtitles[5]:rotated[5],
+                                          self.standardtitles[6]:rotated[6], self.standardtitles[7]:rotated[7],self.titles[4][0]:rotated[8],
+                                          self.titles[4][1]:rotated[9]})
       elif self.functiontype == "visualzscan":
-      
-      
-      
-      self.rootfile["DataTree"].extend({"time":rotated[0],"det_id":rotated[1],"gantry x":rotated[2],"gantry y":rotated[3],
-                                        "gantry z":rotated[4], "LED bias voltage":rotated[5], "LED temp":rotated[6], 
-                                        "SiPM temp":rotated[7],"test1":self.array1,"test2":self.array2})
-      self.array1.clear()
-      self.array2.clear()
-      self.standardarr.clear()
+        self.rootfile["DataTree"].extend({self.standardtitles[0]:rotated[0],self.standardtitles[1]:rotated[1],self.standardtitles[2]:rotated[2],
+                                          self.standardtitles[3]:rotated[3],self.standardtitles[4]:rotated[4], self.standardtitles[5]:rotated[5],
+                                          self.standardtitles[6]:rotated[6], self.standardtitles[7]:rotated[7],self.titles[5][0]:rotated[8],
+                                          self.titles[5][1]:rotated[9]})
+      saveddata.clear()
       self.n=0
     self.n+=1
   
