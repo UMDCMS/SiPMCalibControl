@@ -912,9 +912,13 @@ class rootfilecmd(controlcmd):
   def fillroot(self,data,time=0.0,det_id=-100):
     print("fillroot rootfilecmd")
     
-    self.saveddata.append([time,det_id,self.gcoder.opx,self.gcoder.opy,self.gcoder.opz,
-                            self.gpio.adc_read(2),self.gpio.ntc_read(0),self.gpio.rtd_read(1)]+data)
-    if self.n%10 ==0:
+    ##set output data to [-1000] at the end of the run to dump the remaining data
+    if !data[0]==-1000:
+      self.saveddata.append([time,det_id,self.gcoder.opx,self.gcoder.opy,self.gcoder.opz,
+                             self.gpio.adc_read(2),self.gpio.ntc_read(0),self.gpio.rtd_read(1)]+data)
+    if data[0]==-1000:
+      print("Dump of remaining data worked")
+    if (self.n%10==0 or data[0]==-1000) and len(self.saveddata)!=0:
       rotated = list(zip(*self.saveddata))
       
       if self.functiontype == "halign"or"zscan":
