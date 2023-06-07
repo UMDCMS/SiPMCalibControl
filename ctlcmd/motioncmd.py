@@ -228,8 +228,8 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.rootfilecmd):
     n = 0
     test1 = []
     test2 = []
-    ## Running over mesh.
     self.openroot("halign")
+    ## Running over mesh.
     for xval, yval in self.start_pbar(zip(args.x, args.y)):
       self.check_handle()
       self.move_gantry(xval, yval, args.scanz)
@@ -372,7 +372,6 @@ class zscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.readoutcmd,
       unc.append(uncval)
       self.fillroot([lumival,uncval],det_id=args.detid)
       self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}')
-    self.fillroot([-1000])
 
 class lowlightcollect(cmdbase.singlexycmd, cmdbase.readoutcmd,
                       cmdbase.savefilecmd):
@@ -427,7 +426,6 @@ class lowlightcollect(cmdbase.singlexycmd, cmdbase.readoutcmd,
       readout = self.readout(args, average=False)
       self.fillroot([readout],det_id=args.detid)
       self.pbar_data(Lumi=f'{readout[-1]:.2}')
-    self.fillroot([-1000])
 class timescan(cmdbase.readoutcmd, cmdbase.savefilecmd):
   """
   Generate a log of the readout in terms relative to time.
