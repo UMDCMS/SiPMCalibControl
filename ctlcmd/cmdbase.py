@@ -1089,8 +1089,8 @@ class savefilecmd(controlcmd):
     message to notify the user of where the save file is. This function also
     handles that the save files are closed nominally.
     """
-    self.printmsg("self.savefile ")
-    self.printmsg(self.savefile)
+    print("self.savefile ")
+    print(self.savefile)
     if not self.savefile: return  # Early exit for if savefile is not set
     self.printmsg(f"Saving results to file [{self.savefile.name}]")
     self.savefile.flush()
