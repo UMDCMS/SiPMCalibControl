@@ -932,6 +932,7 @@ class rootfilecmd(controlcmd):
                                           self.standardtitles[6]:rotated[6], self.standardtitles[7]:rotated[7],self.titles[2][0]:rotated[8],
                                           self.titles[2][1]:rotated[9],self.titles[2][2]:rotated[10],self.titles[2][3]:rotated[11]})
       elif self.functiontype == "tb_levelped":
+        print("tb_levelped not ready yet")
       elif self.functiontype == "visualhscan":
         self.rootfile["DataTree"].extend({self.standardtitles[0]:rotated[0],self.standardtitles[1]:rotated[1],self.standardtitles[2]:rotated[2],
                                           self.standardtitles[3]:rotated[3],self.standardtitles[4]:rotated[4], self.standardtitles[5]:rotated[5],
