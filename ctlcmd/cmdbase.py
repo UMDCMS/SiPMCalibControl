@@ -907,6 +907,12 @@ class rootfilecmd(controlcmd):
       print("ERROR: Root data will not save")
     self.saveddata = []
     self.n=1
+    
+    timestring = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+    self.rootfile["Board ID"]=self.board.boardid
+    self.rootfile["Board Type"]=self.board.boardtype
+    self.rootfile["Time"]=timestring
+    ##TODO: add in lines which give the exact command used
   
   def fillroot(self,data,time=0.0,det_id=-100):
     if data[0]!=-1000:
