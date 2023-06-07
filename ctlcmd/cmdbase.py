@@ -909,7 +909,7 @@ class rootfilecmd(controlcmd):
     self.saveddata = []
     self.n=1
   
-  def fillroot(self,data[],time=0.0,det_id=-100):
+  def fillroot(self,data,time=0.0,det_id=-100):
     print("fillroot rootfilecmd")
     
     self.saveddata.append([time,det_id,self.gcoder.opx,self.gcoder.opy,self.gcoder.opz,
