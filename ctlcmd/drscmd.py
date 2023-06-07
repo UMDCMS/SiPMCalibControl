@@ -99,7 +99,7 @@ class drscalib(cmdbase.controlcmd):
 
 class drsrun(cmdbase.savefilecmd):
   """@brief Running the DRS stand alone waveform extraction"""
-
+  ##TODO: make the save root file correct
   DEFAULT_SAVEFILE = 'drsrun_<TIMESTAMP>.txt'
 
   def __init__(self, cmd):
@@ -157,6 +157,8 @@ class drsrun(cmdbase.savefilecmd):
 
   def run(self, args):
     ## First line in file contains convertion information
+
+    ##TODO: decide what to do with this vs the root file, add to root file or keep with txt file?
     if self.savefile.tell() == 0:
       self.savefile.write("{time} {bits} {adcval}\n".format(
           time=1.0 / self.drs.rate(), bits=4, adcval=0.1))

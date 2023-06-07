@@ -61,6 +61,7 @@ class tbset(cmdbase.controlcmd):
 
 
 class tb_saveconfig(cmdbase.savefilecmd):
+    ##TODO: decide what to do with the data in this section
   """
   @brief Saving the current configuration to a file
   """
@@ -97,6 +98,7 @@ class tb_levelped(cmdbase.savefilecmd):
   """
   @brief Running the routine to auto-level the pedestal to some target value.
   """
+  ##TODO:make the naming of the file and the root file work properly
   DEFAULT_SAVEFILE = 'TB_levelped_<TIMESTAMP>.txt'
 
   def __init__(self, cmd):
@@ -113,6 +115,7 @@ class tb_levelped(cmdbase.savefilecmd):
                              help='Number of events used to extract pedestal')
 
   def run(self, args):
+      ##TODO: figure out how to save this part properly
     self.tbc.daq_socket.enable_fast_commands(random=1)
     self.tbc.daq_socket.l1a_settings(bx_spacing=45)
     default_dacb = self.get_current_dacb()

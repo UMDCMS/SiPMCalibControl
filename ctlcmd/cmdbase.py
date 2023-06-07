@@ -869,18 +869,21 @@ class rootfilecmd(controlcmd):
     self.titles = [halign_titles,lowlight_collect_titles,timescan_titles,tb_levelped_titles,visualhscan_titles,visualzscan_titles]
     
     if functiontype == "halign"or"zscan":
+      print("make tree halign or zscan")
       file.mktree("DataTree", {self.standardtitles[0]:np.float32,self.standardtitles[1]:np.int_,self.standardtitles[2]:np.float32,
                                self.standardtitles[3]:np.float32,self.standardtitles[4]:np.float32,self.standardtitles[5]:np.float32,
                                self.standardtitles[6]:np.float32,self.standardtitles[7]:np.float32,
                                self.titles[0][0]:np.float64,self.titles[0][1]:np.float64}, title=functiontype)
       self.rootfile = file
     elif functiontype == "lowlight collect":
+      print("make tree lowlight collect")
       file.mktree("DataTree", {self.standardtitles[0]:np.float32,self.standardtitles[1]:np.int_,self.standardtitles[2]:np.float32,
                                self.standardtitles[3]:np.float32,self.standardtitles[4]:np.float32,self.standardtitles[5]:np.float32,
                                self.standardtitles[6]:np.float32,self.standardtitles[7]:np.float32,
                                self.titles[1][0]:np.float64}, title=functiontype)
       self.rootfile = file
     elif functiontype == "timescan":
+      print("make tree timescan")
       file.mktree("DataTree", {self.standardtitles[0]:np.float32,self.standardtitles[1]:np.int_,self.standardtitles[2]:np.float32,
                                self.standardtitles[3]:np.float32,self.standardtitles[4]:np.float32,self.standardtitles[5]:np.float32,
                                self.standardtitles[6]:np.float32,self.standardtitles[7]:np.float32,
@@ -891,12 +894,14 @@ class rootfilecmd(controlcmd):
       print("Haven't made the root tree for tb_levelped yet, will not work")
       ##TODO: determine types of data
     elif functiontype == "visualhscan":
+      print("make tree visualhscan")
       file.mktree("DataTree", {self.standardtitles[0]:np.float32,self.standardtitles[1]:np.int_,self.standardtitles[2]:np.float32,
                                self.standardtitles[3]:np.float32,self.standardtitles[4]:np.float32,self.standardtitles[5]:np.float32,
                                self.standardtitles[6]:np.float32,self.standardtitles[7]:np.float322,
                                self.titles[4][0]:np.float64,self.titles[4][1]:np.float64}, title=functiontype)
       self.rootfile = file
     elif functiontype == "visualzscan":
+      print("make tree visualzscan")
       file.mktree("DataTree", {self.standardtitles[0]:np.float32,self.standardtitles[1]:np.int_,self.standardtitles[2]:np.float32,
                                self.standardtitles[3]:np.float32,self.standardtitles[4]:np.float32,self.standardtitles[5]:np.float32,
                                self.standardtitles[6]:np.float32,self.standardtitles[7]:np.float32,
@@ -905,6 +910,7 @@ class rootfilecmd(controlcmd):
       self.rootfile = file
     else:
       print("ERROR: Root data will not save")
+    print("Root tree successfully created")
     self.saveddata = []
     self.n=1
     
@@ -912,9 +918,12 @@ class rootfilecmd(controlcmd):
     self.rootfile["Board_ID"]=self.board.boardid
     self.rootfile["Board_Type"]=self.board.boardtype
     self.rootfile["Time"]=timestring
+
+    print("added extra data to root tree successfully")
     ##TODO: add in lines which give the exact command used
   
   def fillroot(self,data,time=0.0,det_id=-100):
+    print("fillroot in rootfilecmd")
     if data[0]!=-1000:
       self.saveddata.append([time,det_id,self.gcoder.opx,self.gcoder.opy,self.gcoder.opz,
                              self.gpio.adc_read(2),self.gpio.ntc_read(0),self.gpio.rtd_read(1)]+data)
@@ -924,15 +933,18 @@ class rootfilecmd(controlcmd):
       rotated = list(zip(*self.saveddata))
       
       if self.functiontype == "halign"or"zscan":
+        print("halign or zscan fill")
         self.rootfile["DataTree"].extend({self.standardtitles[0]:rotated[0],self.standardtitles[1]:rotated[1],self.standardtitles[2]:rotated[2],
                                           self.standardtitles[3]:rotated[3],self.standardtitles[4]:rotated[4], self.standardtitles[5]:rotated[5],
                                           self.standardtitles[6]:rotated[6], self.standardtitles[7]:rotated[7],
                                           self.titles[0][0]:rotated[8],self.titles[0][1]:rotated[9]})
       elif self.functiontype == "lowlight collect":
+        print("lowlight collect fill")
         self.rootfile["DataTree"].extend({self.standardtitles[0]:rotated[0],self.standardtitles[1]:rotated[1],self.standardtitles[2]:rotated[2],
                                           self.standardtitles[3]:rotated[3],self.standardtitles[4]:rotated[4], self.standardtitles[5]:rotated[5],
                                           self.standardtitles[6]:rotated[6], self.standardtitles[7]:rotated[7],self.titles[1][0]:rotated[8]})
       elif self.functiontype == "timescan":
+        print("timescan fill")
         self.rootfile["DataTree"].extend({self.standardtitles[0]:rotated[0],self.standardtitles[1]:rotated[1],self.standardtitles[2]:rotated[2],
                                           self.standardtitles[3]:rotated[3],self.standardtitles[4]:rotated[4], self.standardtitles[5]:rotated[5],
                                           self.standardtitles[6]:rotated[6], self.standardtitles[7]:rotated[7],self.titles[2][0]:rotated[8],
@@ -940,11 +952,13 @@ class rootfilecmd(controlcmd):
       elif self.functiontype == "tb_levelped":
         print("tb_levelped not ready yet")
       elif self.functiontype == "visualhscan":
+        print("visualhscan fill")
         self.rootfile["DataTree"].extend({self.standardtitles[0]:rotated[0],self.standardtitles[1]:rotated[1],self.standardtitles[2]:rotated[2],
                                           self.standardtitles[3]:rotated[3],self.standardtitles[4]:rotated[4], self.standardtitles[5]:rotated[5],
                                           self.standardtitles[6]:rotated[6], self.standardtitles[7]:rotated[7],self.titles[4][0]:rotated[8],
                                           self.titles[4][1]:rotated[9]})
       elif self.functiontype == "visualzscan":
+        print("visualzscan fill")
         self.rootfile["DataTree"].extend({self.standardtitles[0]:rotated[0],self.standardtitles[1]:rotated[1],self.standardtitles[2]:rotated[2],
                                           self.standardtitles[3]:rotated[3],self.standardtitles[4]:rotated[4], self.standardtitles[5]:rotated[5],
                                           self.standardtitles[6]:rotated[6], self.standardtitles[7]:rotated[7],self.titles[5][0]:rotated[8],
@@ -952,7 +966,8 @@ class rootfilecmd(controlcmd):
       self.saveddata.clear()
       self.n=0
     self.n+=1
-  
+
+
   def post_run(self):
     """
     @brief Additional steps to run before the completing the command.
@@ -1089,8 +1104,7 @@ class savefilecmd(controlcmd):
     message to notify the user of where the save file is. This function also
     handles that the save files are closed nominally.
     """
-    print("self.savefile ")
-    print(self.savefile)
+
     if not self.savefile: return  # Early exit for if savefile is not set
     self.printmsg(f"Saving results to file [{self.savefile.name}]")
     self.savefile.flush()
