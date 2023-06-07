@@ -961,7 +961,8 @@ class rootfilecmd(controlcmd):
     """
     if not self.saveroot: return  # Early exit for if saveroot is not set
     self.fillroot([-1000])
-    print("ROOT file saved at "+self.saveroot)
+    print("ROOT file saved at ")
+    print(self.saveroot)
   
 class savefilecmd(controlcmd):
   """
