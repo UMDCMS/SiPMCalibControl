@@ -909,8 +909,8 @@ class rootfilecmd(controlcmd):
     self.n=1
     
     timestring = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-    self.rootfile["Board ID"]=self.board.boardid
-    self.rootfile["Board Type"]=self.board.boardtype
+    self.rootfile["Board_ID"]=self.board.boardid
+    self.rootfile["Board_Type"]=self.board.boardtype
     self.rootfile["Time"]=timestring
     ##TODO: add in lines which give the exact command used
   
