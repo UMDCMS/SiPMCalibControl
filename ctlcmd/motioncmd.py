@@ -228,17 +228,16 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.rootfilecmd):
     n = 0
     test1 = []
     test2 = []
-    self.openroot("halign")
     ## Running over mesh.
     for xval, yval in self.start_pbar(zip(args.x, args.y)):
       self.check_handle()
       self.move_gantry(xval, yval, args.scanz)
       lumival, uncval = self.readout(args, average=True)
-      self.fillroot([lumival,uncval],det_id=args.detid)
+      self.fillroot({"lumival":lumival,"uncval":uncval},"halign",det_id=args.detid)
       self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}')
       lumi.append(abs(lumival))
       unc.append(uncval)
-
+    self.dumprootdata()
     # Performing fit
     p0 = (
         max(lumi) * ((args.scanz + 2)**2),  #
@@ -344,7 +343,6 @@ class zscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.readoutcmd,cmdbase.ro
     """
     lumi = []
     unc = []
-    self.openroot("zscan")
     # Ordering is important! Grouping z values together as the bottle neck is in
     # motion speed
     for z, power in self.start_pbar(
@@ -372,8 +370,9 @@ class zscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.readoutcmd,cmdbase.ro
 
       lumi.append(lumival)
       unc.append(uncval)
-      self.fillroot([lumival,uncval],det_id=args.detid)
+      self.fillroot({"lumival":lumival,"uncval":uncval},"zscan",det_id=args.detid)
       self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}')
+    self.dumprootdata()
 
 class lowlightcollect(cmdbase.singlexycmd, cmdbase.readoutcmd,cmdbase.rootfilecmd):
   """@brief Collection of low light data at a single gantry position, data will
@@ -422,12 +421,12 @@ class lowlightcollect(cmdbase.singlexycmd, cmdbase.readoutcmd,cmdbase.rootfilecm
     """
     self.move_gantry(args.x, args.y, args.z)
     self.gpio.pwm(0, args.power, 1e5)
-    self.openroot("lowlight collect")
     for _ in self.start_pbar(range(args.nparts)):
       self.check_handle()
       readout = self.readout(args, average=False)
-      self.fillroot([readout],det_id=args.detid)
+      self.fillroot({"readout":readout},"lowlight collect",det_id=args.detid)
       self.pbar_data(Lumi=f'{readout[-1]:.2}')
+    self.dumprootdata()
 class timescan(cmdbase.readoutcmd, cmdbase.rootfilecmd):
   """
   Generate a log of the readout in terms relative to time.
@@ -467,7 +466,6 @@ class timescan(cmdbase.readoutcmd, cmdbase.rootfilecmd):
   def run(self, args):
     start_time = time.time_ns()
     pwmindex = 0
-    self.openroot("timescan")
 
     for it in self.start_pbar(args.nslice):
       self.check_handle()
@@ -480,7 +478,8 @@ class timescan(cmdbase.readoutcmd, cmdbase.rootfilecmd):
       s4 = self.visual.get_latest().s4
       sample_time = time.time_ns()
       timestamp = (sample_time - start_time) / 1e9
-      self.fillroot([lumival,uncval,s2,s4],time=timestamp,det_id=-100)
+      self.fillroot({"lumival":lumival,"uncval":uncval,"S2":s2,"S4":s4},"timescan",time=timestamp,det_id=-100)
       self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}',
                      Sharp=f'({s2:.1f}, {s4:.1f})')
       time.sleep(args.interval)
+    self.dumprootdata()

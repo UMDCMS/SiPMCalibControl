@@ -817,6 +817,7 @@ class rootfilecmd(controlcmd):
     print("parse in rootfilecmd")
     if not args.saveroot:  # Early exit if savefile is not set
       self.saveroot = None
+      print("self.saveroot is None")
       return args
     filename = args.saveroot
 
@@ -851,133 +852,95 @@ class rootfilecmd(controlcmd):
                           substring,
                           filename,
                           flags=re.IGNORECASE)
-      self.saveroot=filename
+      self.saveroot = filename 
       return args
       
   def openroot(self,functiontype):
-    print("openroot rootfilecmd")
+    ##Make root file
     file = uproot.recreate(self.saveroot)
-    self.functiontype=functiontype
     
-    halign_titles=["humival","uncval"]
-    lowlight_collect_titles=["readout"]
-    timescan_titles=["lumival","uncval","S2","S4"]
-    tb_levelped_titles=[""]
-    visualhscan_titles=["center x","center y"]
-    visualzscan_titles=["laplace","center x","center y","center area","center maxmeas"]
-    self.standardtitles=["time","det_id","gantry x","gantry y","gantry z","LED bias voltage","LED temp","SiPM temp"]
-    self.titles = [halign_titles,lowlight_collect_titles,timescan_titles,tb_levelped_titles,visualhscan_titles,visualzscan_titles]
+    #Create the titles for the branch names and their data types
+    standard_dict={"time":np.float32,"det_id":int,"gantry x":np.float32,"gantry y":np.float32,
+                   "gantry z":np.float32,"LED bias voltage":np.float32,"LED temp":np.float32,"SiPM temp":np.float32 }
+    halign_dict={"lumival":np.float64,"uncval":np.float64}
+    lowlight_collect_dict={"readout":np.float64}
+    timescan_dict={"lumival":np.float64,"uncval":np.float64,"S2":np.float64,"S4":np.float64}
+    tb_levelped_dict={}
+    visualhscan_dict={"center x":np.float64,"center y":np.float64}
+    visualzscan_dict={"laplace":np.float64,"center x":np.float64,"center y":np.float64,"center area":np.float64,"center maxmeas":np.float64}
+    function_dict={"halign":halign_dict,"zscan":halign_dict,"lowlight collect":lowlight_collect_dict,
+                   "timescan":timescan_dict,"tb_levelped":tb_levelped_dict,"visualhscan":visualhscan_dict,"visualzscan":visualzscan_dict}
+    specific_dict=function_dict[functiontype]
     
-    if functiontype == "halign"or"zscan":
-      print("make tree halign or zscan")
-      file.mktree("DataTree", {self.standardtitles[0]:np.float32,self.standardtitles[1]:np.int_,self.standardtitles[2]:np.float32,
-                               self.standardtitles[3]:np.float32,self.standardtitles[4]:np.float32,self.standardtitles[5]:np.float32,
-                               self.standardtitles[6]:np.float32,self.standardtitles[7]:np.float32,
-                               self.titles[0][0]:np.float64,self.titles[0][1]:np.float64}, title=functiontype)
-      self.rootfile = file
-    elif functiontype == "lowlight collect":
-      print("make tree lowlight collect")
-      file.mktree("DataTree", {self.standardtitles[0]:np.float32,self.standardtitles[1]:np.int_,self.standardtitles[2]:np.float32,
-                               self.standardtitles[3]:np.float32,self.standardtitles[4]:np.float32,self.standardtitles[5]:np.float32,
-                               self.standardtitles[6]:np.float32,self.standardtitles[7]:np.float32,
-                               self.titles[1][0]:np.float64}, title=functiontype)
-      self.rootfile = file
-    elif functiontype == "timescan":
-      print("make tree timescan")
-      file.mktree("DataTree", {self.standardtitles[0]:np.float32,self.standardtitles[1]:np.int_,self.standardtitles[2]:np.float32,
-                               self.standardtitles[3]:np.float32,self.standardtitles[4]:np.float32,self.standardtitles[5]:np.float32,
-                               self.standardtitles[6]:np.float32,self.standardtitles[7]:np.float32,
-                               self.titles[2][0]:np.float64,self.titles[2][1]:np.float64,self.titles[2][2]:np.float64,
-                               self.titles[2][3]:np.float64}, title=functiontype)
-      self.rootfile = file
-    elif functiontype == "tb_levelped":
-      print("Haven't made the root tree for tb_levelped yet, will not work")
-      ##TODO: determine types of data
-    elif functiontype == "visualhscan":
-      print("make tree visualhscan")
-      file.mktree("DataTree", {self.standardtitles[0]:np.float32,self.standardtitles[1]:np.int_,self.standardtitles[2]:np.float32,
-                               self.standardtitles[3]:np.float32,self.standardtitles[4]:np.float32,self.standardtitles[5]:np.float32,
-                               self.standardtitles[6]:np.float32,self.standardtitles[7]:np.float322,
-                               self.titles[4][0]:np.float64,self.titles[4][1]:np.float64}, title=functiontype)
-      self.rootfile = file
-    elif functiontype == "visualzscan":
-      print("make tree visualzscan")
-      file.mktree("DataTree", {self.standardtitles[0]:np.float32,self.standardtitles[1]:np.int_,self.standardtitles[2]:np.float32,
-                               self.standardtitles[3]:np.float32,self.standardtitles[4]:np.float32,self.standardtitles[5]:np.float32,
-                               self.standardtitles[6]:np.float32,self.standardtitles[7]:np.float32,
-                               self.titles[5][0]:np.float64,self.titles[5][1]:np.float64,self.titles[5][2]:np.float64,
-                               self.titles[5][3]:np.float64,self.titles[5][4]:np.float64}, title=functiontype)
-      self.rootfile = file
-    else:
-      print("ERROR: Root data will not save")
-    print("Root tree successfully created")
-    self.saveddata = []
-    self.n=1
+    ##make the TTree in the root file
+    file.mktree("DataTree",{ **{title: standard_dict[title] for title in standard_dict}, **{title:specific_dict[title] for title in specific_dict}})
     
+    ##Fill more data in the root file not to the TTree
     timestring = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-    self.rootfile["Board_ID"]=self.board.boardid
-    self.rootfile["Board_Type"]=self.board.boardtype
-    self.rootfile["Time"]=timestring
+    file["Board_ID"]=self.board.boardid
+    file["Board_Type"]=self.board.boardtype
+    file["Time"]=timestring
 
-    print("added extra data to root tree successfully")
+    self.rootfile=file
+    ##Create apparatus to store data until it is pushed to the root file
+    self.n=1
+    standarddata={**{title:[] for title in standard_dict}}
+    specificdata={**{title:[] for title in specific_dict}}
+    self.saveddata={"standard":standarddata,"specific":specificdata}
+
     ##TODO: add in lines which give the exact command used
   
-  def fillroot(self,data,time=0.0,det_id=-100):
+  def fillroot(self,data,functiontype,time=0.0,det_id=-100):
     print("fillroot in rootfilecmd")
-    if data[0]!=-1000:
-      self.saveddata.append([time,det_id,self.gcoder.opx,self.gcoder.opy,self.gcoder.opz,
-                             self.gpio.adc_read(2),self.gpio.ntc_read(0),self.gpio.rtd_read(1)]+data)
-    if data[0]==-1000:
-      print("Dump of remaining data worked")
-    if (self.n%10==0 or data[0]==-1000) and len(self.saveddata)!=0:
-      rotated = list(zip(*self.saveddata))
-      
-      if self.functiontype == "halign"or"zscan":
-        print("halign or zscan fill")
-        self.rootfile["DataTree"].extend({self.standardtitles[0]:rotated[0],self.standardtitles[1]:rotated[1],self.standardtitles[2]:rotated[2],
-                                          self.standardtitles[3]:rotated[3],self.standardtitles[4]:rotated[4], self.standardtitles[5]:rotated[5],
-                                          self.standardtitles[6]:rotated[6], self.standardtitles[7]:rotated[7],
-                                          self.titles[0][0]:rotated[8],self.titles[0][1]:rotated[9]})
-      elif self.functiontype == "lowlight collect":
-        print("lowlight collect fill")
-        self.rootfile["DataTree"].extend({self.standardtitles[0]:rotated[0],self.standardtitles[1]:rotated[1],self.standardtitles[2]:rotated[2],
-                                          self.standardtitles[3]:rotated[3],self.standardtitles[4]:rotated[4], self.standardtitles[5]:rotated[5],
-                                          self.standardtitles[6]:rotated[6], self.standardtitles[7]:rotated[7],self.titles[1][0]:rotated[8]})
-      elif self.functiontype == "timescan":
-        print("timescan fill")
-        self.rootfile["DataTree"].extend({self.standardtitles[0]:rotated[0],self.standardtitles[1]:rotated[1],self.standardtitles[2]:rotated[2],
-                                          self.standardtitles[3]:rotated[3],self.standardtitles[4]:rotated[4], self.standardtitles[5]:rotated[5],
-                                          self.standardtitles[6]:rotated[6], self.standardtitles[7]:rotated[7],self.titles[2][0]:rotated[8],
-                                          self.titles[2][1]:rotated[9],self.titles[2][2]:rotated[10],self.titles[2][3]:rotated[11]})
-      elif self.functiontype == "tb_levelped":
-        print("tb_levelped not ready yet")
-      elif self.functiontype == "visualhscan":
-        print("visualhscan fill")
-        self.rootfile["DataTree"].extend({self.standardtitles[0]:rotated[0],self.standardtitles[1]:rotated[1],self.standardtitles[2]:rotated[2],
-                                          self.standardtitles[3]:rotated[3],self.standardtitles[4]:rotated[4], self.standardtitles[5]:rotated[5],
-                                          self.standardtitles[6]:rotated[6], self.standardtitles[7]:rotated[7],self.titles[4][0]:rotated[8],
-                                          self.titles[4][1]:rotated[9]})
-      elif self.functiontype == "visualzscan":
-        print("visualzscan fill")
-        self.rootfile["DataTree"].extend({self.standardtitles[0]:rotated[0],self.standardtitles[1]:rotated[1],self.standardtitles[2]:rotated[2],
-                                          self.standardtitles[3]:rotated[3],self.standardtitles[4]:rotated[4], self.standardtitles[5]:rotated[5],
-                                          self.standardtitles[6]:rotated[6], self.standardtitles[7]:rotated[7],self.titles[5][0]:rotated[8],
-                                          self.titles[5][1]:rotated[9]})
-      self.saveddata.clear()
+    
+    ##fill data into the root file
+    if not hasattr(self,"rootfile"):
+      self.openroot(functiontype)
+      print("root tree made")
+  
+    self.saveddata["standard"]["time"].append(time)
+    self.saveddata["standard"]["det_id"].append(det_id)
+    self.saveddata["standard"]["gantry x"].append(self.gcoder.opx)
+    self.saveddata["standard"]["gantry y"].append(self.gcoder.opy)
+    self.saveddata["standard"]["gantry z"].append(self.gcoder.opz)
+    self.saveddata["standard"]["LED bias voltage"].append(self.gpio.adc_read(2))
+    self.saveddata["standard"]["LED temp"].append(self.gpio.ntc_read(0))
+    self.saveddata["standard"]["SiPM temp"].append(self.gpio.rtd_read(1))
+
+    for title1 in data:
+      for title2 in self.saveddata["specific"]:
+        if title1 == title2:
+          self.saveddata["specific"][title2].append(data[title1])
+    
+    ##Only push data once 10 sets of data have been collected to improve speed, extending is more efficient that way
+    if self.n%10==0:
+      self.rootfile["DataTree"].extend({**{title:self.saveddata["standard"][title] for title in self.saveddata["standard"]},**{title:self.saveddata["specific"][title] for title in self.saveddata["specific"]}})
+      for title in self.saveddata["standard"]:
+        self.saveddata["standard"][title].clear()
+      for title in self.saveddata["specific"]:
+        self.saveddata["specific"][title].clear()
       self.n=0
     self.n+=1
 
+  def dumprootdata(self):
+    ##dump end data that does not get saved due to being in the last group of 10
+    self.rootfile["DataTree"].extend({**{title:self.saveddata["standard"][title] for title in self.saveddata["standard"]},**{title:self.saveddata["specific"][title] for title in self.saveddata["specific"]}})
+    for title in self.saveddata["standard"]:
+      self.saveddata["standard"][title].clear()
+    for title in self.saveddata["specific"]:
+      self.saveddata["specific"][title].clear() 
 
-  def post_run(self):
     """
+    def post_run(self):
+    
     @brief Additional steps to run before the completing the command.
 
     @details Dump any data that did not yet get saved, also print out a message to the user for the location of the saved root file.
-    """
+    
     if not self.saveroot: return  # Early exit for if saveroot is not set
     self.fillroot([-1000])
     print("ROOT file saved at ")
-    print(self.saveroot)
+    print(self.saveroot)"""
   
 class savefilecmd(controlcmd):
   """
