@@ -159,7 +159,7 @@ class visualhscan(cmdbase.hscancmd, visualmeta):
         reco_x.append(center.x)
         reco_y.append(center.y)
 
-      self.fillroot({"center x":center.x,"center y":center.y},"visualhscan",det_id=args.detid) 
+      self.fillroot({"center x":center.x,"center y":center.y},det_id=args.detid) 
       self.pbar_data(center=f'({center.x:.0f}, {center.y:.0f})',
                      sharp=f'({center.s2:1f}, {center.s4:.1f})')
     self.dumprootdata()
@@ -483,7 +483,7 @@ class visualzscan(cmdbase.singlexycmd, cmdbase.zscancmd,
       reco_y.append(center.y)
       reco_a.append(center.area)
       reco_d.append(center.maxmeas)
-      self.fillroot({"laplace":laplace[-1],"center x":center.x,"center y":center.y,"center area":center.area,"center maxmeas":center.maxmeas},"visualzscan",det_id=args.detid)
+      self.fillroot({"laplace":laplace[-1],"center x":center.x,"center y":center.y,"center area":center.area,"center maxmeas":center.maxmeas},det_id=args.detid)
       self.pbar_data(sharpness=f'({center.s2:.1f}, {center.s4:.1f})',
                      reco=f'({center.x:.0f}, {center.y:.0f})',
                      measure=f'({center.area:.0f}, {center.maxmeas:.0f})')

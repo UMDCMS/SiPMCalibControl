@@ -135,8 +135,8 @@ class tb_levelped(cmdbase.savefilecmd):
                   -1 if default_dacb[ch] == dacb else \
                   0
       self.write_standard_line((dacb, ped, noise, check_val), ch)
-      print("dacb "+dacb+" ped "+ped+" noise "+noise+ " check_val "+check_val+" ch "+ch)
-
+      self.fillroot({"dacb":dacb,"ped":ped,"noise":noise,"check_val":check_val,"ch":ch})
+    self.dumprootdata()
     print(corrected_dacb)
 
   def acquire_single(self, dacb_map: dict[int, int], nevents: int) -> dict:

@@ -799,11 +799,10 @@ class rootfilecmd(controlcmd):
   ##TODO: update this to make the file location customizable
   DEFAULT_ROOTFILE = 'SAVEROOT_<TIMESTAMP>'
   def __init__(self, cmd):
-    print("initialize rootfilecmd")
     controlcmd.__init__(self, cmd)
-    
+     
+
   def add_args(self):
-    print("add_args in rootfilecmd")
     group = self.parser.add_argument_group(
         "root file saving options", """Options for changing the root file location.
         For more details, see the official documentation.""")
@@ -814,7 +813,7 @@ class rootfilecmd(controlcmd):
                        default=%(default)s""")
  
   def parse(self,args):
-    print("parse in rootfilecmd")
+    print("parse rootfilecmd")
     if not args.saveroot:  # Early exit if savefile is not set
       self.saveroot = None
       print("self.saveroot is None")
@@ -855,80 +854,61 @@ class rootfilecmd(controlcmd):
       self.saveroot = filename 
       return args
       
-  def openroot(self,functiontype):
-    ##Make root file
-    file = uproot.recreate(self.saveroot)
-    
-    #Create the titles for the branch names and their data types
+  def maketree(self,data,datatypes={}):
+    print("maketree in rootfilecmd")
+    self.rootfile = uproot.recreate(self.saveroot)
     standard_dict={"time":np.float32,"det_id":int,"gantry x":np.float32,"gantry y":np.float32,
-                   "gantry z":np.float32,"LED bias voltage":np.float32,"LED temp":np.float32,"SiPM temp":np.float32 }
-    halign_dict={"lumival":np.float64,"uncval":np.float64}
-    lowlight_collect_dict={"readout":np.float64}
-    timescan_dict={"lumival":np.float64,"uncval":np.float64,"S2":np.float64,"S4":np.float64}
-    tb_levelped_dict={}
-    visualhscan_dict={"center x":np.float64,"center y":np.float64}
-    visualzscan_dict={"laplace":np.float64,"center x":np.float64,"center y":np.float64,"center area":np.float64,"center maxmeas":np.float64}
-    function_dict={"halign":halign_dict,"zscan":halign_dict,"lowlight collect":lowlight_collect_dict,
-                   "timescan":timescan_dict,"tb_levelped":tb_levelped_dict,"visualhscan":visualhscan_dict,"visualzscan":visualzscan_dict}
-    specific_dict=function_dict[functiontype]
+                   "gantry z":np.float32,"LED bias voltage":np.float32,"LED temp":np.float32,"SiPM temp":np.float32} 
+    specific_dict={**{title:type(data[title]) for title in data}}
     
-    ##make the TTree in the root file
-    file.mktree("DataTree",{ **{title: standard_dict[title] for title in standard_dict}, **{title:specific_dict[title] for title in specific_dict}})
-    
-    ##Fill more data in the root file not to the TTree
-    timestring = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-    file["Board_ID"]=self.board.boardid
-    file["Board_Type"]=self.board.boardtype
-    file["Time"]=timestring
+    ##manual override if type is not returning a value that root will accept
+    for title in datatypes:
+        specific_dict[title]=datatypes[title]
 
-    self.rootfile=file
+    self.rootfile.mktree("DataTree",{**{title:standard_dict[title] for title in standard_dict},**{title:specific_dict[title] for title in specific_dict}}) 
+    timestring = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+    self.rootfile["Board_ID"]=self.board.boardid
+    self.rootfile["Board_Type"]=self.board.boardtype
+    self.rootfile["Time"]=timestring
     ##Create apparatus to store data until it is pushed to the root file
-    self.n=1
+    self.n=0
     standarddata={**{title:[] for title in standard_dict}}
     specificdata={**{title:[] for title in specific_dict}}
-    self.saveddata={"standard":standarddata,"specific":specificdata}
-
-    ##TODO: add in lines which give the exact command used
+    self.saveddata={"standard":standarddata,"specific":specificdata} 
   
-  def fillroot(self,data,functiontype,time=0.0,det_id=-100):
-    print("fillroot in rootfilecmd")
-    
+  def fillroot(self,data,datatypes={},time=0.0,det_id=-100):
     ##fill data into the root file
     if not hasattr(self,"rootfile"):
-      self.openroot(functiontype)
-      print("root tree made")
+      self.maketree(data,datatypes)
   
-    self.saveddata["standard"]["time"].append(time)
-    self.saveddata["standard"]["det_id"].append(det_id)
-    self.saveddata["standard"]["gantry x"].append(self.gcoder.opx)
-    self.saveddata["standard"]["gantry y"].append(self.gcoder.opy)
-    self.saveddata["standard"]["gantry z"].append(self.gcoder.opz)
-    self.saveddata["standard"]["LED bias voltage"].append(self.gpio.adc_read(2))
-    self.saveddata["standard"]["LED temp"].append(self.gpio.ntc_read(0))
-    self.saveddata["standard"]["SiPM temp"].append(self.gpio.rtd_read(1))
+    if data != "dump":
+      self.saveddata["standard"]["time"].append(time)
+      self.saveddata["standard"]["det_id"].append(det_id)
+      self.saveddata["standard"]["gantry x"].append(self.gcoder.opx)
+      self.saveddata["standard"]["gantry y"].append(self.gcoder.opy)
+      self.saveddata["standard"]["gantry z"].append(self.gcoder.opz)
+      self.saveddata["standard"]["LED bias voltage"].append(self.gpio.adc_read(2))
+      self.saveddata["standard"]["LED temp"].append(self.gpio.ntc_read(0))
+      self.saveddata["standard"]["SiPM temp"].append(self.gpio.rtd_read(1))
 
-    for title1 in data:
-      for title2 in self.saveddata["specific"]:
-        if title1 == title2:
-          self.saveddata["specific"][title2].append(data[title1])
-    
-    ##Only push data once 10 sets of data have been collected to improve speed, extending is more efficient that way
-    if self.n%10==0:
+      for title1 in data:
+        for title2 in self.saveddata["specific"]:
+          if title1 == title2:
+            self.saveddata["specific"][title2].append(data[title1])
+      self.n+=1
+    ##Only push data to rootfile once multiple sets of data have been collected to improve speed, extending is more efficient that way
+    if self.n%10==0 or data == "dump":
       self.rootfile["DataTree"].extend({**{title:self.saveddata["standard"][title] for title in self.saveddata["standard"]},**{title:self.saveddata["specific"][title] for title in self.saveddata["specific"]}})
+      if data == "dump": print("Remaining root data dumped successfully with n= ",self.n)
+      print("Root data saved with n= ",self.n)
       for title in self.saveddata["standard"]:
         self.saveddata["standard"][title].clear()
       for title in self.saveddata["specific"]:
         self.saveddata["specific"][title].clear()
       self.n=0
-    self.n+=1
 
   def dumprootdata(self):
-    ##dump end data that does not get saved due to being in the last group of 10
-    self.rootfile["DataTree"].extend({**{title:self.saveddata["standard"][title] for title in self.saveddata["standard"]},**{title:self.saveddata["specific"][title] for title in self.saveddata["specific"]}})
-    for title in self.saveddata["standard"]:
-      self.saveddata["standard"][title].clear()
-    for title in self.saveddata["specific"]:
-      self.saveddata["specific"][title].clear() 
+    self.fillroot("dump")
 
     """
     def post_run(self):

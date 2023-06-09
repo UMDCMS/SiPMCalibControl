@@ -11,7 +11,7 @@ import ctlcmd.cmdbase as cmdbase
 import numpy as np
 from scipy.optimize import curve_fit
 import time
-
+import uproot
 
 class rungcode(cmdbase.controlcmd):
   """
@@ -233,7 +233,7 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.rootfilecmd):
       self.check_handle()
       self.move_gantry(xval, yval, args.scanz)
       lumival, uncval = self.readout(args, average=True)
-      self.fillroot({"lumival":lumival,"uncval":uncval},"halign",det_id=args.detid)
+      self.fillroot({"lumival":lumival,"uncval":uncval},det_id=args.detid)
       self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}')
       lumi.append(abs(lumival))
       unc.append(uncval)
@@ -370,7 +370,7 @@ class zscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.readoutcmd,cmdbase.ro
 
       lumi.append(lumival)
       unc.append(uncval)
-      self.fillroot({"lumival":lumival,"uncval":uncval},"zscan",det_id=args.detid)
+      self.fillroot({"lumival":lumival,"uncval":uncval},det_id=args.detid)
       self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}')
     self.dumprootdata()
 
@@ -424,7 +424,8 @@ class lowlightcollect(cmdbase.singlexycmd, cmdbase.readoutcmd,cmdbase.rootfilecm
     for _ in self.start_pbar(range(args.nparts)):
       self.check_handle()
       readout = self.readout(args, average=False)
-      self.fillroot({"readout":readout},"lowlight collect",det_id=args.detid)
+      ##TODO: update this so that it works properly
+      self.fillroot({"readout":readout},{"readout":"var * float64"},det_id=args.detid)
       self.pbar_data(Lumi=f'{readout[-1]:.2}')
     self.dumprootdata()
 class timescan(cmdbase.readoutcmd, cmdbase.rootfilecmd):
@@ -478,7 +479,7 @@ class timescan(cmdbase.readoutcmd, cmdbase.rootfilecmd):
       s4 = self.visual.get_latest().s4
       sample_time = time.time_ns()
       timestamp = (sample_time - start_time) / 1e9
-      self.fillroot({"lumival":lumival,"uncval":uncval,"S2":s2,"S4":s4},"timescan",time=timestamp,det_id=-100)
+      self.fillroot({"lumival":lumival,"uncval":uncval,"S2":s2,"S4":s4},time=timestamp,det_id=-100)
       self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}',
                      Sharp=f'({s2:.1f}, {s4:.1f})')
       time.sleep(args.interval)
