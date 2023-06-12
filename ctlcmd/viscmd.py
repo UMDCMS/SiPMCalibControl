@@ -104,7 +104,7 @@ class visualset(cmdbase.controlcmd):
       self.visual.poly_range = args.poly
 
 
-class visualhscan(cmdbase.hscancmd, visualmeta):
+class visualhscan(cmdbase.hscancmd, visualmeta,cmdbase.rootfilecmd):
   """
   @brief Performing horizontal scan with camera system
   """
@@ -116,8 +116,7 @@ class visualhscan(cmdbase.hscancmd, visualmeta):
   coordinates for fast visual calibration.
   """
 
-  ##TODO: fix root file saving here
-  DEFAULT_SAVEFILE = 'vhscan_<BOARDTYPE>_<BOARDID>_<DETID>_<SCANZ>_<TIMESTAMP>.txt'
+  DEFAULT_ROOTFILE = 'vhscan_<BOARDTYPE>_<BOARDID>_<DETID>_<SCANZ>_<TIMESTAMP>.root'
   HSCAN_ZVALUE = 20
   HSCAN_RANGE = 3
   HSCAN_SEPRATION = 0.5
@@ -455,13 +454,12 @@ class visualsaveframe(cmdbase.controlcmd):
 
 
 class visualzscan(cmdbase.singlexycmd, cmdbase.zscancmd,
-                  visualmeta):
+                  visualmeta,cmdbase.rootfilecmd):
   """
   @brief Scanning focus to calibrate z distance
   """
   VISUAL_OFFSET = True
-  ##fix default save file for root
-  DEFAULT_SAVEFILE = 'vscan_<DETID>_<TIMESTAMP>.txt'
+  DEFAULT_ROOTFILE= 'vscan_<DETID>_<TIMESTAMP>.root'
 
   def __init__(self, cmd):
     cmdbase.controlcmd.__init__(self, cmd)

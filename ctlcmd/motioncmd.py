@@ -179,10 +179,8 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.rootfilecmd):
   @brief Running horizontal alignment procedure by luminosity readout vs and xy
   grid scan motion.
   """
-  ##TODO: fix rootfile here and txt file
-  ##DEFAULT_SAVEFILE = 'halign_<BOARDTYPE>_<BOARDID>_<DETID>_<SCANZ>_<TIMESTAMP>.txt'
+
   DEFAULT_ROOTFILE = 'halign_<BOARDTYPE>_<BOARDID>_<DETID>_<SCANZ>_<TIMESTAMP>.root'
-  print("DEFAULT_ROOTFILE "+DEFAULT_ROOTFILE)
   
   def __init__(self, cmd):
     cmdbase.controlcmd.__init__(self, cmd)
@@ -310,10 +308,7 @@ class zscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.readoutcmd,cmdbase.ro
   list of biassing power.
   """
 
-  ##TODO: fix rootfile save here and txt save
-  DEFAULT_ROOTFILE='zscan_<BOARDTYPE>_<BOARDID>_<DETID>_<TIMESTAMP>.txt'
-
-  ##DEFAULT_SAVEFILE='zscan_<BOARDTYPE>_<BOARDID>_<DETID>_<TIMESTAMP>.txt'
+  DEFAULT_ROOTFILE='zscan_<BOARDTYPE>_<BOARDID>_<DETID>_<TIMESTAMP>.root'
 
   def __init__(self, cmd):
     cmdbase.controlcmd.__init__(self, cmd)
@@ -377,9 +372,7 @@ class zscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.readoutcmd,cmdbase.ro
 class lowlightcollect(cmdbase.singlexycmd, cmdbase.readoutcmd,cmdbase.rootfilecmd):
   """@brief Collection of low light data at a single gantry position, data will
   be collected without averaging."""
-  ##TODO: fix rootfile save here and txt file save
-  DEFAULT_ROOTFILE= 'lowlight_<BOARDTYPE>_<BOARDID>_<DETID>_<TIMESTAMP>.txt' 
-  DEFAULT_SAVEFILE = 'lowlight_<BOARDTYPE>_<BOARDID>_<DETID>_<TIMESTAMP>.txt'
+  DEFAULT_ROOTFILE= 'lowlight_<BOARDTYPE>_<BOARDID>_<DETID>_<TIMESTAMP>.root' 
 
   def __init__(self, cmd):
     cmdbase.controlcmd.__init__(self, cmd)
@@ -424,7 +417,7 @@ class lowlightcollect(cmdbase.singlexycmd, cmdbase.readoutcmd,cmdbase.rootfilecm
     for _ in self.start_pbar(range(args.nparts)):
       self.check_handle()
       readout = self.readout(args, average=False)
-      ##TODO: update this so that it works properly
+      readout=readout.tolist()
       self.fillroot({"readout":readout},{"readout":"var * float64"},det_id=args.detid)
       self.pbar_data(Lumi=f'{readout[-1]:.2}')
     self.dumprootdata()
@@ -432,9 +425,7 @@ class timescan(cmdbase.readoutcmd, cmdbase.rootfilecmd):
   """
   Generate a log of the readout in terms relative to time.
   """
-  ##TODO: determine how to fix the file name issue
-  DEFAULT_ROOTFILE = 'tscan_<TIMESTAMP>,txt'
-  DEFAULT_SAVEFILE = 'tscan_<TIMESTAMP>.txt'
+  DEFAULT_ROOTFILE = 'tscan_<TIMESTAMP>.root'
 
   def __init__(self, cmd):
     cmdbase.controlcmd.__init__(self, cmd)
@@ -468,7 +459,9 @@ class timescan(cmdbase.readoutcmd, cmdbase.rootfilecmd):
     start_time = time.time_ns()
     pwmindex = 0
 
+    print("start of for loop in run timescan")
     for it in self.start_pbar(args.nslice):
+      print("part of for loop in run timescan")
       self.check_handle()
       if (it % args.pwmslices == 0):
         self.gpio.pwm(0, args.testpwm[pwmindex], 1e5)
@@ -479,6 +472,7 @@ class timescan(cmdbase.readoutcmd, cmdbase.rootfilecmd):
       s4 = self.visual.get_latest().s4
       sample_time = time.time_ns()
       timestamp = (sample_time - start_time) / 1e9
+      print("run self.fillroot in timescan after this")
       self.fillroot({"lumival":lumival,"uncval":uncval,"S2":s2,"S4":s4},time=timestamp,det_id=-100)
       self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}',
                      Sharp=f'({s2:.1f}, {s4:.1f})')

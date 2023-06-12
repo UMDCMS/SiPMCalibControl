@@ -83,6 +83,7 @@ import logging
 import tqdm
 import signal
 import uproot
+import awkward as ak
 
 # Potentially missing package -- PICO
 try:
@@ -788,7 +789,7 @@ class rootfilecmd(controlcmd):
   measured SiPM temp (C), and measured pulser board temp (C) will always be in the root file. 
   Extra branches with more data will be added based on the commands run. 
   
-  The save file string can also include placeholder strings to have the filename
+  The saveroot string input by the user can also include placeholder strings to have the filename
   automatically be modified according other input arguments and/or the state of
   the system. This allows the same command to be used for different
   configurations while still have the results be saved in distinct files.
@@ -796,7 +797,6 @@ class rootfilecmd(controlcmd):
   special placeholders, as well as how the file parsing is handled, see the
   detailed documentation in the `ctlcmd.cmdbase.savefilecmd.parse` method.
   """
-  ##TODO: update this to make the file location customizable
   DEFAULT_ROOTFILE = 'SAVEROOT_<TIMESTAMP>'
   def __init__(self, cmd):
     controlcmd.__init__(self, cmd)
@@ -813,10 +813,8 @@ class rootfilecmd(controlcmd):
                        default=%(default)s""")
  
   def parse(self,args):
-    print("parse rootfilecmd")
     if not args.saveroot:  # Early exit if savefile is not set
       self.saveroot = None
-      print("self.saveroot is None")
       return args
     filename = args.saveroot
 
@@ -851,32 +849,57 @@ class rootfilecmd(controlcmd):
                           substring,
                           filename,
                           flags=re.IGNORECASE)
-      self.saveroot = filename 
-      return args
+    self.saveroot = filename
+    return args
       
   def maketree(self,data,datatypes={}):
-    print("maketree in rootfilecmd")
+    """
+    @brief Create the root file and the TTree in the root file
+
+    @details This command creates the root file and creates the TTree with the correct
+    data types and names for each branch of the tree. This also saves some extra basic data 
+    like the time the file was created, the Board_ID and Board_Type. This function is only called once.
+
+    """
+     
     self.rootfile = uproot.recreate(self.saveroot)
     standard_dict={"time":np.float32,"det_id":int,"gantry x":np.float32,"gantry y":np.float32,
                    "gantry z":np.float32,"LED bias voltage":np.float32,"LED temp":np.float32,"SiPM temp":np.float32} 
-    specific_dict={**{title:type(data[title]) for title in data}}
-    
-    ##manual override if type is not returning a value that root will accept
-    for title in datatypes:
-        specific_dict[title]=datatypes[title]
+    self.specific_dict={**{title:type(data[title]) for title in data}}
 
-    self.rootfile.mktree("DataTree",{**{title:standard_dict[title] for title in standard_dict},**{title:specific_dict[title] for title in specific_dict}}) 
+    ##manual override if type is not returning a value that root will accept
+    if datatypes:
+      for title in datatypes:
+        self.specific_dict[title]=datatypes[title]
+    
+    self.rootfile.mktree("DataTree",{**{title:standard_dict[title] for title in standard_dict},**{title:self.specific_dict[title] for title in self.specific_dict}})
+
+    ##add extra data which must only be saved once
     timestring = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
     self.rootfile["Board_ID"]=self.board.boardid
     self.rootfile["Board_Type"]=self.board.boardtype
     self.rootfile["Time"]=timestring
+    
     ##Create apparatus to store data until it is pushed to the root file
     self.n=0
     standarddata={**{title:[] for title in standard_dict}}
-    specificdata={**{title:[] for title in specific_dict}}
+    specificdata={**{title:[] for title in self.specific_dict}}
     self.saveddata={"standard":standarddata,"specific":specificdata} 
   
   def fillroot(self,data,datatypes={},time=0.0,det_id=-100):
+    """
+    @brief Fill the root file with the given data, will create a root file on the first call
+
+    @details This command is called to push data to the root file. The first run of this command will create 
+    a root file and the correct TTree based on the input of data and datatypes. The format of data should be 
+    a dictionary with the keys as the branch titles for corresponding data. 
+    datatypes is also a dictionary 
+    
+    whose purpose is to override the rootfilecmd in the case that type() does not work. Branches being filled 
+    will multiple values per call of fill root must set datatypes and must make sure they are inputting a list.
+    Ex: self.fillroot({"testdata":[1,2,3]},datatypes = {"testdata":"var * int64")
+
+    """
     ##fill data into the root file
     if not hasattr(self,"rootfile"):
       self.maketree(data,datatypes)
@@ -890,37 +913,48 @@ class rootfilecmd(controlcmd):
       self.saveddata["standard"]["LED bias voltage"].append(self.gpio.adc_read(2))
       self.saveddata["standard"]["LED temp"].append(self.gpio.ntc_read(0))
       self.saveddata["standard"]["SiPM temp"].append(self.gpio.rtd_read(1))
-
+    
       for title1 in data:
         for title2 in self.saveddata["specific"]:
           if title1 == title2:
             self.saveddata["specific"][title2].append(data[title1])
       self.n+=1
     ##Only push data to rootfile once multiple sets of data have been collected to improve speed, extending is more efficient that way
-    if self.n%10==0 or data == "dump":
-      self.rootfile["DataTree"].extend({**{title:self.saveddata["standard"][title] for title in self.saveddata["standard"]},**{title:self.saveddata["specific"][title] for title in self.saveddata["specific"]}})
-      if data == "dump": print("Remaining root data dumped successfully with n= ",self.n)
-      print("Root data saved with n= ",self.n)
-      for title in self.saveddata["standard"]:
-        self.saveddata["standard"][title].clear()
+    if self.n%10==0 or (data == "dump" and self.n!=0):
       for title in self.saveddata["specific"]:
-        self.saveddata["specific"][title].clear()
+        ##change nested lists to akward arrays in order to save properly to the tree
+        if isinstance(self.specific_dict[title],str):
+          if "var *" in self.specific_dict[title]:
+            self.saveddata["specific"][title]=ak.Array(self.saveddata["specific"][title])
+      self.rootfile["DataTree"].extend({**{title:self.saveddata["standard"][title] for title in self.saveddata["standard"]},**{title:self.saveddata["specific"][title] for title in self.saveddata["specific"]}})
+      for title in self.saveddata["standard"]:
+        self.saveddata["standard"][title]=[]
+      for title in self.saveddata["specific"]:
+        self.saveddata["specific"][title]=[]
       self.n=0
 
   def dumprootdata(self):
-    self.fillroot("dump")
+    """
+    @brief Command to dump any data still in memory not saved to the root TTree
+
+    @details It is more efficient to collect the data to be saved in memory and periodically
+    push it to the root TTree than save every single file at once. This ensures that at
+    the end of the run none of the data is left in memory and not in the TTree
 
     """
-    def post_run(self):
     
+    self.fillroot("dump")
+ 
+  def post_run(self):
+    """
     @brief Additional steps to run before the completing the command.
 
-    @details Dump any data that did not yet get saved, also print out a message to the user for the location of the saved root file.
-    
-    if not self.saveroot: return  # Early exit for if saveroot is not set
-    self.fillroot([-1000])
-    print("ROOT file saved at ")
-    print(self.saveroot)"""
+    @details As this modifies files on the system, we will always print a verbose
+    message to notify the user of where the save file is.
+    """
+
+    if not self.saveroot: return  # Early exit for if rootfile name is not set
+    self.printmsg(f"Saving results to file [{self.saveroot}]")
   
 class savefilecmd(controlcmd):
   """
