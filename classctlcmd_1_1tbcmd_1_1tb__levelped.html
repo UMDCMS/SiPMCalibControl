@@ -100,8 +100,8 @@ Inheritance diagram for ctlcmd.tbcmd.tb_levelped:</div>
  <div class="center">
   <img src="classctlcmd_1_1tbcmd_1_1tb__levelped.png" usemap="#ctlcmd.tbcmd.tb_5Flevelped_map" alt=""/>
   <map id="ctlcmd.tbcmd.tb_5Flevelped_map" name="ctlcmd.tbcmd.tb_5Flevelped_map">
-<area href="classctlcmd_1_1cmdbase_1_1savefilecmd.html" title="commands that will save to a file" alt="ctlcmd.cmdbase.savefilecmd" shape="rect" coords="0,112,173,136"/>
-<area href="classctlcmd_1_1cmdbase_1_1controlcmd.html" title="Base interface for command classes." alt="ctlcmd.cmdbase.controlcmd" shape="rect" coords="0,56,173,80"/>
+<area href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html" title="commands that control saving data to the root file" alt="ctlcmd.cmdbase.rootfilecmd" shape="rect" coords="0,112,168,136"/>
+<area href="classctlcmd_1_1cmdbase_1_1controlcmd.html" title="Base interface for command classes." alt="ctlcmd.cmdbase.controlcmd" shape="rect" coords="0,56,168,80"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -128,22 +128,25 @@ dict&#160;</td><td class="memItemRight" valign="bottom"><b>get_current_dacb</b> 
 dict&#160;</td><td class="memItemRight" valign="bottom"><b>calc_corrected_dacb</b> (self, data, target)</td></tr>
 <tr class="memdesc:aa11c067123800b48f82bf6daa0d092b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given data in the format of {(channel, dacb): (pedestal, noise)} return a {channel:dacb} dictionary, which attempt to correct the DAC bit value to be as close to the target value as possible. <br /></td></tr>
 <tr class="separator:aa11c067123800b48f82bf6daa0d092b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classctlcmd_1_1cmdbase_1_1savefilecmd"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classctlcmd_1_1cmdbase_1_1savefilecmd')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classctlcmd_1_1cmdbase_1_1savefilecmd.html">ctlcmd.cmdbase.savefilecmd</a></td></tr>
-<tr class="memitem:aedada0adbba2f4ddd4739bb36000adac inherit pub_methods_classctlcmd_1_1cmdbase_1_1savefilecmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1savefilecmd.html#aedada0adbba2f4ddd4739bb36000adac">__init__</a> (self, cmd)</td></tr>
-<tr class="memdesc:aedada0adbba2f4ddd4739bb36000adac inherit pub_methods_classctlcmd_1_1cmdbase_1_1savefilecmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializing the parser class and creating a reference to the control instances.  <br /></td></tr>
-<tr class="separator:aedada0adbba2f4ddd4739bb36000adac inherit pub_methods_classctlcmd_1_1cmdbase_1_1savefilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6592b062cb3de7915c25a32a3284f3a6 inherit pub_methods_classctlcmd_1_1cmdbase_1_1savefilecmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1savefilecmd.html#a6592b062cb3de7915c25a32a3284f3a6">add_args</a> (self)</td></tr>
-<tr class="memdesc:a6592b062cb3de7915c25a32a3284f3a6 inherit pub_methods_classctlcmd_1_1cmdbase_1_1savefilecmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adding arguments to the command.  <br /></td></tr>
-<tr class="separator:a6592b062cb3de7915c25a32a3284f3a6 inherit pub_methods_classctlcmd_1_1cmdbase_1_1savefilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9ba04f9aa221f7877b4e269eb292cbc inherit pub_methods_classctlcmd_1_1cmdbase_1_1savefilecmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1savefilecmd.html#af9ba04f9aa221f7877b4e269eb292cbc">parse</a> (self, args)</td></tr>
-<tr class="memdesc:af9ba04f9aa221f7877b4e269eb292cbc inherit pub_methods_classctlcmd_1_1cmdbase_1_1savefilecmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modifying the filename placeholders, as well as changing the savefile attribute of the args object to the file handler.  <br /></td></tr>
-<tr class="separator:af9ba04f9aa221f7877b4e269eb292cbc inherit pub_methods_classctlcmd_1_1cmdbase_1_1savefilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77c4d50704344f9151a98b740fcf6066 inherit pub_methods_classctlcmd_1_1cmdbase_1_1savefilecmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1savefilecmd.html#a77c4d50704344f9151a98b740fcf6066">post_run</a> (self)</td></tr>
-<tr class="memdesc:a77c4d50704344f9151a98b740fcf6066 inherit pub_methods_classctlcmd_1_1cmdbase_1_1savefilecmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Additional steps to run before the completing the command.  <br /></td></tr>
-<tr class="separator:a77c4d50704344f9151a98b740fcf6066 inherit pub_methods_classctlcmd_1_1cmdbase_1_1savefilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade581a6d783b337ce6724458d2ca385c inherit pub_methods_classctlcmd_1_1cmdbase_1_1savefilecmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1savefilecmd.html#ade581a6d783b337ce6724458d2ca385c">write_standard_line</a> (self, data, det_id=-100, time=0.0)</td></tr>
-<tr class="memdesc:ade581a6d783b337ce6724458d2ca385c inherit pub_methods_classctlcmd_1_1cmdbase_1_1savefilecmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Standard function for generating a data file in a standard format.  <br /></td></tr>
-<tr class="separator:ade581a6d783b337ce6724458d2ca385c inherit pub_methods_classctlcmd_1_1cmdbase_1_1savefilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html">ctlcmd.cmdbase.rootfilecmd</a></td></tr>
+<tr class="memitem:ab4bcd4a46966fd255f41236dc40fa493 inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html#ab4bcd4a46966fd255f41236dc40fa493">__init__</a> (self, cmd)</td></tr>
+<tr class="memdesc:ab4bcd4a46966fd255f41236dc40fa493 inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializing the parser class and creating a reference to the control instances.  <br /></td></tr>
+<tr class="separator:ab4bcd4a46966fd255f41236dc40fa493 inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae14406446211b25b01a45b1621893c6a inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html#ae14406446211b25b01a45b1621893c6a">add_args</a> (self)</td></tr>
+<tr class="memdesc:ae14406446211b25b01a45b1621893c6a inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adding arguments to the command.  <br /></td></tr>
+<tr class="separator:ae14406446211b25b01a45b1621893c6a inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6212cb436c76dfe1b5c47ef1184178ac inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html#a6212cb436c76dfe1b5c47ef1184178ac">parse</a> (self, args)</td></tr>
+<tr class="memdesc:a6212cb436c76dfe1b5c47ef1184178ac inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method that should be overwritten for additional argument parsing.  <br /></td></tr>
+<tr class="separator:a6212cb436c76dfe1b5c47ef1184178ac inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcf21162e0178f5c2f291cac306d2e8f inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html#abcf21162e0178f5c2f291cac306d2e8f">maketree</a> (self, data, datatypes)</td></tr>
+<tr class="memdesc:abcf21162e0178f5c2f291cac306d2e8f inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create the root file and the TTree in the root file.  <br /></td></tr>
+<tr class="separator:abcf21162e0178f5c2f291cac306d2e8f inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9434d9e252a00a27432b294cb360266 inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html#ae9434d9e252a00a27432b294cb360266">fillroot</a> (self, data, datatypes=None, time=0.0, det_id=-100)</td></tr>
+<tr class="memdesc:ae9434d9e252a00a27432b294cb360266 inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill the root file with the given data, will create a root file on the first call.  <br /></td></tr>
+<tr class="separator:ae9434d9e252a00a27432b294cb360266 inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16ef5c9b58619fd97805327bafd9a8f0 inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html#a16ef5c9b58619fd97805327bafd9a8f0">post_run</a> (self)</td></tr>
+<tr class="memdesc:a16ef5c9b58619fd97805327bafd9a8f0 inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Additional steps to run before the completing the command.  <br /></td></tr>
+<tr class="separator:a16ef5c9b58619fd97805327bafd9a8f0 inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classctlcmd_1_1cmdbase_1_1controlcmd"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classctlcmd_1_1cmdbase_1_1controlcmd')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html">ctlcmd.cmdbase.controlcmd</a></td></tr>
 <tr class="memitem:a4adfd9b03f4cd92f1730bb1b58aff2d0 inherit pub_methods_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memItemLeft" align="right" valign="top">
 &#160;</td><td class="memItemRight" valign="bottom"><b>classname</b> (self)</td></tr>
@@ -224,13 +227,13 @@ str&#160;</td><td class="memItemRight" valign="bottom"><b>prompt_input</b> (self
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a9ed8402f14c621066e9b3e494dfe386c"><td class="memItemLeft" align="right" valign="top"><a id="a9ed8402f14c621066e9b3e494dfe386c" name="a9ed8402f14c621066e9b3e494dfe386c"></a>
-str&#160;</td><td class="memItemRight" valign="bottom"><b>DEFAULT_SAVEFILE</b> = 'TB_levelped_&lt;TIMESTAMP&gt;.txt'</td></tr>
-<tr class="separator:a9ed8402f14c621066e9b3e494dfe386c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_static_attribs_classctlcmd_1_1cmdbase_1_1savefilecmd"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classctlcmd_1_1cmdbase_1_1savefilecmd')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="classctlcmd_1_1cmdbase_1_1savefilecmd.html">ctlcmd.cmdbase.savefilecmd</a></td></tr>
-<tr class="memitem:aa9e8e681588d9f891c79abd93fa7a5da inherit pub_static_attribs_classctlcmd_1_1cmdbase_1_1savefilecmd"><td class="memItemLeft" align="right" valign="top">
-str&#160;</td><td class="memItemRight" valign="bottom"><b>DEFAULT_SAVEFILE</b> = 'SAVEFILE_&lt;TIMESTAMP&gt;'</td></tr>
-<tr class="separator:aa9e8e681588d9f891c79abd93fa7a5da inherit pub_static_attribs_classctlcmd_1_1cmdbase_1_1savefilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ad2f07a935c73c86fc485201c9750e8"><td class="memItemLeft" align="right" valign="top"><a id="a0ad2f07a935c73c86fc485201c9750e8" name="a0ad2f07a935c73c86fc485201c9750e8"></a>
+str&#160;</td><td class="memItemRight" valign="bottom"><b>DEFAULT_ROOTFILE</b> = 'TB_levelped_&lt;TIMESTAMP&gt;.root'</td></tr>
+<tr class="separator:a0ad2f07a935c73c86fc485201c9750e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_static_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html">ctlcmd.cmdbase.rootfilecmd</a></td></tr>
+<tr class="memitem:a484cdb2a6ec00c822e3d99f76d045adc inherit pub_static_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">
+str&#160;</td><td class="memItemRight" valign="bottom"><b>DEFAULT_ROOTFILE</b> = 'SAVEROOT_&lt;TIMESTAMP&gt;'</td></tr>
+<tr class="separator:a484cdb2a6ec00c822e3d99f76d045adc inherit pub_static_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_static_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classctlcmd_1_1cmdbase_1_1controlcmd')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html">ctlcmd.cmdbase.controlcmd</a></td></tr>
 <tr class="memitem:aa814fb1f03ff7d89fd88259318ccdeb7 inherit pub_static_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memItemLeft" align="right" valign="top">
 int&#160;</td><td class="memItemRight" valign="bottom"><b>PARSE_ERROR</b> = -1</td></tr>
@@ -255,10 +258,23 @@ Additional Inherited Members</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>globcomp</b> (text)</td></tr>
 <tr class="memdesc:aa2ea04e2c2ab53815b7cdb64af527cc4 inherit pub_static_methods_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function for getting globbed files for autocompletion. <br /></td></tr>
 <tr class="separator:aa2ea04e2c2ab53815b7cdb64af527cc4 inherit pub_static_methods_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_attribs_classctlcmd_1_1cmdbase_1_1savefilecmd"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classctlcmd_1_1cmdbase_1_1savefilecmd')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classctlcmd_1_1cmdbase_1_1savefilecmd.html">ctlcmd.cmdbase.savefilecmd</a></td></tr>
-<tr class="memitem:a611b632eb8a00101ebe73492e524a38c inherit pub_attribs_classctlcmd_1_1cmdbase_1_1savefilecmd"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>savefile</b></td></tr>
-<tr class="separator:a611b632eb8a00101ebe73492e524a38c inherit pub_attribs_classctlcmd_1_1cmdbase_1_1savefilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html">ctlcmd.cmdbase.rootfilecmd</a></td></tr>
+<tr class="memitem:aecc1298624a62aa47598a305bf186d61 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>saveroot</b></td></tr>
+<tr class="separator:aecc1298624a62aa47598a305bf186d61 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a56b67bf6c365abcb79decbb7e116c0 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>rootfile</b></td></tr>
+<tr class="separator:a0a56b67bf6c365abcb79decbb7e116c0 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1dd707575138f2d20c65f26af3d8da21 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>specific_dict</b></td></tr>
+<tr class="separator:a1dd707575138f2d20c65f26af3d8da21 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42a65115b3fe397df7a4e7cb2285b42c inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>n</b></td></tr>
+<tr class="memdesc:a42a65115b3fe397df7a4e7cb2285b42c inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create apparatus to store data until it is pushed to the root file. <br /></td></tr>
+<tr class="separator:a42a65115b3fe397df7a4e7cb2285b42c inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b2b097b7b57e5f8ca74394e61a6b7a5 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>saveddata</b></td></tr>
+<tr class="separator:a1b2b097b7b57e5f8ca74394e61a6b7a5 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html">ctlcmd.cmdbase.controlcmd</a></td></tr>
 <tr class="memitem:ad0bf16d0f974c98d74db242e11c26c7e inherit pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memItemLeft" align="right" valign="top">
 &#160;</td><td class="memItemRight" valign="bottom"><b>parser</b></td></tr>
@@ -305,7 +321,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>The argument parser class is initialized with the class name as the program name and the class doc string as the description string. This greatly reduces the verbosity of writing custom commands. Each command will have accession to the cmd session, and by extension, every interface object the could potentially be used. </p>
 
-<p>Reimplemented from <a class="el" href="classctlcmd_1_1cmdbase_1_1savefilecmd.html#aedada0adbba2f4ddd4739bb36000adac">ctlcmd.cmdbase.savefilecmd</a>.</p>
+<p>Reimplemented from <a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html#ab4bcd4a46966fd255f41236dc40fa493">ctlcmd.cmdbase.rootfilecmd</a>.</p>
 
 </div>
 </div>
@@ -327,7 +343,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Method to be overridden for adding additional argument to the containing <code>parser</code> object. This can be added at any level of subsequently defined command classes. </p>
 
-<p>Reimplemented from <a class="el" href="classctlcmd_1_1cmdbase_1_1savefilecmd.html#a6592b062cb3de7915c25a32a3284f3a6">ctlcmd.cmdbase.savefilecmd</a>.</p>
+<p>Reimplemented from <a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html#ae14406446211b25b01a45b1621893c6a">ctlcmd.cmdbase.rootfilecmd</a>.</p>
 
 </div>
 </div>

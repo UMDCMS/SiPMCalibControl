@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.7"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>SiPM Calibration Control Program: ctlcmd.motioncmd.timescan Class Reference</title>
+<title>SiPM Calibration Control Program: ctlcmd.cmdbase.rootfilecmd Class Reference</title>
 <!-- Overriding the tabs css with our own -->
 <!--link href="tabs.css" rel="stylesheet" type="text/css"/-->
 <script type="text/javascript" src="jquery.js"></script>
@@ -83,71 +83,59 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>ctlcmd</b></li><li class="navelem"><a class="el" href="namespacectlcmd_1_1motioncmd.html">motioncmd</a></li><li class="navelem"><a class="el" href="classctlcmd_1_1motioncmd_1_1timescan.html">timescan</a></li>  </ul>
+<li class="navelem"><b>ctlcmd</b></li><li class="navelem"><b>cmdbase</b></li><li class="navelem"><a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html">rootfilecmd</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
-<a href="classctlcmd_1_1motioncmd_1_1timescan-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">ctlcmd.motioncmd.timescan Class Reference<div class="ingroups"><a class="el" href="group__cli.html">Command Line Interface Manual</a> &raquo; <a class="el" href="group__cli0__analysis.html">SiPM Analysis-Level commands</a> &#124; <a class="el" href="group__cli.html">Command Line Interface Manual</a> &raquo; <a class="el" href="group__cli__debug.html">System Debugging command and Miscelleneous commands</a></div></div></div>
+<a href="classctlcmd_1_1cmdbase_1_1rootfilecmd-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">ctlcmd.cmdbase.rootfilecmd Class Reference<div class="ingroups"><a class="el" href="group__cli__design.html">CLI Framework</a></div></div></div>
 </div><!--header-->
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><hr  />
- </div><div class="dynheader">
-Inheritance diagram for ctlcmd.motioncmd.timescan:</div>
+<div class="textblock"><p>Commands for data which needs to be saved to a root file, this is an update to the old savefilecmd class which only wrote to a text file. All functions that wish to have their default save location overridden should simply change the DEFAULT_SAVEFILE static variable.</p>
+<p>The data of timestamp (ms), detector id, gantry coordinates (mm), measured bias voltage (mv), measured SiPM temp (C), and measured pulser board temp (C) will always be in the root file. Extra branches with more data will be added based on the commands run.</p>
+<p>The saveroot string input by the user can also include placeholder strings to have the filename automatically be modified according other input arguments and/or the state of the system. This allows the same command to be used for different configurations while still have the results be saved in distinct files. Placeholders will be specified in the angle braced. For the full list of special placeholders, as well as how the file parsing is handled, see the detailed documentation in the <code><a class="el" href="classctlcmd_1_1cmdbase_1_1savefilecmd.html#af9ba04f9aa221f7877b4e269eb292cbc" title="Modifying the filename placeholders, as well as changing the savefile attribute of the args object to...">ctlcmd.cmdbase.savefilecmd.parse</a></code> method. </p>
+</div><div class="dynheader">
+Inheritance diagram for ctlcmd.cmdbase.rootfilecmd:</div>
 <div class="dyncontent">
  <div class="center">
-  <img src="classctlcmd_1_1motioncmd_1_1timescan.png" usemap="#ctlcmd.motioncmd.timescan_map" alt=""/>
-  <map id="ctlcmd.motioncmd.timescan_map" name="ctlcmd.motioncmd.timescan_map">
-<area href="classctlcmd_1_1cmdbase_1_1readoutcmd.html" title="Commands that should have a single readout mode." alt="ctlcmd.cmdbase.readoutcmd" shape="rect" coords="0,112,172,136"/>
-<area href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html" title="commands that control saving data to the root file" alt="ctlcmd.cmdbase.rootfilecmd" shape="rect" coords="182,112,354,136"/>
-<area href="classctlcmd_1_1cmdbase_1_1controlcmd.html" title="Base interface for command classes." alt="ctlcmd.cmdbase.controlcmd" shape="rect" coords="0,56,172,80"/>
-<area href="classctlcmd_1_1cmdbase_1_1controlcmd.html" title="Base interface for command classes." alt="ctlcmd.cmdbase.controlcmd" shape="rect" coords="182,56,354,80"/>
+  <img src="classctlcmd_1_1cmdbase_1_1rootfilecmd.png" usemap="#ctlcmd.cmdbase.rootfilecmd_map" alt=""/>
+  <map id="ctlcmd.cmdbase.rootfilecmd_map" name="ctlcmd.cmdbase.rootfilecmd_map">
+<area href="classctlcmd_1_1cmdbase_1_1controlcmd.html" title="Base interface for command classes." alt="ctlcmd.cmdbase.controlcmd" shape="rect" coords="612,56,806,80"/>
+<area href="classctlcmd_1_1motioncmd_1_1halign.html" title="Running horizontal alignment procedure by luminosity readout vs and xy grid scan motion." alt="ctlcmd.motioncmd.halign" shape="rect" coords="0,168,194,192"/>
+<area href="classctlcmd_1_1motioncmd_1_1lowlightcollect.html" title="Collection of low light data at a single gantry position, data will be collected without averaging." alt="ctlcmd.motioncmd.lowlightcollect" shape="rect" coords="204,168,398,192"/>
+<area href="classctlcmd_1_1motioncmd_1_1timescan.html" title="Generate a log of the readout in terms relative to time." alt="ctlcmd.motioncmd.timescan" shape="rect" coords="408,168,602,192"/>
+<area href="classctlcmd_1_1motioncmd_1_1zscan.html" title="Performing the intensity scan give a list of scanning z coordinates and the list of biassing power." alt="ctlcmd.motioncmd.zscan" shape="rect" coords="612,168,806,192"/>
+<area href="classctlcmd_1_1tbcmd_1_1tb__levelped.html" title="Running the routine to auto-level the pedestal to some target value." alt="ctlcmd.tbcmd.tb_levelped" shape="rect" coords="816,168,1010,192"/>
+<area href="classctlcmd_1_1viscmd_1_1visualhscan.html" title="Performing horizontal scan with camera system." alt="ctlcmd.viscmd.visualhscan" shape="rect" coords="1020,168,1214,192"/>
+<area href="classctlcmd_1_1viscmd_1_1visualzscan.html" title="Scanning focus to calibrate z distance." alt="ctlcmd.viscmd.visualzscan" shape="rect" coords="1224,168,1418,192"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a614e0d56e3f7dc6da99d5310047c0857"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1motioncmd_1_1timescan.html#a614e0d56e3f7dc6da99d5310047c0857">__init__</a> (self, cmd)</td></tr>
-<tr class="memdesc:a614e0d56e3f7dc6da99d5310047c0857"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializing the parser class and creating a reference to the control instances.  <br /></td></tr>
-<tr class="separator:a614e0d56e3f7dc6da99d5310047c0857"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac178848a05c1d6d571c334793b8a3dc0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1motioncmd_1_1timescan.html#ac178848a05c1d6d571c334793b8a3dc0">add_args</a> (self)</td></tr>
-<tr class="memdesc:ac178848a05c1d6d571c334793b8a3dc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adding arguments to the command.  <br /></td></tr>
-<tr class="separator:ac178848a05c1d6d571c334793b8a3dc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ad9dcc501793fa7ca486d6021f0d130"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1motioncmd_1_1timescan.html#a3ad9dcc501793fa7ca486d6021f0d130">parse</a> (self, args)</td></tr>
-<tr class="memdesc:a3ad9dcc501793fa7ca486d6021f0d130"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks to make sure the inputs values are sane.  <br /></td></tr>
-<tr class="separator:a3ad9dcc501793fa7ca486d6021f0d130"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a3928a2b5df8c8237780c20c422318e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1motioncmd_1_1timescan.html#a4a3928a2b5df8c8237780c20c422318e">run</a> (self, args)</td></tr>
-<tr class="memdesc:a4a3928a2b5df8c8237780c20c422318e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method of execution to be overloaded.  <br /></td></tr>
-<tr class="separator:a4a3928a2b5df8c8237780c20c422318e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classctlcmd_1_1cmdbase_1_1readoutcmd.html">ctlcmd.cmdbase.readoutcmd</a></td></tr>
-<tr class="memitem:a444cb259234cc190c5553fd956255863 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1readoutcmd.html#a444cb259234cc190c5553fd956255863">__init__</a> (self, cmd)</td></tr>
-<tr class="memdesc:a444cb259234cc190c5553fd956255863 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializing the parser class and creating a reference to the control instances.  <br /></td></tr>
-<tr class="separator:a444cb259234cc190c5553fd956255863 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f83bc4e710f3ea12cd202324ecc3e3a inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1readoutcmd.html#a3f83bc4e710f3ea12cd202324ecc3e3a">add_args</a> (self)</td></tr>
-<tr class="memdesc:a3f83bc4e710f3ea12cd202324ecc3e3a inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adding arguments to the command.  <br /></td></tr>
-<tr class="separator:a3f83bc4e710f3ea12cd202324ecc3e3a inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70846818a8ab16d88b57886e688f67e2 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1readoutcmd.html#a70846818a8ab16d88b57886e688f67e2">parse</a> (self, args)</td></tr>
-<tr class="memdesc:a70846818a8ab16d88b57886e688f67e2 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks to make sure the inputs values are sane.  <br /></td></tr>
-<tr class="separator:a70846818a8ab16d88b57886e688f67e2 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f841d67f5b07612209ce36d52040e37 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1readoutcmd.html#a0f841d67f5b07612209ce36d52040e37">readout</a> (self, args, average=True)</td></tr>
-<tr class="memdesc:a0f841d67f5b07612209ce36d52040e37 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perfroming a readout routine with the specified arguments.  <br /></td></tr>
-<tr class="separator:a0f841d67f5b07612209ce36d52040e37 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a071b4e1e1d0da231e6de6c103a1032d0 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1readoutcmd.html#a071b4e1e1d0da231e6de6c103a1032d0">read_adc</a> (self, args)</td></tr>
-<tr class="memdesc:a071b4e1e1d0da231e6de6c103a1032d0 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation for reading out the ADC.  <br /></td></tr>
-<tr class="separator:a071b4e1e1d0da231e6de6c103a1032d0 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aafec911fb3436a6bf299aa9aebbf57b1 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1readoutcmd.html#aafec911fb3436a6bf299aa9aebbf57b1">read_pico</a> (self, args)</td></tr>
-<tr class="memdesc:aafec911fb3436a6bf299aa9aebbf57b1 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation for reading out the Picoscope.  <br /></td></tr>
-<tr class="separator:aafec911fb3436a6bf299aa9aebbf57b1 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b5a08ef2ee358a53034886ae81e7d72 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1readoutcmd.html#a1b5a08ef2ee358a53034886ae81e7d72">read_drs</a> (self, args)</td></tr>
-<tr class="memdesc:a1b5a08ef2ee358a53034886ae81e7d72 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation for reading out the DRS4.  <br /></td></tr>
-<tr class="separator:a1b5a08ef2ee358a53034886ae81e7d72 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a446460a36cbd040c3c02f7ef1e0fca03 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1readoutcmd.html#a446460a36cbd040c3c02f7ef1e0fca03">read_model</a> (self, args)</td></tr>
-<tr class="memdesc:a446460a36cbd040c3c02f7ef1e0fca03 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generating a fake readout from a predefined model.  <br /></td></tr>
-<tr class="separator:a446460a36cbd040c3c02f7ef1e0fca03 inherit pub_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4bcd4a46966fd255f41236dc40fa493"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html#ab4bcd4a46966fd255f41236dc40fa493">__init__</a> (self, cmd)</td></tr>
+<tr class="memdesc:ab4bcd4a46966fd255f41236dc40fa493"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializing the parser class and creating a reference to the control instances.  <br /></td></tr>
+<tr class="separator:ab4bcd4a46966fd255f41236dc40fa493"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae14406446211b25b01a45b1621893c6a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html#ae14406446211b25b01a45b1621893c6a">add_args</a> (self)</td></tr>
+<tr class="memdesc:ae14406446211b25b01a45b1621893c6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adding arguments to the command.  <br /></td></tr>
+<tr class="separator:ae14406446211b25b01a45b1621893c6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6212cb436c76dfe1b5c47ef1184178ac"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html#a6212cb436c76dfe1b5c47ef1184178ac">parse</a> (self, args)</td></tr>
+<tr class="memdesc:a6212cb436c76dfe1b5c47ef1184178ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method that should be overwritten for additional argument parsing.  <br /></td></tr>
+<tr class="separator:a6212cb436c76dfe1b5c47ef1184178ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcf21162e0178f5c2f291cac306d2e8f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html#abcf21162e0178f5c2f291cac306d2e8f">maketree</a> (self, data, datatypes)</td></tr>
+<tr class="memdesc:abcf21162e0178f5c2f291cac306d2e8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create the root file and the TTree in the root file.  <br /></td></tr>
+<tr class="separator:abcf21162e0178f5c2f291cac306d2e8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9434d9e252a00a27432b294cb360266"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html#ae9434d9e252a00a27432b294cb360266">fillroot</a> (self, data, datatypes=None, time=0.0, det_id=-100)</td></tr>
+<tr class="memdesc:ae9434d9e252a00a27432b294cb360266"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill the root file with the given data, will create a root file on the first call.  <br /></td></tr>
+<tr class="separator:ae9434d9e252a00a27432b294cb360266"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16ef5c9b58619fd97805327bafd9a8f0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html#a16ef5c9b58619fd97805327bafd9a8f0">post_run</a> (self)</td></tr>
+<tr class="memdesc:a16ef5c9b58619fd97805327bafd9a8f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Additional steps to run before the completing the command.  <br /></td></tr>
+<tr class="separator:a16ef5c9b58619fd97805327bafd9a8f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classctlcmd_1_1cmdbase_1_1controlcmd"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classctlcmd_1_1cmdbase_1_1controlcmd')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html">ctlcmd.cmdbase.controlcmd</a></td></tr>
 <tr class="memitem:a4adfd9b03f4cd92f1730bb1b58aff2d0 inherit pub_methods_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memItemLeft" align="right" valign="top">
 &#160;</td><td class="memItemRight" valign="bottom"><b>classname</b> (self)</td></tr>
@@ -225,31 +213,44 @@ str&#160;</td><td class="memItemRight" valign="bottom"><b>prompt_input</b> (self
 <tr class="memitem:a840ad9428e388cf73c9a8cd852891c3f inherit pub_methods_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a840ad9428e388cf73c9a8cd852891c3f">prompt_yn</a> (self, question, default=None)</td></tr>
 <tr class="memdesc:a840ad9428e388cf73c9a8cd852891c3f inherit pub_methods_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ask a yes/no question and prompt a question to the user and return their answer.  <br /></td></tr>
 <tr class="separator:a840ad9428e388cf73c9a8cd852891c3f inherit pub_methods_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html">ctlcmd.cmdbase.rootfilecmd</a></td></tr>
-<tr class="memitem:ab4bcd4a46966fd255f41236dc40fa493 inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html#ab4bcd4a46966fd255f41236dc40fa493">__init__</a> (self, cmd)</td></tr>
-<tr class="memdesc:ab4bcd4a46966fd255f41236dc40fa493 inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializing the parser class and creating a reference to the control instances.  <br /></td></tr>
-<tr class="separator:ab4bcd4a46966fd255f41236dc40fa493 inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae14406446211b25b01a45b1621893c6a inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html#ae14406446211b25b01a45b1621893c6a">add_args</a> (self)</td></tr>
-<tr class="memdesc:ae14406446211b25b01a45b1621893c6a inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adding arguments to the command.  <br /></td></tr>
-<tr class="separator:ae14406446211b25b01a45b1621893c6a inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6212cb436c76dfe1b5c47ef1184178ac inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html#a6212cb436c76dfe1b5c47ef1184178ac">parse</a> (self, args)</td></tr>
-<tr class="memdesc:a6212cb436c76dfe1b5c47ef1184178ac inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method that should be overwritten for additional argument parsing.  <br /></td></tr>
-<tr class="separator:a6212cb436c76dfe1b5c47ef1184178ac inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abcf21162e0178f5c2f291cac306d2e8f inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html#abcf21162e0178f5c2f291cac306d2e8f">maketree</a> (self, data, datatypes)</td></tr>
-<tr class="memdesc:abcf21162e0178f5c2f291cac306d2e8f inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create the root file and the TTree in the root file.  <br /></td></tr>
-<tr class="separator:abcf21162e0178f5c2f291cac306d2e8f inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9434d9e252a00a27432b294cb360266 inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html#ae9434d9e252a00a27432b294cb360266">fillroot</a> (self, data, datatypes=None, time=0.0, det_id=-100)</td></tr>
-<tr class="memdesc:ae9434d9e252a00a27432b294cb360266 inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill the root file with the given data, will create a root file on the first call.  <br /></td></tr>
-<tr class="separator:ae9434d9e252a00a27432b294cb360266 inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16ef5c9b58619fd97805327bafd9a8f0 inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html#a16ef5c9b58619fd97805327bafd9a8f0">post_run</a> (self)</td></tr>
-<tr class="memdesc:a16ef5c9b58619fd97805327bafd9a8f0 inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Additional steps to run before the completing the command.  <br /></td></tr>
-<tr class="separator:a16ef5c9b58619fd97805327bafd9a8f0 inherit pub_methods_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:aecc1298624a62aa47598a305bf186d61"><td class="memItemLeft" align="right" valign="top"><a id="aecc1298624a62aa47598a305bf186d61" name="aecc1298624a62aa47598a305bf186d61"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>saveroot</b></td></tr>
+<tr class="separator:aecc1298624a62aa47598a305bf186d61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a56b67bf6c365abcb79decbb7e116c0"><td class="memItemLeft" align="right" valign="top"><a id="a0a56b67bf6c365abcb79decbb7e116c0" name="a0a56b67bf6c365abcb79decbb7e116c0"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>rootfile</b></td></tr>
+<tr class="separator:a0a56b67bf6c365abcb79decbb7e116c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1dd707575138f2d20c65f26af3d8da21"><td class="memItemLeft" align="right" valign="top"><a id="a1dd707575138f2d20c65f26af3d8da21" name="a1dd707575138f2d20c65f26af3d8da21"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>specific_dict</b></td></tr>
+<tr class="separator:a1dd707575138f2d20c65f26af3d8da21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42a65115b3fe397df7a4e7cb2285b42c"><td class="memItemLeft" align="right" valign="top"><a id="a42a65115b3fe397df7a4e7cb2285b42c" name="a42a65115b3fe397df7a4e7cb2285b42c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>n</b></td></tr>
+<tr class="memdesc:a42a65115b3fe397df7a4e7cb2285b42c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create apparatus to store data until it is pushed to the root file. <br /></td></tr>
+<tr class="separator:a42a65115b3fe397df7a4e7cb2285b42c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b2b097b7b57e5f8ca74394e61a6b7a5"><td class="memItemLeft" align="right" valign="top"><a id="a1b2b097b7b57e5f8ca74394e61a6b7a5" name="a1b2b097b7b57e5f8ca74394e61a6b7a5"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>saveddata</b></td></tr>
+<tr class="separator:a1b2b097b7b57e5f8ca74394e61a6b7a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html">ctlcmd.cmdbase.controlcmd</a></td></tr>
+<tr class="memitem:ad0bf16d0f974c98d74db242e11c26c7e inherit pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>parser</b></td></tr>
+<tr class="separator:ad0bf16d0f974c98d74db242e11c26c7e inherit pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab236eaf69dc0093d779a9138261915be inherit pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>cmd</b></td></tr>
+<tr class="separator:ab236eaf69dc0093d779a9138261915be inherit pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0935caa4a4fb2571d54f38d041fd052 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>pbar</b></td></tr>
+<tr class="separator:ad0935caa4a4fb2571d54f38d041fd052 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96f280c2bfa71832c1ab49551aa92d31 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>classname</b></td></tr>
+<tr class="separator:a96f280c2bfa71832c1ab49551aa92d31 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a141d2d9f3cd9fb71222af461480f6b6c"><td class="memItemLeft" align="right" valign="top"><a id="a141d2d9f3cd9fb71222af461480f6b6c" name="a141d2d9f3cd9fb71222af461480f6b6c"></a>
-str&#160;</td><td class="memItemRight" valign="bottom"><b>DEFAULT_ROOTFILE</b> = 'tscan_&lt;TIMESTAMP&gt;.root'</td></tr>
-<tr class="separator:a141d2d9f3cd9fb71222af461480f6b6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a484cdb2a6ec00c822e3d99f76d045adc"><td class="memItemLeft" align="right" valign="top"><a id="a484cdb2a6ec00c822e3d99f76d045adc" name="a484cdb2a6ec00c822e3d99f76d045adc"></a>
+str&#160;</td><td class="memItemRight" valign="bottom"><b>DEFAULT_ROOTFILE</b> = 'SAVEROOT_&lt;TIMESTAMP&gt;'</td></tr>
+<tr class="separator:a484cdb2a6ec00c822e3d99f76d045adc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_static_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classctlcmd_1_1cmdbase_1_1controlcmd')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html">ctlcmd.cmdbase.controlcmd</a></td></tr>
 <tr class="memitem:aa814fb1f03ff7d89fd88259318ccdeb7 inherit pub_static_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memItemLeft" align="right" valign="top">
 int&#160;</td><td class="memItemRight" valign="bottom"><b>PARSE_ERROR</b> = -1</td></tr>
@@ -266,10 +267,6 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>TERMINATE_SESSION</b> 
 <tr class="memitem:aa2d9fe6dc7005eba81cd8f622744d4e3 inherit pub_static_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memItemLeft" align="right" valign="top">
 int&#160;</td><td class="memItemRight" valign="bottom"><b>TERMINATE_CMD</b> = 2</td></tr>
 <tr class="separator:aa2d9fe6dc7005eba81cd8f622744d4e3 inherit pub_static_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_static_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html">ctlcmd.cmdbase.rootfilecmd</a></td></tr>
-<tr class="memitem:a484cdb2a6ec00c822e3d99f76d045adc inherit pub_static_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">
-str&#160;</td><td class="memItemRight" valign="bottom"><b>DEFAULT_ROOTFILE</b> = 'SAVEROOT_&lt;TIMESTAMP&gt;'</td></tr>
-<tr class="separator:a484cdb2a6ec00c822e3d99f76d045adc inherit pub_static_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -278,67 +275,20 @@ Additional Inherited Members</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>globcomp</b> (text)</td></tr>
 <tr class="memdesc:aa2ea04e2c2ab53815b7cdb64af527cc4 inherit pub_static_methods_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function for getting globbed files for autocompletion. <br /></td></tr>
 <tr class="separator:aa2ea04e2c2ab53815b7cdb64af527cc4 inherit pub_static_methods_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_attribs_classctlcmd_1_1cmdbase_1_1readoutcmd"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classctlcmd_1_1cmdbase_1_1readoutcmd')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classctlcmd_1_1cmdbase_1_1readoutcmd.html">ctlcmd.cmdbase.readoutcmd</a></td></tr>
-<tr class="memitem:af06c48537dcefb9e84e99fc0ddb4a1d4 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>sipm</b></td></tr>
-<tr class="memdesc:af06c48537dcefb9e84e99fc0ddb4a1d4 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Additional initialization done here: <br /></td></tr>
-<tr class="separator:af06c48537dcefb9e84e99fc0ddb4a1d4 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1abc9adce77c916cee4d08c0edd42101 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>diode</b></td></tr>
-<tr class="separator:a1abc9adce77c916cee4d08c0edd42101 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html">ctlcmd.cmdbase.controlcmd</a></td></tr>
-<tr class="memitem:ad0bf16d0f974c98d74db242e11c26c7e inherit pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>parser</b></td></tr>
-<tr class="separator:ad0bf16d0f974c98d74db242e11c26c7e inherit pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab236eaf69dc0093d779a9138261915be inherit pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>cmd</b></td></tr>
-<tr class="separator:ab236eaf69dc0093d779a9138261915be inherit pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad0935caa4a4fb2571d54f38d041fd052 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>pbar</b></td></tr>
-<tr class="separator:ad0935caa4a4fb2571d54f38d041fd052 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96f280c2bfa71832c1ab49551aa92d31 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>classname</b></td></tr>
-<tr class="separator:a96f280c2bfa71832c1ab49551aa92d31 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classctlcmd_1_1cmdbase_1_1rootfilecmd.html">ctlcmd.cmdbase.rootfilecmd</a></td></tr>
-<tr class="memitem:aecc1298624a62aa47598a305bf186d61 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>saveroot</b></td></tr>
-<tr class="separator:aecc1298624a62aa47598a305bf186d61 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a56b67bf6c365abcb79decbb7e116c0 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>rootfile</b></td></tr>
-<tr class="separator:a0a56b67bf6c365abcb79decbb7e116c0 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1dd707575138f2d20c65f26af3d8da21 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>specific_dict</b></td></tr>
-<tr class="separator:a1dd707575138f2d20c65f26af3d8da21 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a42a65115b3fe397df7a4e7cb2285b42c inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>n</b></td></tr>
-<tr class="memdesc:a42a65115b3fe397df7a4e7cb2285b42c inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create apparatus to store data until it is pushed to the root file. <br /></td></tr>
-<tr class="separator:a42a65115b3fe397df7a4e7cb2285b42c inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b2b097b7b57e5f8ca74394e61a6b7a5 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>saveddata</b></td></tr>
-<tr class="separator:a1b2b097b7b57e5f8ca74394e61a6b7a5 inherit pub_attribs_classctlcmd_1_1cmdbase_1_1rootfilecmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classctlcmd_1_1cmdbase_1_1readoutcmd')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classctlcmd_1_1cmdbase_1_1readoutcmd.html">ctlcmd.cmdbase.readoutcmd</a></td></tr>
-<tr class="memitem:ae88636272f1945e64883765d324636d6 inherit pro_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>_fire_trigger</b> (self, n=10, wait=100)</td></tr>
-<tr class="memdesc:ae88636272f1945e64883765d324636d6 inherit pro_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function for firing trigger for the scope-like readouts. <br /></td></tr>
-<tr class="separator:ae88636272f1945e64883765d324636d6 inherit pro_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e62a524e4d7e633105c33984eb2f171 inherit pro_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>_is_counting</b> (self, args)</td></tr>
-<tr class="memdesc:a2e62a524e4d7e633105c33984eb2f171 inherit pro_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple check for whether this the target readout is a counting system. <br /></td></tr>
-<tr class="separator:a2e62a524e4d7e633105c33984eb2f171 inherit pro_methods_classctlcmd_1_1cmdbase_1_1readoutcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_static_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td colspan="2" onclick="javascript:toggleInherit('pro_static_attribs_classctlcmd_1_1cmdbase_1_1controlcmd')"><img src="closed.png" alt="-"/>&#160;Static Protected Attributes inherited from <a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html">ctlcmd.cmdbase.controlcmd</a></td></tr>
 <tr class="memitem:adadc571b2ce429148af3d7ae5dc165d0 inherit pro_static_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memItemLeft" align="right" valign="top">
 &#160;</td><td class="memItemRight" valign="bottom"><b>_PROGRESS_BAR_CONSTRUCTOR_</b> = tqdm.tqdm</td></tr>
 <tr class="separator:adadc571b2ce429148af3d7ae5dc165d0 inherit pro_static_attribs_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a614e0d56e3f7dc6da99d5310047c0857" name="a614e0d56e3f7dc6da99d5310047c0857"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a614e0d56e3f7dc6da99d5310047c0857">&#9670;&#160;</a></span>__init__()</h2>
+<a id="ab4bcd4a46966fd255f41236dc40fa493" name="ab4bcd4a46966fd255f41236dc40fa493"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4bcd4a46966fd255f41236dc40fa493">&#9670;&#160;</a></span>__init__()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">ctlcmd.motioncmd.timescan.__init__ </td>
+          <td class="memname">ctlcmd.cmdbase.rootfilecmd.__init__ </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>self</em>, </td>
@@ -358,19 +308,21 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>The argument parser class is initialized with the class name as the program name and the class doc string as the description string. This greatly reduces the verbosity of writing custom commands. Each command will have accession to the cmd session, and by extension, every interface object the could potentially be used. </p>
 
-<p>Reimplemented from <a class="el" href="classctlcmd_1_1cmdbase_1_1readoutcmd.html#a444cb259234cc190c5553fd956255863">ctlcmd.cmdbase.readoutcmd</a>.</p>
+<p>Reimplemented from <a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a891842db0dd0eccddbc48c56186ad430">ctlcmd.cmdbase.controlcmd</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classctlcmd_1_1motioncmd_1_1halign.html#a6d905fb0f89163026b28f06cd6ed511a">ctlcmd.motioncmd.halign</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1zscan.html#abf6ee4096989d5ef38c31619de207d24">ctlcmd.motioncmd.zscan</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1lowlightcollect.html#ae0bcbcd21f7e8f9c3905371679f747d3">ctlcmd.motioncmd.lowlightcollect</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1timescan.html#a614e0d56e3f7dc6da99d5310047c0857">ctlcmd.motioncmd.timescan</a>, <a class="el" href="classctlcmd_1_1tbcmd_1_1tb__levelped.html#a9bdc1ed4a9cb59ed2fb4479765b48f79">ctlcmd.tbcmd.tb_levelped</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualhscan.html#ad599ded880d41adf6ae0ee422cb76773">ctlcmd.viscmd.visualhscan</a>, and <a class="el" href="classctlcmd_1_1viscmd_1_1visualzscan.html#a942cfe5564fa420291271812247fcce8">ctlcmd.viscmd.visualzscan</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac178848a05c1d6d571c334793b8a3dc0" name="ac178848a05c1d6d571c334793b8a3dc0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac178848a05c1d6d571c334793b8a3dc0">&#9670;&#160;</a></span>add_args()</h2>
+<a id="ae14406446211b25b01a45b1621893c6a" name="ae14406446211b25b01a45b1621893c6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae14406446211b25b01a45b1621893c6a">&#9670;&#160;</a></span>add_args()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">ctlcmd.motioncmd.timescan.add_args </td>
+          <td class="memname">ctlcmd.cmdbase.rootfilecmd.add_args </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>self</em></td><td>)</td>
@@ -380,18 +332,103 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Method to be overridden for adding additional argument to the containing <code>parser</code> object. This can be added at any level of subsequently defined command classes. </p>
 
-<p>Reimplemented from <a class="el" href="classctlcmd_1_1cmdbase_1_1readoutcmd.html#a3f83bc4e710f3ea12cd202324ecc3e3a">ctlcmd.cmdbase.readoutcmd</a>.</p>
+<p>Reimplemented from <a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a3a1f810b20fe32278cf87c1193ae5758">ctlcmd.cmdbase.controlcmd</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classctlcmd_1_1motioncmd_1_1halign.html#a5d8f70e7c173c7641f5a82f0eb18143d">ctlcmd.motioncmd.halign</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1zscan.html#a2d93d0b25ed360b4f636377f7a12dd8f">ctlcmd.motioncmd.zscan</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1lowlightcollect.html#aaa45ccafff2ca31711373d93a3e1d2cf">ctlcmd.motioncmd.lowlightcollect</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1timescan.html#ac178848a05c1d6d571c334793b8a3dc0">ctlcmd.motioncmd.timescan</a>, <a class="el" href="classctlcmd_1_1tbcmd_1_1tb__levelped.html#a5ef7a27320e2fe00dfb4370b5a751fca">ctlcmd.tbcmd.tb_levelped</a>, <a class="el" href="classctlcmd_1_1viscmd_1_1visualhscan.html#aa735cd71c1d088a83cc8b95a8812e887">ctlcmd.viscmd.visualhscan</a>, and <a class="el" href="classctlcmd_1_1viscmd_1_1visualzscan.html#af3bbcc2f902b3486afa78a4e56ca7ffb">ctlcmd.viscmd.visualzscan</a>.</p>
 
 </div>
 </div>
-<a id="a3ad9dcc501793fa7ca486d6021f0d130" name="a3ad9dcc501793fa7ca486d6021f0d130"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3ad9dcc501793fa7ca486d6021f0d130">&#9670;&#160;</a></span>parse()</h2>
+<a id="ae9434d9e252a00a27432b294cb360266" name="ae9434d9e252a00a27432b294cb360266"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9434d9e252a00a27432b294cb360266">&#9670;&#160;</a></span>fillroot()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">ctlcmd.motioncmd.timescan.parse </td>
+          <td class="memname">ctlcmd.cmdbase.rootfilecmd.fillroot </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>datatypes</em> = <code>None</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>time</em> = <code>0.0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>det_id</em> = <code>-100</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>This command is called to push data to the root file. The first run of this command will create a root file and the correct TTree based on the input of data and datatypes. The format of data should be a dictionary with the keys as the branch titles for corresponding data. datatypes is also a dictionary</p>
+<p>whose purpose is to override the rootfilecmd in the case that type() does not work. Branches being filled will multiple values per call of fill root must set datatypes and must make sure they are inputting a list. Ex: self.fillroot({"testdata":[1,2,3]},datatypes = {"testdata":"var * int64") </p>
+
+</div>
+</div>
+<a id="abcf21162e0178f5c2f291cac306d2e8f" name="abcf21162e0178f5c2f291cac306d2e8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abcf21162e0178f5c2f291cac306d2e8f">&#9670;&#160;</a></span>maketree()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ctlcmd.cmdbase.rootfilecmd.maketree </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>datatypes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>This command creates the root file and creates the TTree with the correct data types and names for each branch of the tree. This also saves some extra basic data like the time the file was created, the Board_ID and Board_Type. This function is only called once. </p>
+
+</div>
+</div>
+<a id="a6212cb436c76dfe1b5c47ef1184178ac" name="a6212cb436c76dfe1b5c47ef1184178ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6212cb436c76dfe1b5c47ef1184178ac">&#9670;&#160;</a></span>parse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ctlcmd.cmdbase.rootfilecmd.parse </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>self</em>, </td>
@@ -409,49 +446,37 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Additional checks include:</p><ul>
-<li>If the channel is not specified, then the channel will be assumed to be the channel associated with the detector ID (if applicable). Otherwise the channel defaults to 0.</li>
-<li>If the readout mode is not specified, then the mode will be pulled from the board information if applicable. Otherwise, the last-used mode will be used.</li>
-<li>Here we will also be double checking that the channel makes sense for the read-out mode. An exception will be raised if the readout mode is not sensible. </li>
-</ul>
+<p>Notice that the return of this method must be the augmented argument container instance. </p>
 
-<p>Reimplemented from <a class="el" href="classctlcmd_1_1cmdbase_1_1readoutcmd.html#a70846818a8ab16d88b57886e688f67e2">ctlcmd.cmdbase.readoutcmd</a>.</p>
+<p>Reimplemented from <a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a2b7aaa19576b87aa4e7db73ebc9370a4">ctlcmd.cmdbase.controlcmd</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classctlcmd_1_1motioncmd_1_1halign.html#a141314bcea9959de33624e9a62ea245c">ctlcmd.motioncmd.halign</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1zscan.html#aedabd6ecd76f077a43d592ecbb44ad54">ctlcmd.motioncmd.zscan</a>, <a class="el" href="classctlcmd_1_1motioncmd_1_1lowlightcollect.html#a1809d67ee42c30e170be7406325548dc">ctlcmd.motioncmd.lowlightcollect</a>, and <a class="el" href="classctlcmd_1_1motioncmd_1_1timescan.html#a3ad9dcc501793fa7ca486d6021f0d130">ctlcmd.motioncmd.timescan</a>.</p>
 
 </div>
 </div>
-<a id="a4a3928a2b5df8c8237780c20c422318e" name="a4a3928a2b5df8c8237780c20c422318e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4a3928a2b5df8c8237780c20c422318e">&#9670;&#160;</a></span>run()</h2>
+<a id="a16ef5c9b58619fd97805327bafd9a8f0" name="a16ef5c9b58619fd97805327bafd9a8f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16ef5c9b58619fd97805327bafd9a8f0">&#9670;&#160;</a></span>post_run()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">ctlcmd.motioncmd.timescan.run </td>
+          <td class="memname">ctlcmd.cmdbase.rootfilecmd.post_run </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>self</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>self</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>args</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Functions that require command specific definitions, should be overwritten in the descendent classes </p>
+<p>As this modifies files on the system, we will always print a verbose message to notify the user of where the save file is. This also dumps any remaining data still in memory to the root file. </p>
 
-<p>Reimplemented from <a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a26eefc1e87a4530bbc8f359e5226467c">ctlcmd.cmdbase.controlcmd</a>.</p>
+<p>Reimplemented from <a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#aa7271596ebbb064f77123f20acf7a5b7">ctlcmd.cmdbase.controlcmd</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>/github/workspace/ctlcmd/motioncmd.py</li>
+<li>/github/workspace/ctlcmd/<a class="el" href="cmdbase_8py.html">cmdbase.py</a></li>
 </ul>
 </div><!-- contents -->
 <!-- HTML footer for doxygen 1.8.14-->
