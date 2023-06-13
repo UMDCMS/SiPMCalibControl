@@ -61,7 +61,6 @@ class tbset(cmdbase.controlcmd):
 
 
 class tb_saveconfig(cmdbase.savefilecmd):
-    ##TODO: decide what to do with the data in this section
   """
   @brief Saving the current configuration to a file
   """
@@ -134,7 +133,6 @@ class tb_levelped(cmdbase.rootfilecmd):
                   0
       self.write_standard_line((dacb, ped, noise, check_val), ch)
       self.fillroot({"dacb":dacb,"ped":ped,"noise":noise,"check_val":check_val,"ch":ch})
-    self.dumprootdata()
     print(corrected_dacb)
 
   def acquire_single(self, dacb_map: dict[int, int], nevents: int) -> dict:

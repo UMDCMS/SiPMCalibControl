@@ -852,7 +852,7 @@ class rootfilecmd(controlcmd):
     self.saveroot = filename
     return args
       
-  def maketree(self,data,datatypes={}):
+  def maketree(self,data,datatypes):
     """
     @brief Create the root file and the TTree in the root file
 
@@ -861,10 +861,11 @@ class rootfilecmd(controlcmd):
     like the time the file was created, the Board_ID and Board_Type. This function is only called once.
 
     """
-     
+    if datatypes is None:
+      datatypes = {}
     self.rootfile = uproot.recreate(self.saveroot)
-    standard_dict={"time":np.float32,"det_id":int,"gantry x":np.float32,"gantry y":np.float32,
-                   "gantry z":np.float32,"LED bias voltage":np.float32,"LED temp":np.float32,"SiPM temp":np.float32} 
+    standard_dict={"time":np.float32,"det_id":int,"gantry_x":np.float32,"gantry_y":np.float32,
+                   "gantry_z":np.float32,"led_bv":np.float32,"led_temp":np.float32,"sipm_temp":np.float32} 
     self.specific_dict={**{title:type(data[title]) for title in data}}
 
     ##manual override if type is not returning a value that root will accept
@@ -872,13 +873,20 @@ class rootfilecmd(controlcmd):
       for title in datatypes:
         self.specific_dict[title]=datatypes[title]
     
+    for title in data:
+      if not title.isidentifier():
+        warnings.warn("The title "+title+" in the standard data for the TTree DataTree is not an acceptable identifier. The program will continue to run.")
+    for title in self.specific_dict:
+      if not title.isidentifier():
+        warnings.warn("The title "+title+" in the specific data for the TTree DataTree is not an acceptable identifier. The program will continue to run")
+
     self.rootfile.mktree("DataTree",{**{title:standard_dict[title] for title in standard_dict},**{title:self.specific_dict[title] for title in self.specific_dict}})
 
     ##add extra data which must only be saved once
     timestring = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-    self.rootfile["Board_ID"]=self.board.boardid
-    self.rootfile["Board_Type"]=self.board.boardtype
-    self.rootfile["Time"]=timestring
+    self.rootfile["run_info/board_id"]=self.board.boardid
+    self.rootfile["run_info/board_type"]=self.board.boardtype
+    self.rootfile["run_info/timestamp"]=timestring
     
     ##Create apparatus to store data until it is pushed to the root file
     self.n=0
@@ -886,7 +894,7 @@ class rootfilecmd(controlcmd):
     specificdata={**{title:[] for title in self.specific_dict}}
     self.saveddata={"standard":standarddata,"specific":specificdata} 
   
-  def fillroot(self,data,datatypes={},time=0.0,det_id=-100):
+  def fillroot(self,data,datatypes=None,time=0.0,det_id=-100):
     """
     @brief Fill the root file with the given data, will create a root file on the first call
 
@@ -907,12 +915,12 @@ class rootfilecmd(controlcmd):
     if data != "dump":
       self.saveddata["standard"]["time"].append(time)
       self.saveddata["standard"]["det_id"].append(det_id)
-      self.saveddata["standard"]["gantry x"].append(self.gcoder.opx)
-      self.saveddata["standard"]["gantry y"].append(self.gcoder.opy)
-      self.saveddata["standard"]["gantry z"].append(self.gcoder.opz)
-      self.saveddata["standard"]["LED bias voltage"].append(self.gpio.adc_read(2))
-      self.saveddata["standard"]["LED temp"].append(self.gpio.ntc_read(0))
-      self.saveddata["standard"]["SiPM temp"].append(self.gpio.rtd_read(1))
+      self.saveddata["standard"]["gantry_x"].append(self.gcoder.opx)
+      self.saveddata["standard"]["gantry_y"].append(self.gcoder.opy)
+      self.saveddata["standard"]["gantry_z"].append(self.gcoder.opz)
+      self.saveddata["standard"]["led_bv"].append(self.gpio.adc_read(2))
+      self.saveddata["standard"]["led_temp"].append(self.gpio.ntc_read(0))
+      self.saveddata["standard"]["sipm_temp"].append(self.gpio.rtd_read(1))
     
       for title1 in data:
         for title2 in self.saveddata["specific"]:
@@ -926,34 +934,25 @@ class rootfilecmd(controlcmd):
         if isinstance(self.specific_dict[title],str):
           if "var *" in self.specific_dict[title]:
             self.saveddata["specific"][title]=ak.Array(self.saveddata["specific"][title])
+      
       self.rootfile["DataTree"].extend({**{title:self.saveddata["standard"][title] for title in self.saveddata["standard"]},**{title:self.saveddata["specific"][title] for title in self.saveddata["specific"]}})
+      
       for title in self.saveddata["standard"]:
         self.saveddata["standard"][title]=[]
       for title in self.saveddata["specific"]:
         self.saveddata["specific"][title]=[]
       self.n=0
 
-  def dumprootdata(self):
-    """
-    @brief Command to dump any data still in memory not saved to the root TTree
-
-    @details It is more efficient to collect the data to be saved in memory and periodically
-    push it to the root TTree than save every single file at once. This ensures that at
-    the end of the run none of the data is left in memory and not in the TTree
-
-    """
-    
-    self.fillroot("dump")
- 
   def post_run(self):
     """
     @brief Additional steps to run before the completing the command.
 
     @details As this modifies files on the system, we will always print a verbose
-    message to notify the user of where the save file is.
+    message to notify the user of where the save file is. This also dumps any remaining data
+    still in memory to the root file.
     """
 
-    if not self.saveroot: return  # Early exit for if rootfile name is not set
+    self.fillroot("dump")
     self.printmsg(f"Saving results to file [{self.saveroot}]")
   
 class savefilecmd(controlcmd):

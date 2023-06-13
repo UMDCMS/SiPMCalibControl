@@ -235,7 +235,6 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.rootfilecmd):
       self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}')
       lumi.append(abs(lumival))
       unc.append(uncval)
-    self.dumprootdata()
     # Performing fit
     p0 = (
         max(lumi) * ((args.scanz + 2)**2),  #
@@ -367,7 +366,6 @@ class zscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.readoutcmd,cmdbase.ro
       unc.append(uncval)
       self.fillroot({"lumival":lumival,"uncval":uncval},det_id=args.detid)
       self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}')
-    self.dumprootdata()
 
 class lowlightcollect(cmdbase.singlexycmd, cmdbase.readoutcmd,cmdbase.rootfilecmd):
   """@brief Collection of low light data at a single gantry position, data will
@@ -420,7 +418,6 @@ class lowlightcollect(cmdbase.singlexycmd, cmdbase.readoutcmd,cmdbase.rootfilecm
       readout=readout.tolist()
       self.fillroot({"readout":readout},{"readout":"var * float64"},det_id=args.detid)
       self.pbar_data(Lumi=f'{readout[-1]:.2}')
-    self.dumprootdata()
 class timescan(cmdbase.readoutcmd, cmdbase.rootfilecmd):
   """
   Generate a log of the readout in terms relative to time.
@@ -459,9 +456,7 @@ class timescan(cmdbase.readoutcmd, cmdbase.rootfilecmd):
     start_time = time.time_ns()
     pwmindex = 0
 
-    print("start of for loop in run timescan")
     for it in self.start_pbar(args.nslice):
-      print("part of for loop in run timescan")
       self.check_handle()
       if (it % args.pwmslices == 0):
         self.gpio.pwm(0, args.testpwm[pwmindex], 1e5)
@@ -472,9 +467,7 @@ class timescan(cmdbase.readoutcmd, cmdbase.rootfilecmd):
       s4 = self.visual.get_latest().s4
       sample_time = time.time_ns()
       timestamp = (sample_time - start_time) / 1e9
-      print("run self.fillroot in timescan after this")
       self.fillroot({"lumival":lumival,"uncval":uncval,"S2":s2,"S4":s4},time=timestamp,det_id=-100)
       self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}',
                      Sharp=f'({s2:.1f}, {s4:.1f})')
       time.sleep(args.interval)
-    self.dumprootdata()
