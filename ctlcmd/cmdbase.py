@@ -96,6 +96,8 @@ try:
   import cmod.drs as drs
 except (ImportError, ModuleNotFoundError) as err:
   drs = None
+
+
 class controlsignalhandle(object):
   """
   Simple class for handling signal termination signals emitted by user input
@@ -773,7 +775,7 @@ class controlcmd(object):
     globlist = [file + '/' if os.path.isdir(file) else file for file in globlist]
     return globlist
 
- 
+
 class rootfilecmd(controlcmd):
   """
   @brief commands that control saving data to the root file
@@ -798,21 +800,22 @@ class rootfilecmd(controlcmd):
   detailed documentation in the `ctlcmd.cmdbase.savefilecmd.parse` method.
   """
   DEFAULT_ROOTFILE = 'SAVEROOT_<TIMESTAMP>'
+
   def __init__(self, cmd):
     controlcmd.__init__(self, cmd)
-     
 
   def add_args(self):
     group = self.parser.add_argument_group(
-        "root file saving options", """Options for changing the root file location.
+        "root file saving options",
+        """Options for changing the root file location.
         For more details, see the official documentation.""")
     group.add_argument('--saveroot',
                        type=str,
                        default=self.DEFAULT_ROOTFILE,
                        help="""File path to save (placeholders in angle braces).
                        default=%(default)s""")
- 
-  def parse(self,args):
+
+  def parse(self, args):
     if not args.saveroot:  # Early exit if savefile is not set
       self.saveroot = None
       return args
@@ -851,8 +854,8 @@ class rootfilecmd(controlcmd):
                           flags=re.IGNORECASE)
     self.saveroot = filename
     return args
-      
-  def maketree(self,data,datatypes):
+
+  def maketree(self, data, datatypes):
     """
     @brief Create the root file and the TTree in the root file
 
@@ -864,37 +867,61 @@ class rootfilecmd(controlcmd):
     if datatypes is None:
       datatypes = {}
     self.rootfile = uproot.recreate(self.saveroot)
-    standard_dict={"time":np.float32,"det_id":int,"gantry_x":np.float32,"gantry_y":np.float32,
-                   "gantry_z":np.float32,"led_bv":np.float32,"led_temp":np.float32,"sipm_temp":np.float32} 
-    self.specific_dict={**{title:type(data[title]) for title in data}}
+    standard_dict = {
+        "time": np.float32,
+        "det_id": int,
+        "gantry_x": np.float32,
+        "gantry_y": np.float32,
+        "gantry_z": np.float32,
+        "led_bv": np.float32,
+        "led_temp": np.float32,
+        "sipm_temp": np.float32
+    }
+    self.specific_dict = {**{title: type(data[title]) for title in data}}
 
     ##manual override if type is not returning a value that root will accept
     if datatypes:
       for title in datatypes:
-        self.specific_dict[title]=datatypes[title]
-    
+        self.specific_dict[title] = datatypes[title]
+
     for title in data:
       if not title.isidentifier():
-        warnings.warn("The title "+title+" in the standard data for the TTree DataTree is not an acceptable identifier. The program will continue to run.")
+        warnings.warn(
+            "The title " + title +
+            " in the standard data for the TTree DataTree is not an acceptable identifier. The program will continue to run."
+        )
     for title in self.specific_dict:
       if not title.isidentifier():
-        warnings.warn("The title "+title+" in the specific data for the TTree DataTree is not an acceptable identifier. The program will continue to run")
+        warnings.warn(
+            "The title " + title +
+            " in the specific data for the TTree DataTree is not an acceptable identifier. The program will continue to run"
+        )
 
-    self.rootfile.mktree("DataTree",{**{title:standard_dict[title] for title in standard_dict},**{title:self.specific_dict[title] for title in self.specific_dict}})
+    self.rootfile.mktree(
+        "DataTree", {
+            **{
+                title: standard_dict[title]
+                for title in standard_dict
+            },
+            **{
+                title: self.specific_dict[title]
+                for title in self.specific_dict
+            }
+        })
 
     ##add extra data which must only be saved once
     timestring = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-    self.rootfile["run_info/board_id"]=self.board.boardid
-    self.rootfile["run_info/board_type"]=self.board.boardtype
-    self.rootfile["run_info/timestamp"]=timestring
-    
+    self.rootfile["run_info/board_id"] = self.board.boardid
+    self.rootfile["run_info/board_type"] = self.board.boardtype
+    self.rootfile["run_info/timestamp"] = timestring
+
     ##Create apparatus to store data until it is pushed to the root file
-    self.n=0
-    standarddata={**{title:[] for title in standard_dict}}
-    specificdata={**{title:[] for title in self.specific_dict}}
-    self.saveddata={"standard":standarddata,"specific":specificdata} 
-  
-  def fillroot(self,data,datatypes=None,time=0.0,det_id=-100):
+    self.n = 0
+    standarddata = {**{title: [] for title in standard_dict}}
+    specificdata = {**{title: [] for title in self.specific_dict}}
+    self.saveddata = {"standard": standarddata, "specific": specificdata}
+
+  def fillroot(self, data, datatypes=None, time=0.0, det_id=-100):
     """
     @brief Fill the root file with the given data, will create a root file on the first call
 
@@ -909,9 +936,9 @@ class rootfilecmd(controlcmd):
 
     """
     ##fill data into the root file
-    if not hasattr(self,"rootfile"):
-      self.maketree(data,datatypes)
-  
+    if not hasattr(self, "rootfile"):
+      self.maketree(data, datatypes)
+
     if data != "dump":
       self.saveddata["standard"]["time"].append(time)
       self.saveddata["standard"]["det_id"].append(det_id)
@@ -921,27 +948,37 @@ class rootfilecmd(controlcmd):
       self.saveddata["standard"]["led_bv"].append(self.gpio.adc_read(2))
       self.saveddata["standard"]["led_temp"].append(self.gpio.ntc_read(0))
       self.saveddata["standard"]["sipm_temp"].append(self.gpio.rtd_read(1))
-    
+
       for title1 in data:
         for title2 in self.saveddata["specific"]:
           if title1 == title2:
             self.saveddata["specific"][title2].append(data[title1])
-      self.n+=1
+      self.n += 1
     ##Only push data to rootfile once multiple sets of data have been collected to improve speed, extending is more efficient that way
-    if self.n%10==0 or (data == "dump" and self.n!=0):
+    if self.n % 10 == 0 or (data == "dump" and self.n != 0):
       for title in self.saveddata["specific"]:
         ##change nested lists to akward arrays in order to save properly to the tree
-        if isinstance(self.specific_dict[title],str):
+        if isinstance(self.specific_dict[title], str):
           if "var *" in self.specific_dict[title]:
-            self.saveddata["specific"][title]=ak.Array(self.saveddata["specific"][title])
-      
-      self.rootfile["DataTree"].extend({**{title:self.saveddata["standard"][title] for title in self.saveddata["standard"]},**{title:self.saveddata["specific"][title] for title in self.saveddata["specific"]}})
-      
+            self.saveddata["specific"][title] = ak.Array(
+                self.saveddata["specific"][title])
+
+      self.rootfile["DataTree"].extend({
+          **{
+              title: self.saveddata["standard"][title]
+              for title in self.saveddata["standard"]
+          },
+          **{
+              title: self.saveddata["specific"][title]
+              for title in self.saveddata["specific"]
+          }
+      })
+
       for title in self.saveddata["standard"]:
-        self.saveddata["standard"][title]=[]
+        self.saveddata["standard"][title] = []
       for title in self.saveddata["specific"]:
-        self.saveddata["specific"][title]=[]
-      self.n=0
+        self.saveddata["specific"][title] = []
+      self.n = 0
 
   def post_run(self):
     """
@@ -954,7 +991,8 @@ class rootfilecmd(controlcmd):
 
     self.fillroot("dump")
     self.printmsg(f"Saving results to file [{self.saveroot}]")
-  
+
+
 class savefilecmd(controlcmd):
   """
   @brief commands that will save to a file

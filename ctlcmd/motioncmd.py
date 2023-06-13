@@ -11,7 +11,7 @@ import ctlcmd.cmdbase as cmdbase
 import numpy as np
 from scipy.optimize import curve_fit
 import time
-import uproot
+
 
 class rungcode(cmdbase.controlcmd):
   """
@@ -181,10 +181,10 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.rootfilecmd):
   """
 
   DEFAULT_ROOTFILE = 'halign_<BOARDTYPE>_<BOARDID>_<DETID>_<SCANZ>_<TIMESTAMP>.root'
-  
+
   def __init__(self, cmd):
     cmdbase.controlcmd.__init__(self, cmd)
-    
+
   def add_args(self):
     """
     @brief Adding the overwrite and power settings
@@ -222,7 +222,7 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.rootfilecmd):
     lumi = []
     unc = []
     total = len(args.x)
-    
+
     n = 0
     test1 = []
     test2 = []
@@ -231,7 +231,7 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.rootfilecmd):
       self.check_handle()
       self.move_gantry(xval, yval, args.scanz)
       lumival, uncval = self.readout(args, average=True)
-      self.fillroot({"lumival":lumival,"uncval":uncval},det_id=args.detid)
+      self.fillroot({"lumival": lumival, "uncval": uncval}, det_id=args.detid)
       self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}')
       lumi.append(abs(lumival))
       unc.append(uncval)
@@ -301,13 +301,14 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.rootfilecmd):
     return (N * z / D**1.5) + p
 
 
-class zscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.readoutcmd,cmdbase.rootfilecmd):
+class zscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.readoutcmd,
+            cmdbase.rootfilecmd):
   """
   Performing the intensity scan give a list of scanning z coordinates and the
   list of biassing power.
   """
 
-  DEFAULT_ROOTFILE='zscan_<BOARDTYPE>_<BOARDID>_<DETID>_<TIMESTAMP>.root'
+  DEFAULT_ROOTFILE = 'zscan_<BOARDTYPE>_<BOARDID>_<DETID>_<TIMESTAMP>.root'
 
   def __init__(self, cmd):
     cmdbase.controlcmd.__init__(self, cmd)
@@ -364,13 +365,15 @@ class zscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.readoutcmd,cmdbase.ro
 
       lumi.append(lumival)
       unc.append(uncval)
-      self.fillroot({"lumival":lumival,"uncval":uncval},det_id=args.detid)
+      self.fillroot({"lumival": lumival, "uncval": uncval}, det_id=args.detid)
       self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}')
 
-class lowlightcollect(cmdbase.singlexycmd, cmdbase.readoutcmd,cmdbase.rootfilecmd):
+
+class lowlightcollect(cmdbase.singlexycmd, cmdbase.readoutcmd,
+                      cmdbase.rootfilecmd):
   """@brief Collection of low light data at a single gantry position, data will
   be collected without averaging."""
-  DEFAULT_ROOTFILE= 'lowlight_<BOARDTYPE>_<BOARDID>_<DETID>_<TIMESTAMP>.root' 
+  DEFAULT_ROOTFILE = 'lowlight_<BOARDTYPE>_<BOARDID>_<DETID>_<TIMESTAMP>.root'
 
   def __init__(self, cmd):
     cmdbase.controlcmd.__init__(self, cmd)
@@ -415,9 +418,12 @@ class lowlightcollect(cmdbase.singlexycmd, cmdbase.readoutcmd,cmdbase.rootfilecm
     for _ in self.start_pbar(range(args.nparts)):
       self.check_handle()
       readout = self.readout(args, average=False)
-      readout=readout.tolist()
-      self.fillroot({"readout":readout},{"readout":"var * float64"},det_id=args.detid)
+      readout = readout.tolist()
+      self.fillroot({"readout": readout}, {"readout": "var * float64"},
+                    det_id=args.detid)
       self.pbar_data(Lumi=f'{readout[-1]:.2}')
+
+
 class timescan(cmdbase.readoutcmd, cmdbase.rootfilecmd):
   """
   Generate a log of the readout in terms relative to time.
@@ -467,7 +473,14 @@ class timescan(cmdbase.readoutcmd, cmdbase.rootfilecmd):
       s4 = self.visual.get_latest().s4
       sample_time = time.time_ns()
       timestamp = (sample_time - start_time) / 1e9
-      self.fillroot({"lumival":lumival,"uncval":uncval,"S2":s2,"S4":s4},time=timestamp,det_id=-100)
+      self.fillroot({
+          "lumival": lumival,
+          "uncval": uncval,
+          "S2": s2,
+          "S4": s4
+      },
+                    time=timestamp,
+                    det_id=-100)
       self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}',
                      Sharp=f'({s2:.1f}, {s4:.1f})')
       time.sleep(args.interval)

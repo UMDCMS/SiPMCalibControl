@@ -132,7 +132,13 @@ class tb_levelped(cmdbase.rootfilecmd):
                   -1 if default_dacb[ch] == dacb else \
                   0
       self.write_standard_line((dacb, ped, noise, check_val), ch)
-      self.fillroot({"dacb":dacb,"ped":ped,"noise":noise,"check_val":check_val,"ch":ch})
+      self.fillroot({
+          "dacb": dacb,
+          "ped": ped,
+          "noise": noise,
+          "check_val": check_val,
+          "ch": ch
+      })
     print(corrected_dacb)
 
   def acquire_single(self, dacb_map: dict[int, int], nevents: int) -> dict:
@@ -144,9 +150,11 @@ class tb_levelped(cmdbase.rootfilecmd):
       self.tbc.i2c_socket.configure(yaml_config=TBController.make_deep(
           'roc_s0', 'sc', 'ch', channel, 'Dacb', dacb_map[channel]))
     arr = self.tbc.acquire(nevents)
-    return {(ch, dacb_map[ch]): (np.mean(arr.adc[arr.channel == channel]),
-                                 np.std(arr.adc[arr.channel == channel]))
-            for ch in dacb_map.keys()}
+    return {
+        (ch, dacb_map[ch]): (np.mean(arr.adc[arr.channel == channel]),
+                             np.std(arr.adc[arr.channel == channel]))
+        for ch in dacb_map.keys()
+    }
 
   def get_current_dacb(self) -> dict:
     """

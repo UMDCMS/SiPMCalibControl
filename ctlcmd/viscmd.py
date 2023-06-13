@@ -104,7 +104,7 @@ class visualset(cmdbase.controlcmd):
       self.visual.poly_range = args.poly
 
 
-class visualhscan(cmdbase.hscancmd, visualmeta,cmdbase.rootfilecmd):
+class visualhscan(cmdbase.hscancmd, visualmeta, cmdbase.rootfilecmd):
   """
   @brief Performing horizontal scan with camera system
   """
@@ -158,7 +158,11 @@ class visualhscan(cmdbase.hscancmd, visualmeta,cmdbase.rootfilecmd):
         reco_x.append(center.x)
         reco_y.append(center.y)
 
-      self.fillroot({"center x":center.x,"center y":center.y},det_id=args.detid) 
+      self.fillroot({
+          "center x": center.x,
+          "center y": center.y
+      },
+                    det_id=args.detid)
       self.pbar_data(center=f'({center.x:.0f}, {center.y:.0f})',
                      sharp=f'({center.s2:1f}, {center.s4:.1f})')
     fitx, covar_x = curve_fit(visualhscan.model, np.vstack((gantry_x, gantry_y)),
@@ -452,13 +456,13 @@ class visualsaveframe(cmdbase.controlcmd):
     self.visual.save_image(args.saveimg, args.raw)
 
 
-class visualzscan(cmdbase.singlexycmd, cmdbase.zscancmd,
-                  visualmeta,cmdbase.rootfilecmd):
+class visualzscan(cmdbase.singlexycmd, cmdbase.zscancmd, visualmeta,
+                  cmdbase.rootfilecmd):
   """
   @brief Scanning focus to calibrate z distance
   """
   VISUAL_OFFSET = True
-  DEFAULT_ROOTFILE= 'vscan_<DETID>_<TIMESTAMP>.root'
+  DEFAULT_ROOTFILE = 'vscan_<DETID>_<TIMESTAMP>.root'
 
   def __init__(self, cmd):
     cmdbase.controlcmd.__init__(self, cmd)
@@ -480,10 +484,20 @@ class visualzscan(cmdbase.singlexycmd, cmdbase.zscancmd,
       reco_y.append(center.y)
       reco_a.append(center.area)
       reco_d.append(center.maxmeas)
-      self.fillroot({"laplace":laplace[-1],"center x":center.x,"center y":center.y,"center area":center.area,"center maxmeas":center.maxmeas},det_id=args.detid)
+      self.fillroot(
+          {
+              "laplace": laplace[-1],
+              "center x": center.x,
+              "center y": center.y,
+              "center area": center.area,
+              "center maxmeas": center.maxmeas
+          },
+          det_id=args.detid)
       self.pbar_data(sharpness=f'({center.s2:.1f}, {center.s4:.1f})',
                      reco=f'({center.x:.0f}, {center.y:.0f})',
                      measure=f'({center.area:.0f}, {center.maxmeas:.0f})')
+
+
 class visualshowdet(visualmeta):
   """@brief Display of detector position, until termination signal is obtained."""
   def __init__(self, cmd):
