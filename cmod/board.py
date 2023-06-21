@@ -261,24 +261,71 @@ if __name__ == "__main__":
 
 
 
-
-
-# TODO: a function to load gantry conditions from a file
-# TODO: a function to save gantry conditions to a file
-# TODO: a getter for the gantry conditions
-# TODO: implement the gantry conditions calculation
 # NOTE: "uses visual system commands"
-# gantry conditions should be stored as a dictionary with the following keys:
-#   {
-#     "FOV_to_gantry_coordinates": {
-#       "diff": [0, 0, 0]
-#     },
-#     "lumi_vs_FOV_center": {
-#       "diff": [0,0,0],
-#       "FOV_center": [0, 0, 0],
-#       "lumi_center": [0, 0, 0]
-#     },
-#   }
+# TODO: move to different file, maybe
+class GantryConditions(object):
+  def __init__(self, cmd):
+    self.cmd = cmd
+    self.logger = cmd.devlog("GantryConditions")
+    # gantry conditions should be stored as a dictionary with the following keys:
+    #   {
+    #     "FOV_to_gantry_coordinates": {
+    #       "diff": [0, 0, 0]
+    #     },
+    #     "lumi_vs_FOV_center": {
+    #       "diff": [0,0,0],
+    #       "FOV_center": [0, 0, 0],
+    #       "lumi_center": [0, 0, 0]
+    #     },
+    #   }
+    self.conditions = {}
+
+  # loads gantry conditions from a file and returns True if successful, False otherwise
+  def load_gantry_conditions(self, file):
+    conditions = json.loads(open(file, 'r').read())
+    try:
+      new_conditions = {
+        "FOV_to_gantry_coordinates": {
+        "diff": conditions["FOV_to_gantry_coordinates"]["diff"],
+      },
+      "lumi_vs_FOV_center": {
+        "diff": conditions["lumi_vs_FOV_center"]["diff"],
+        "FOV_center": conditions,
+        "lumi_center": conditions["lumi_vs_FOV_center"]["lumi_center"],
+      },
+      }
+
+      # all 3 ([x,y,z]) are required in all cases, except for the default_coordinates of each detector
+      if not(len(conditions["FOV_to_gantry_coordinates"]["diff"]) == 3):
+        raise KeyError("[\"FOV_to_gantry_coordinates\"][\"diff\"] not of length 3")
+      if not(len(conditions["lumi_vs_FOV_center"]["diff"]) == 3):
+        raise KeyError("[\"lumi_vs_FOV_center\"][\"diff\"] not of length 3")
+      if not(len(conditions["lumi_vs_FOV_center"]["FOV_center"]) == 3):
+        raise KeyError("[\"lumi_vs_FOV_center\"][\"FOV_center\"] not of length 3")
+      if not(len(conditions["lumi_vs_FOV_center"]["lumi_center"]) == 3):
+        raise KeyError("[\"lumi_vs_FOV_center\"][\"lumi_center\"] not of length 3")
+      
+      self.conditions = new_conditions
+      return True
+    except KeyError as e:
+      self.logger.error(e)
+      self.logger.error("""
+        The gantry conditions file does not contain the required gantry conditions:
+        'FOV_to_gantry_coordinates', and 'lumi_vs_FOV_center'. Please check the
+        file and the required format and try again.""")
+      # TODO: might want to add logic that if the required conditions are provided run the process to calculate those that are missing or even all of them as don't want to trust an "incomplete" set of conditions
+      return False
+
+  # saves gantry conditions to a file
+  def save_gantry_conditions(self, file):
+    with open(file, 'w') as f:
+      f.write(json.dumps(self.conditions, indent=2))
+  # returns the gantry conditions
+    def get_gantry_conditions(self):
+        return self.conditions
+  # TODO: implement the gantry conditions calculation
+  def calculate_gantry_conditions(self):
+    raise NotImplementedError("calculate_gantry_conditions not implemented")
 
 
 # TODO: a function to load data quality(long term) conditions from a file
