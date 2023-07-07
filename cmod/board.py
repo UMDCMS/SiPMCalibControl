@@ -29,8 +29,8 @@ class Detector(object):
    self.channel = int(jsonmap['channel'])
    self.coordinates = {
      "default": jsonmap['default_coordinates'],
-     "calibrated": []
-     }
+     "calibrated": {}
+    }
 
 
    # TODO: add the conditions calculated per detector
@@ -79,6 +79,7 @@ class Board(object):
    self.description = ""
    self.detectors = []
    self.calib_routines = []
+#    TODO: add the board conditions
    self.conditions = {}
 
 
@@ -107,61 +108,17 @@ class Board(object):
        jsonmap = json.loads(open(file, 'r').read())
        self.type = jsonmap['type']
        self.description = jsonmap['description']
-       self.detectors = jsonmap['detectors']
        self.calib_routines = jsonmap['calib_routines'] if 'calib_routines' in jsonmap else []
        self.conditions = jsonmap['conditions'] if 'conditions' in jsonmap else {}
+
+       for det in jsonmap['detectors']:
+          self.detectors.append(Detector(det))
    else:
    #   TODO add documentation for format of the config file
      self.logger.error("""
        The board config file does not contain the required fields: 'type', 'description', and 'detectors'. Please check the
        file and the required format and try again.""")
      return
-
-
-   # for det in jsonmap['detectors']:
-   #   self.detectors.append(Detector(det))
-
-
-  
-
-
-#   def load_calib_file(self, file):
-   # if not self.empty():
-   #   self.logger.warning("""
-   #    The current session is not empty. Loading a new boardtype will erase any
-   #    existing configuration for the current session""")
-   # jsonmap = json.loads(open(file, 'r').read())
-
-
-   # for det in jsonmap:
-   #   if det not in self.detectors:
-   #     if int(det) >= 0:
-   #       self.logger.warning("""
-   #         Detector recorded in the calibration file but not defined in the
-   #         calibration, ignoring""")
-   #       continue
-   #     else:
-   #       self.add_calib_det(det)
-
-
-   #   def format_dict(original_dict):
-   #     return {float(z): original_dict[z] for z in original_dict}
-
-
-   #   self.detectors[det].lumi_coord = format_dict(
-   #       jsonmap[det]['Luminosity coordinates'])
-   #   self.detectors[det].vis_coord = format_dict(
-   #       jsonmap[det]['Visual coordinates'])
-   #   self.detectors[det].vis_M = format_dict(jsonmap[det]['FOV transformation'])
-
-
-#   def save_calib_file(self, file):
-#     dicttemp = {det: self.detectors[det].__dict__() for det in self.detectors}
-
-
-#     with open(file, 'w') as f:
-#       f.write(json.dumps(dicttemp, indent=2))
-
 
  def get_detector(self, detid):
    # -1 as detid is the detector's index in the list + 1
@@ -173,72 +130,65 @@ class Board(object):
 
 
 #   def calib_dets(self):
-   return sorted([k for k in self.get_all_detectors() if int(k) < 0], reverse=True)
+#    return sorted([k for k in self.get_all_detectors() if int(k) < 0], reverse=True)
 
 
-#   def add_calib_det(self, detid, mode=-1, channel=-1):
-   detid = str(detid)
-   if detid not in self.get_all_detectors() and int(detid) < 0:
-     self.detectors[detid] = Detector({
-         "mode": mode,
-         "channel": channel,
-         "default coordinates": [-100, -100]
-     }, self)
+#    def add_calib_det(self, detid, mode=-1, channel=-1):
+#     if detid not in self.get_all_detectors() and int(detid) < 0:
+#         self.detectors[detid] = Detector({
+#             "mode": mode,
+#             "channel": channel,
+#             "default coordinates": [-100, -100]
+#         }, self)
 
 
  # Get/Set calibration measures with additional parsing
 #   TODO: revisit while implementing conditions
-#   def add_vis_coord(self, det, z, data):
-#     det = str(det)
-#     self.detectors[det].vis_coord[self.roundz(z)] = data
+ def add_vis_coord(self, detid, z, data, filename):
+   self.detectors[detid-1]['coordinates']['calibrated']['visualcenterdet'][self.roundz(z)]['coordinates'] = data
+   self.detectors[detid-1]['coordinates']['calibrated']['visualcenterdet'][self.roundz(z)]['file'] = filename
 
 
-#   def add_visM(self, det, z, data):
-#     det = str(det)
-#     self.detectors[det].vis_M[self.roundz(z)] = data
+ def add_visM(self, detid, z, data, filename):
+   self.detectors[detid-1]['coordinates']['calibrated']['visualhscan'][self.roundz(z)].['transform'] = data
+   self.detectors[detid-1]['coordinates']['calibrated']['visualhscan'][self.roundz(z)]['file'] = filename
 
 
-#   def add_lumi_coord(self, det, z, data):
-#     det = str(det)
-#     self.detectors[det].lumi_coord[self.roundz(z)] = data
+ def add_lumi_coord(self, detid, z, data):
+   self.detectors[detid-1]['coordinates']['calibrated']['halign'][self.roundz(z)]['coordinates'] = data
 
 
-#   def get_vis_coord(self, det, z):
-#     det = str(det)
-#     return self.detectors[det].vis_coord[self.roundz(z)]
+ def get_vis_coord(self, detid, z):
+   return self.detectors[detid-1]['coordinates']['calibrated']['visualcenterdet'][self.roundz(z)]
 
 
-#   def get_visM(self, det, z):
-#     det = str(det)
-#     return self.detectors[det].vis_M[self.roundz(z)]
+ def get_visM(self, detid, z):
+   return self.detectors[detid-1]['coordinates']['calibrated'].visualhscan[self.roundz(z)]
 
 
-#   def get_lumi_coord(self, det, z):
-#     det = str(det)
-#     return self.detectors[det].lumi_coord[self.roundz(z)]
+ def get_lumi_coord(self, detid, z):
+   return self.detectors[detid-1]['coordinates']['calibrated']['halign'][self.roundz(z)]
+
+ def add_lumi_vis_separation(self, detid, z, h):
+   self.detectors[detid-1]['coordinates']['calibrated']['lumi_vis_separation'][self.roundz(z)]['separation'] = h
+
+ def vis_coord_hasz(self, detid, z):
+   return self.roundz(z) in self.detectors[detid-1]['coordinates']['calibrated']['visualcenterdet'].keys()
 
 
-#   def vis_coord_hasz(self, det, z):
-#     det = str(det)
-#     return self.roundz(z) in self.detectors[det].vis_coord
+ def visM_hasz(self, detid, z):
+   return self.roundz(z) in self.detectors[detid-1]['coordinates']['calibrated']['visualhscan'].keys()
 
 
-#   def visM_hasz(self, det, z):
-#     det = str(det)
-#     return self.roundz(z) in self.detectors[det].vis_M
+ def lumi_coord_hasz(self, detid, z):
+   return self.roundz(z) in self.detectors[detid-1]['coordinates']['calibrated']['halign'].keys()
 
 
-#   def lumi_coord_hasz(self, det, z):
-   det = str(det)
-   return self.roundz(z) in self.detectors[det].lumi_coord
-
-
-# TODO: revisit after implementing conditions
+# TODO: why is this needed??
  def empty(self):
-#     for det in self.detectors:
-#       if (any(self.detectors[det].vis_coord) or any(self.detectors[det].vis_M)
-#           or any(self.detectors[det].lumi_coord)):
-#         return False
+   for det in self.detectors:
+     if ('visualcenterdet' in det['coordinates']['calibrated'] or 'visualhscan' in det['coordinates']['calibrated'] or 'halign' in det['coordinates']['calibrated']):
+       return False
    return True
 
 
@@ -253,84 +203,5 @@ class Board(object):
 if __name__ == "__main__":
  board = Board()
  board.load_board('cfg/reference_single.json')
-#   print(board.detectors['-100'])
  for det in board.detectors:
    print(det)
- board.save_calib_file('test.json')
-
-
-
-
-# NOTE: "uses visual system commands"
-# TODO: move to different file, maybe
-class GantryConditions(object):
-  def __init__(self, cmd):
-    self.cmd = cmd
-    self.logger = cmd.devlog("GantryConditions")
-    # gantry conditions should be stored as a dictionary with the following keys:
-    #   {
-    #     "FOV_to_gantry_coordinates": {
-    #       "diff": [0, 0, 0]
-    #     },
-    #     "lumi_vs_FOV_center": {
-    #       "diff": [0,0,0],
-    #       "FOV_center": [0, 0, 0],
-    #       "lumi_center": [0, 0, 0]
-    #     },
-    #   }
-    self.conditions = {}
-
-  # loads gantry conditions from a file and returns True if successful, False otherwise
-  def load_gantry_conditions(self, file):
-    conditions = json.loads(open(file, 'r').read())
-    try:
-      new_conditions = {
-        "FOV_to_gantry_coordinates": {
-        "diff": conditions["FOV_to_gantry_coordinates"]["diff"],
-      },
-      "lumi_vs_FOV_center": {
-        "diff": conditions["lumi_vs_FOV_center"]["diff"],
-        "FOV_center": conditions,
-        "lumi_center": conditions["lumi_vs_FOV_center"]["lumi_center"],
-      },
-      }
-
-      # all 3 ([x,y,z]) are required in all cases, except for the default_coordinates of each detector
-      if not(len(conditions["FOV_to_gantry_coordinates"]["diff"]) == 3):
-        raise KeyError("[\"FOV_to_gantry_coordinates\"][\"diff\"] not of length 3")
-      if not(len(conditions["lumi_vs_FOV_center"]["diff"]) == 3):
-        raise KeyError("[\"lumi_vs_FOV_center\"][\"diff\"] not of length 3")
-      if not(len(conditions["lumi_vs_FOV_center"]["FOV_center"]) == 3):
-        raise KeyError("[\"lumi_vs_FOV_center\"][\"FOV_center\"] not of length 3")
-      if not(len(conditions["lumi_vs_FOV_center"]["lumi_center"]) == 3):
-        raise KeyError("[\"lumi_vs_FOV_center\"][\"lumi_center\"] not of length 3")
-      
-      self.conditions = new_conditions
-      return True
-    except KeyError as e:
-      self.logger.error(e)
-      self.logger.error("""
-        The gantry conditions file does not contain the required gantry conditions:
-        'FOV_to_gantry_coordinates', and 'lumi_vs_FOV_center'. Please check the
-        file and the required format and try again.""")
-      # TODO: might want to add logic that if the required conditions are provided run the process to calculate those that are missing or even all of them as don't want to trust an "incomplete" set of conditions
-      return False
-
-  # saves gantry conditions to a file
-  def save_gantry_conditions(self, file):
-    with open(file, 'w') as f:
-      f.write(json.dumps(self.conditions, indent=2))
-  # returns the gantry conditions
-    def get_gantry_conditions(self):
-        return self.conditions
-  # TODO: implement the gantry conditions calculation
-  def calculate_gantry_conditions(self):
-    raise NotImplementedError("calculate_gantry_conditions not implemented")
-
-
-# TODO: a function to load data quality(long term) conditions from a file
-# TODO: a function to save data quality(long term) conditions to a file
-# TODO: a getter for the data quality(long term) conditions
-# TODO: implement the data quality(long term) conditions calculation
-
-

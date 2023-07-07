@@ -60,6 +60,7 @@ class and method  `__doc__` strings.
 
 [controlcmd]: @ref ctlcmd.cmdbase.controlcmd
 """
+from cmod.conditions import Conditions
 import cmod.gcoder as gcoder
 import cmod.board as board
 import cmod.gpio as gpio
@@ -851,21 +852,21 @@ class savefilecmd(controlcmd):
     if not args.savefile:  # Early exit if savefile is not set
       self.savefile = None
       return args
-    filename = args.savefile
+    self.filename = args.savefile
 
     # Adding time stamp filenames
     timestring = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-    filename = re.sub('<TIMESTAMP>', timestring, filename, flags=re.IGNORECASE)
+    self.filename = re.sub('<TIMESTAMP>', timestring, self.filename, flags=re.IGNORECASE)
 
     # Adding boardid to the settings
-    filename = re.sub('<BOARDID>',
+    self.filename = re.sub('<BOARDID>',
                       str(self.board.boardid),
-                      filename,
+                      self.filename,
                       flags=re.IGNORECASE)
     # Adding boardtype to the settings
-    filename = re.sub('<BOARDTYPE>',
+    self.filename = re.sub('<BOARDTYPE>',
                       str(self.board.boardtype),
-                      filename,
+                      self.filename,
                       flags=re.IGNORECASE)
 
     # Substituting tokens for argument values
@@ -880,13 +881,13 @@ class savefilecmd(controlcmd):
           pass
         substring = '{0}{1}'.format(string, val)
         substring = re.sub(r'\.', 'p', substring)
-        filename = re.sub('\\<{0}\\>'.format(string),
+        self.filename = re.sub('\\<{0}\\>'.format(string),
                           substring,
-                          filename,
+                          self.filename,
                           flags=re.IGNORECASE)
 
     # Opening the file.
-    self.savefile = open(filename, 'w' if args.wipefile else 'a')
+    self.savefile = open(self.filename, 'w' if args.wipefile else 'a')
     return args
 
   def post_run(self):
@@ -931,6 +932,7 @@ class savefilecmd(controlcmd):
     tokens.extend([f'{x:.2f}' for x in data])
     self.savefile.write(' '.join(tokens) + '\n')
     self.savefile.flush()
+    return self.filename
 
 
 class singlexycmd(controlcmd):

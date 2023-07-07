@@ -159,7 +159,7 @@ class visualhscan(cmdbase.hscancmd, cmdbase.savefilecmd, visualmeta):
         reco_x.append(center.x)
         reco_y.append(center.y)
 
-      self.write_standard_line((center.x, center.y), det_id=args.detid)
+      filename = self.write_standard_line((center.x, center.y), det_id=args.detid)
       self.pbar_data(center=f'({center.x:.0f}, {center.y:.0f})',
                      sharp=f'({center.s2:1f}, {center.s4:.1f})')
 
@@ -179,21 +179,21 @@ class visualhscan(cmdbase.hscancmd, cmdbase.savefilecmd, visualmeta):
     self.printmsg(f'Transformation for CamY = ({yx})x + ({yy})y')
 
     ## Generating calibration det id if using det coordinates
-    detid = str(args.detid)
-    if not detid in self.board.dets() and int(args.detid) < 0:
-      self.board.add_calib_det(args.detid)
+    detid = int(args.detid)
+    # if not detid in self.board.get_all_detectors() and int(args.detid) < 0:
+    #   self.board.add_calib_det(args.detid)
 
     ## Saving rounded coordinates
     if not self.board.visM_hasz(detid, self.gcoder.opz) or args.overwrite:
       self.board.add_visM(detid, self.gcoder.opz,
-                          [[fitx[0], fitx[1]], [fity[0], fity[1]]])
+                          [[fitx[0], fitx[1]], [fity[0], fity[1]]], filename)
     elif self.board.visM_hasz(detid, self.gcoder.opz):
       if self.prompt_yn(
           f"""
           Transformation equation for z={args.scanz:.1f} already exists,
           overwrite?""", False):
         self.board.add_visM(detid, self.gcoder.opz,
-                            [[fitx[0], fitx[1]], [fity[0], fity[1]]])
+                            [[fitx[0], fitx[1]], [fity[0], fity[1]]], filename)
 
     ## Moving back to center
     self.move_gantry(args.x, args.y, args.scanz)
@@ -239,7 +239,7 @@ class visualcenterdet(cmdbase.singlexycmd, visualmeta):
   def parse(self, args):
     args.calibdet = None
     if self.board.visM_hasz(args.detid, args.scanz):
-      args.calibdet = args.detit
+      args.calibdet = args.detid
     else:
       args.calibdet = next(
           iter([

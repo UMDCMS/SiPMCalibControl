@@ -116,6 +116,22 @@ if __name__ == '__main__':
         fmt.oneline_string("""
           There was error in the GPIO setup, program will continue but will most
           likely misbehave! Use at your own risk!"""))
+    
+    # Do the conditions calculations
+    # Gantry conditions:
+    # conditions = conditions.Conditions()
+    filename = cmd.conditions.get_latest_gantry_conditions_filename()
+
+    if filename is not None:
+      # if so, then load the conditions from the file
+      if not cmd.conditions.load_gantry_conditions(filename):
+        # if the conditions file is not valid, then calculate the conditions
+        cmd.conditions.calculate_conditions(cmd)
+    #   TODO: update the type value for a prod board
+      elif cmd.board.type.count("prod") > 0:
+        cmd.conditions.calculate_sipm_vis_coordinates(cmd, save_gantry_conditions_changes=True)
+    else:
+      cmd.conditions.calculate_conditions(cmd)
 
   cmd.cmdloop()
   del cmd  # This object requires explicit closing!
