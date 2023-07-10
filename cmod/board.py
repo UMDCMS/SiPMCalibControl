@@ -28,8 +28,8 @@ class Detector(object):
    self.mode = int(jsonmap['mode'])
    self.channel = int(jsonmap['channel'])
    self.coordinates = {
-     "default": jsonmap['default_coordinates'],
-     "calibrated": [] # a stack
+     "default": jsonmap['coordinates']['default'],
+     "calibrated": jsonmap['coordinates']['calibrated'] if not (len(jsonmap['coordinates']['calibrated']) == 0) else [] # a stack
     }
 
 
@@ -96,7 +96,6 @@ class Board(object):
 
 
  def load_board(self, file):
-   # TODO: revisit condition after revisiting self.empty
    if any(self.get_all_detectors()) or not self.empty():
      self.logger.warning("""
        The current session is not empty. Loading a new board will erase any
@@ -112,7 +111,15 @@ class Board(object):
        self.conditions = jsonmap['conditions'] if 'conditions' in jsonmap else {}
 
        for det in jsonmap['detectors']:
-          self.detectors.append(Detector(det))
+          self.detectors.append(Detector(det, self))
+          if self.type == 'prod' and self.get_latest_entry(det, 'visualcenterdet') is None:
+            # calculating the vis_coord for new sipm
+            self.cmd.conditions.calculate_sipm_vis_coords(self.cmd, len(self.detectors), True)
+          elif not (self.type == 'prod') and self.get_latest_entry(det, 'visualcenterdet') is None and self.get_latest_entry(det, 'visualhscan') is None and self.get_latest_entry(det, 'halign') is None:
+            # calculating the vis_coord for new sipm
+            self.cmd.conditions.calculate_sipm_vis_coords(self.cmd, len(self.detectors), True)
+            # calculating the lumi_coord for new sipm
+            self.cmd.conditions.calulate_sipm_lumi_coords(self.cmd, len(self.detectors), True)
    else:
    #   TODO add documentation for format of the config file
      self.logger.error("""
