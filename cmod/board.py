@@ -29,7 +29,7 @@ class Detector(object):
    self.channel = int(jsonmap['channel'])
    self.coordinates = {
      "default": jsonmap['default_coordinates'],
-     "calibrated": {}
+     "calibrated": [] # a stack
     }
 
 
@@ -61,7 +61,7 @@ class Detector(object):
    return {
        'mode': self.mode,
        'channel': self.channel,
-       'default coordinates': self.orig_coord,
+       'coordinates': self.coordinates,
        # 'Luminosity coordinates': self.lumi_coord,
        # 'Visual coordinates': self.vis_coord,
        # 'FOV transformation': self.vis_M
@@ -145,49 +145,78 @@ class Board(object):
  # Get/Set calibration measures with additional parsing
 #   TODO: revisit while implementing conditions
  def add_vis_coord(self, detid, z, data, filename):
-   self.detectors[detid-1]['coordinates']['calibrated']['visualcenterdet'][self.roundz(z)]['coordinates'] = data
-   self.detectors[detid-1]['coordinates']['calibrated']['visualcenterdet'][self.roundz(z)]['file'] = filename
+   self.detectors[detid-1]['coordinates']['calibrated'].append({
+     'command': 'visualcenterdet',
+     z: self.roundz(z),
+     'data': {
+       'coordinates': data,
+       'file': filename
+     }
+    })
 
 
  def add_visM(self, detid, z, data, filename):
-   self.detectors[detid-1]['coordinates']['calibrated']['visualhscan'][self.roundz(z)].['transform'] = data
-   self.detectors[detid-1]['coordinates']['calibrated']['visualhscan'][self.roundz(z)]['file'] = filename
+   self.detectors[detid-1]['coordinates']['calibrated'].append({
+     'command': 'visualhscan',
+     'z': self.roundz(z),
+     'data': {
+        'transform': data,
+        'file': filename
+     }
+    })
 
 
  def add_lumi_coord(self, detid, z, data):
-   self.detectors[detid-1]['coordinates']['calibrated']['halign'][self.roundz(z)]['coordinates'] = data
+   self.detectors[detid-1]['coordinates']['calibrated'].append({
+     'command': 'halign',
+     z: self.roundz(z),
+     'data': {
+       'coordinates': data
+     }
+    })
 
+ def get_latest_entry(self, detid, commandname, z=None):
+   for i in range(len(self.detectors[detid-1]['coordinates']['calibrated'])-1, -1, -1):
+     entry = self.detectors[detid-1]['coordinates']['calibrated'][i]
+     if entry['command'] == commandname and (z is None or entry['z'] == self.roundz(z)):
+       return entry
+   return None
 
  def get_vis_coord(self, detid, z):
-   return self.detectors[detid-1]['coordinates']['calibrated']['visualcenterdet'][self.roundz(z)]
+   return self.get_latest_entry(detid, 'visualcenterdet', z)
 
 
  def get_visM(self, detid, z):
-   return self.detectors[detid-1]['coordinates']['calibrated'].visualhscan[self.roundz(z)]
-
+   return self.get_latest_entry(detid, 'visualhscan', z)
 
  def get_lumi_coord(self, detid, z):
-   return self.detectors[detid-1]['coordinates']['calibrated']['halign'][self.roundz(z)]
+   return self.get_latest_entry(detid, 'halign', z)
 
  def add_lumi_vis_separation(self, detid, z, h):
-   self.detectors[detid-1]['coordinates']['calibrated']['lumi_vis_separation'][self.roundz(z)]['separation'] = h
+   self.detectors[detid-1]['coordinates']['calibrated'].append({
+     'command': 'lumi_vis_separation', 
+     'z': self.roundz(z), 
+     'data': {
+       'separation': h
+     }
+                                   })
 
  def vis_coord_hasz(self, detid, z):
-   return self.roundz(z) in self.detectors[detid-1]['coordinates']['calibrated']['visualcenterdet'].keys()
+   return self.get_latest_entry(detid, 'visualcenterdet', z) is not None
 
 
  def visM_hasz(self, detid, z):
-   return self.roundz(z) in self.detectors[detid-1]['coordinates']['calibrated']['visualhscan'].keys()
+   return self.get_latest_entry(detid, 'visualhscan', z) is not None
 
 
  def lumi_coord_hasz(self, detid, z):
-   return self.roundz(z) in self.detectors[detid-1]['coordinates']['calibrated']['halign'].keys()
+   return self.get_latest_entry(detid, 'halign', z) is not None
 
 
 # TODO: why is this needed??
  def empty(self):
-   for det in self.detectors:
-     if ('visualcenterdet' in det['coordinates']['calibrated'] or 'visualhscan' in det['coordinates']['calibrated'] or 'halign' in det['coordinates']['calibrated']):
+   for detid in range(0, len(self.detectors)):
+     if (self.get_latest_entry(detid, 'visualcenterdet') is not None or self.get_latest_entry(detid, 'visualhscan') is not None or self.get_latest_entry(detid, 'halign') is not None):
        return False
    return True
 

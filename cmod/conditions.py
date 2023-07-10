@@ -12,45 +12,38 @@ class Conditions(object):
     # gantry conditions should be stored as a dictionary with the following keys:
     #   {
     #     "fov_to_gantry_coordinates": {
+    #       'z': 5,
     #       "transform": [[xx, xy],[yx, yy]]
     #     },
     #     "lumi_vs_fov_center": {
-    #       "diff": [0,0,0]
+    #       'z': 5,
+    #       "separation": [[xx, xy],[yx, yy]]
     #     },
         # "use_count": 0
     #   }
     self.gantry_conditions = {}
     self.gantry_conditions_use_count = 0
     self.gantry_conditions_filename = None
+    self.h_list = []
 
   # loads gantry conditions from a file and returns True if successful, False otherwise
   def load_gantry_conditions(self, file):
     conditions = json.loads(open(file, 'r').read())
     try:
-      new_conditions = {
+      self.gantry_conditions = {
         "FOV_to_gantry_coordinates": {
-        "diff": conditions["FOV_to_gantry_coordinates"]["diff"],
-      },
-      "lumi_vs_FOV_center": {
-        "diff": conditions["lumi_vs_FOV_center"]["diff"],
-        "FOV_center": conditions,
-        "lumi_center": conditions["lumi_vs_FOV_center"]["lumi_center"],
-      },
+          "z": conditions["FOV_to_gantry_coordinates"]["z"],
+          "transform": conditions["FOV_to_gantry_coordinates"]["data"]["transform"]
+        },
+        "lumi_vs_FOV_center": {
+          "z": conditions["lumi_vs_FOV_center"]["z"],
+          "separation": conditions["lumi_vs_FOV_center"]["data"]["separation"]
+        },
+        "use_count": conditions["use_count"] if "use_count" in conditions else 0
       }
-
-      # TODO: revist this formatting expectations:
-      #  all 3 ([x,y,z]) are required in all cases, except for the default_coordinates of each detector
-      if not(len(conditions["FOV_to_gantry_coordinates"]["diff"]) == 3):
-        raise KeyError("[\"FOV_to_gantry_coordinates\"][\"diff\"] not of length 3")
-      if not(len(conditions["lumi_vs_FOV_center"]["diff"]) == 3):
-        raise KeyError("[\"lumi_vs_FOV_center\"][\"diff\"] not of length 3")
-      if not(len(conditions["lumi_vs_FOV_center"]["FOV_center"]) == 3):
-        raise KeyError("[\"lumi_vs_FOV_center\"][\"FOV_center\"] not of length 3")
-      if not(len(conditions["lumi_vs_FOV_center"]["lumi_center"]) == 3):
-        raise KeyError("[\"lumi_vs_FOV_center\"][\"lumi_center\"] not of length 3")
-      
-      self.gantry_conditions = new_conditions
       self.increment_use_count()
+
+      self.h_list = [self.gantry_conditions["lumi_vs_FOV_center"]["data"]["separation"]]
 
       return True
     except KeyError as e:
@@ -59,7 +52,7 @@ class Conditions(object):
         The gantry conditions file does not contain the required gantry conditions:
         'FOV_to_gantry_coordinates', and 'lumi_vs_FOV_center'. Please check the
         file and the required format and try again.""")
-      # TODO: might want to add logic that if the required conditions are provided run the process to calculate those that are missing or even all of them as don't want to trust an "incomplete" set of conditions
+      # TODO: might want to add logic that if the required conditions are not provided, run the process to calculate those that are missing or even all of them as don't want to trust an "incomplete" set of conditions
       return False
 
   # saves gantry conditions to a file
@@ -75,11 +68,7 @@ class Conditions(object):
     return self.gantry_conditions
 
   def calculate_gantry_conditions(self, cmd):
-    h_list = []
-    avg_h = 0
-
     for id in range(1, len(cmd.board.detectors)+1):
-        # vishscan
         # TODO: confirm inputs to all the  commands
         cmd_str = """
         visualhscan --detid={detid} -z {zval} --range 25 --distance 1 
@@ -89,23 +78,21 @@ class Conditions(object):
         sig = cmd.onecmd(command)
         status = cmd.postcmd(sig, command)
 
-        self.gantry_conditions["fov_to_gantry_coordinates"] = cmd.board.get_detector(id).getVisM(id, 5)
+        visM = cmd.board.getVisM(id, 5)
+        self.gantry_conditions['FOV_to_gantry_coordinates']['z'] = visM['z']
+        self.gantry_conditions['FOV_to_gantry_coordinates']['transform'] = visM['data']['transform']
 
         # vis_center_det vs halign
-        self.calculate_sipm_vis_coordinates(cmd, id, False)
+        self.calculate_sipm_vis_coords(cmd, id, False)
 
-        self.calculate_sipm_lumi_coordinates(cmd, id, False)
-
-    # check if we have multiple H values out of tolerance with each other,
-    # if check_conditions(h_list):
-    #   avg_h = sum(h_list)/len(h_list)
-    #   self.gantry_conditions["lumi_vs_FOV_center"]["diff"] = avg_h
-    # TODO: add the else: an error should be raised such that the operator knows that something is wrong (maybe the gantry head dislodged or was tugged
+        self.calculate_sipm_lumi_coords(cmd, id, False)
+        
+        self.increment_use_count()
 
     self.save_gantry_conditions()
 
   
-  def calculate_sipm_vis_coordinates(self, cmd, detid=None, save_gantry_conditions_changes=True):
+  def calculate_sipm_vis_coords(self, cmd, detid=None, save_gantry_conditions_changes=True):
     if detid is not None:
       visalign_cmd_str = """
         visualcenterdet --detid {detid} -z {zval} --overwrite
@@ -117,20 +104,21 @@ class Conditions(object):
       if cmd.board.lumi_coord_hasz(id, 5):
         h = cmd.board.get_lumi_coord(id, 5)-cmd.board.get_vis_coord(id, 5)
         cmd.board.add_lumi_vis_separation(id, 5, h)
-
-        self.gantry_conditions["lumi_vs_FOV_center"]["diff"] = (self.gantry_conditions["lumi_vs_FOV_center"]["diff"]*self.gantry_conditions["lumi_vs_FOV_center"]["num_sipms"] + h) /  self.gantry_conditions["lumi_vs_FOV_center"]["num_sipms"]+1
-
-        self.gantry_conditions["lumi_vs_FOV_center"]["num_sipms"] += 1
+        # check if we have multiple H values out of tolerance with each other,
+        if self.check_conditions(self.h_list, h):
+          self.h_list.append(h)
+          self.gantry_conditions["lumi_vs_FOV_center"]["separation"] = ((self.gantry_conditions["lumi_vs_FOV_center"]['data']["separation"]*len(self.h_list)) + h) /  (len(self.h_list)+1)
+        # TODO: add the else: an error should be raised such that the operator knows that something is wrong (maybe the gantry head dislodged or was tugged
 
     else:
       for id in range(1, len(cmd.board.detectors)+1):
-        self.calculate_sipm_vis_coordinates(cmd, id, False)
+        self.calculate_sipm_vis_coords(cmd, id, False)
     
     if save_gantry_conditions_changes:
       self.save_gantry_conditions()
 
 
-  def calculate_sipm_lumi_coordinates(self, cmd, detid=None, save_gantry_conditions_changes=True):
+  def calculate_sipm_lumi_coords(self, cmd, detid=None, save_gantry_conditions_changes=True):
     if detid is not None:
       halign_cmd_str = """halign --detid={detid}
             --channel={channel} --mode={mode}
@@ -155,17 +143,23 @@ class Conditions(object):
         h = cmd.board.get_lumi_coord(id, 5)-cmd.board.get_vis_coord(id, 5)
         cmd.board.add_lumi_vis_separation(id, 5, h)
 
-        self.gantry_conditions["lumi_vs_FOV_center"]["diff"] = (self.gantry_conditions["lumi_vs_FOV_center"]["diff"]*self.gantry_conditions["lumi_vs_FOV_center"]["num_sipms"] + h) /  self.gantry_conditions["lumi_vs_FOV_center"]["num_sipms"]+1
-
-        self.gantry_conditions["lumi_vs_FOV_center"]["num_sipms"] += 1
+        # check if we have multiple H values out of tolerance with each other,
+        if self.check_conditions(self.h_list, h):
+          self.h_list.append(h)
+          self.gantry_conditions["lumi_vs_FOV_center"]["separation"] = ((self.gantry_conditions["lumi_vs_FOV_center"]["separation"]*len(self.h_list)) + h) /  (len(self.h_list)+1)
+        # TODO: add the else: an error should be raised such that the operator knows that something is wrong (maybe the gantry head dislodged or was tugged
 
     else:
       for id in range(1, len(cmd.board.detectors)+1):
-        self.calculate_sipm_lumi_coordinates(cmd, id, False)
+        self.calculate_sipm_lumi_coords(cmd, id, False)
     
 
     if save_gantry_conditions_changes:
       self.save_gantry_conditions()
+
+  def check_conditions(self, h_list, h, tolerance):
+    # TODO implement
+    return True
 
   # increments the use count
   def increment_use_count(self):
