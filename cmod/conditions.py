@@ -105,7 +105,7 @@ class Conditions(object):
         h = cmd.board.get_lumi_coord(id, 5)-cmd.board.get_vis_coord(id, 5)
         cmd.board.add_lumi_vis_separation(id, 5, h)
         # check if we have multiple H values out of tolerance with each other,
-        if self.check_conditions(self.h_list, h):
+        if self.is_h_valid(self.h_list, h, 0.5):
           self.h_list.append(h)
           self.gantry_conditions["lumi_vs_FOV_center"]["separation"] = ((self.gantry_conditions["lumi_vs_FOV_center"]['data']["separation"]*len(self.h_list)) + h) /  (len(self.h_list)+1)
         # TODO: add the else: an error should be raised such that the operator knows that something is wrong (maybe the gantry head dislodged or was tugged
@@ -144,7 +144,7 @@ class Conditions(object):
         cmd.board.add_lumi_vis_separation(id, 5, h)
 
         # check if we have multiple H values out of tolerance with each other,
-        if self.check_conditions(self.h_list, h):
+        if self.is_h_valid(self.h_list, h, 0.5):
           self.h_list.append(h)
           self.gantry_conditions["lumi_vs_FOV_center"]["separation"] = ((self.gantry_conditions["lumi_vs_FOV_center"]["separation"]*len(self.h_list)) + h) /  (len(self.h_list)+1)
         # TODO: add the else: an error should be raised such that the operator knows that something is wrong (maybe the gantry head dislodged or was tugged
@@ -157,8 +157,13 @@ class Conditions(object):
     if save_gantry_conditions_changes:
       self.save_gantry_conditions()
 
-  def check_conditions(self, h_list, h, tolerance):
-    # TODO implement
+  def is_h_valid(self, h_list, h, tolerance):
+    """
+    Checks if the h value is within tolerance of the h values in the h_list
+    """
+    for h_i in h_list:
+      if abs(h_i-h) > tolerance:
+        return False
     return True
 
   # increments the use count
