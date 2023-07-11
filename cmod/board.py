@@ -125,14 +125,6 @@ class Board(object):
 
        for det in jsonmap['detectors']:
           self.detectors.append(Detector(det, self))
-          if self.type == 'prod' and self.get_latest_entry(det, 'visualcenterdet') is None:
-            # calculating the vis_coord for new sipm
-            self.cmd.conditions.calculate_sipm_vis_coords(self.cmd, len(self.detectors), True)
-          elif not (self.type == 'prod') and self.get_latest_entry(det, 'visualcenterdet') is None and self.get_latest_entry(det, 'visualhscan') is None and self.get_latest_entry(det, 'halign') is None:
-            # calculating the vis_coord for new sipm
-            self.cmd.conditions.calculate_sipm_vis_coords(self.cmd, len(self.detectors), True)
-            # calculating the lumi_coord for new sipm
-            self.cmd.conditions.calulate_sipm_lumi_coords(self.cmd, len(self.detectors), True)
    else:
    #   TODO add documentation for format of the config file
      self.logger.error("""
@@ -160,10 +152,6 @@ class Board(object):
 #             "channel": channel,
 #             "default coordinates": [-100, -100]
 #         }, self)
-
-
- def update_gantry_and_sipm_conditions(self, cmd, detid, z,):
-   self.cmd.conditions.update_gantry_and_sipm_conditions(cmd, detid, z)
 
  # Get/Set calibration measures with additional parsing
 #   TODO: revisit while implementing conditions
