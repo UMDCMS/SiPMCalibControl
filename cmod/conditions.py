@@ -30,6 +30,7 @@ class Conditions(object):
 
   # loads gantry conditions from a file and returns True if successful, False otherwise
   def load_gantry_conditions(self, file):
+    self.gantry_conditions_filename = file
     conditions = json.loads(open(file, 'r').read())
     try:
       self.gantry_conditions = {
@@ -43,6 +44,7 @@ class Conditions(object):
         },
         "use_count": conditions["use_count"] if "use_count" in conditions else 0
       }
+      
       self.increment_use_count()
 
       self.h_list = [self.gantry_conditions["lumi_vs_FOV_center"]["data"]["separation"]]
@@ -61,6 +63,7 @@ class Conditions(object):
   def save_gantry_conditions(self):
     if self.gantry_conditions_filename is None:
       self.create_gantry_conditions_filename()
+      self.increment_use_count()
 
     with open(self.gantry_conditions_filename, 'w') as f:
       f.write(json.dumps(self.gantry_conditions, indent=2))
@@ -68,97 +71,7 @@ class Conditions(object):
   # returns the gantry conditions
   def get_gantry_conditions(self):
     return self.gantry_conditions
-
-  def calculate_gantry_conditions(self, cmd):
-    for id in range(1, len(cmd.board.detectors)+1):
-        # TODO: confirm inputs to all the  commands
-        cmd_str = """
-        visualhscan --detid={detid} -z {zval} --range 25 --distance 1 
-                    -f=/dev/null
-        """.format(detid=id, zval=5)
-        command = cmd.precmd(cmd_str)
-        sig = cmd.onecmd(command)
-        status = cmd.postcmd(sig, command)
-
-        visM = cmd.board.getVisM(id, 5)
-        self.gantry_conditions['FOV_to_gantry_coordinates']['z'] = visM['z']
-        self.gantry_conditions['FOV_to_gantry_coordinates']['transform'] = visM['data']['transform']
-
-        # vis_center_det vs halign
-        self.calculate_sipm_vis_coords(cmd, id, False)
-
-        self.calculate_sipm_lumi_coords(cmd, id, False)
-        
-        self.increment_use_count()
-
-    self.save_gantry_conditions()
-
   
-  def calculate_sipm_vis_coords(self, cmd, detid=None, save_gantry_conditions_changes=True):
-    if detid is not None:
-      visalign_cmd_str = """
-        visualcenterdet --detid {detid} -z {zval} --overwrite
-        """.format(detid=id, zval=5)
-      command1 = cmd.precmd(visalign_cmd_str)
-      sig1 = cmd.onecmd(command1)
-      status1 = cmd.postcmd(sig1, command1)
-
-      if cmd.board.lumi_coord_hasz(id, 5):
-        h = cmd.board.get_lumi_coord(id, 5)-cmd.board.get_vis_coord(id, 5)
-        cmd.board.add_lumi_vis_separation(id, 5, h)
-        # check if we have multiple H values out of tolerance with each other,
-        if self.is_h_valid(self.h_list, h, 0.5):
-          self.h_list.append(h)
-          self.gantry_conditions["lumi_vs_FOV_center"]["separation"] = ((self.gantry_conditions["lumi_vs_FOV_center"]['data']["separation"]*len(self.h_list)) + h) /  (len(self.h_list)+1)
-        # TODO: add the else: an error should be raised such that the operator knows that something is wrong (maybe the gantry head dislodged or was tugged
-
-    else:
-      for id in range(1, len(cmd.board.detectors)+1):
-        self.calculate_sipm_vis_coords(cmd, id, False)
-    
-    if save_gantry_conditions_changes:
-      self.save_gantry_conditions()
-
-
-  def calculate_sipm_lumi_coords(self, cmd, detid=None, save_gantry_conditions_changes=True):
-    if detid is not None:
-      halign_cmd_str = """halign --detid={detid}
-            --channel={channel} --mode={mode}
-            --sample={samples} -z {zval}  --overwrite
-            --range={range} --distance={distance}
-            --power={power}
-            --wipefile
-        """.format(detid=id,
-            mode= cmd.board.get_detector(id).mode,
-            channel= cmd.board.get_detector(id).channel,
-            samples= 100,
-            zval= 10,
-            range= 6,
-            distance= 2,
-            power= 0.5)
-        
-      command2 = cmd.precmd(halign_cmd_str)
-      sig2 = cmd.onecmd(command2)
-      status2 = cmd.postcmd(sig2, command2)
-
-      if cmd.board.vis_coord_hasz(id, 5):
-        h = cmd.board.get_lumi_coord(id, 5)-cmd.board.get_vis_coord(id, 5)
-        cmd.board.add_lumi_vis_separation(id, 5, h)
-
-        # check if we have multiple H values out of tolerance with each other,
-        if self.is_h_valid(self.h_list, h, 0.5):
-          self.h_list.append(h)
-          self.gantry_conditions["lumi_vs_FOV_center"]["separation"] = ((self.gantry_conditions["lumi_vs_FOV_center"]["separation"]*len(self.h_list)) + h) /  (len(self.h_list)+1)
-        # TODO: add the else: an error should be raised such that the operator knows that something is wrong (maybe the gantry head dislodged or was tugged
-
-    else:
-      for id in range(1, len(cmd.board.detectors)+1):
-        self.calculate_sipm_lumi_coords(cmd, id, False)
-    
-
-    if save_gantry_conditions_changes:
-      self.save_gantry_conditions()
-
   def update_gantry_and_sipm_conditions(self, cmd, detid, z):
     if cmd == CmdType.VISUALCENTERDET:
       if cmd.board.lumi_coord_hasz(detid, z):
