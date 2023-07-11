@@ -162,8 +162,8 @@ class Board(object):
 #         }, self)
 
 
- def update_gantry_and_sipm_conditions(self, cmd, detid, z, data):
-   self.cmd.conditions.update_gantry_conditions(cmd, detid, z, data)
+ def update_gantry_and_sipm_conditions(self, cmd, detid, z,):
+   self.cmd.conditions.update_gantry_and_sipm_conditions(cmd, detid, z)
 
  # Get/Set calibration measures with additional parsing
 #   TODO: revisit while implementing conditions
