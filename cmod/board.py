@@ -9,7 +9,20 @@
 import cmod.gcoder as gcoder
 import json
 import logging
+from enum import Enum
 
+
+# class BoardType(Enum):
+#   # add more board types as needed
+#   PROD = 'prod'
+#   REF = 'ref'
+#   TEST = 'test'
+
+class CmdType(Enum):
+  # add more commands as needed
+  VISUALCENTERDET = 'visualcenterdet'
+  VISUALHSCAN = 'visualhscan'
+  HALIGN = 'halign'
 
 class Detector(object):
  """
@@ -148,6 +161,9 @@ class Board(object):
 #             "default coordinates": [-100, -100]
 #         }, self)
 
+
+ def update_gantry_and_sipm_conditions(self, cmd, detid, z, data):
+   self.cmd.conditions.update_gantry_conditions(cmd, detid, z, data)
 
  # Get/Set calibration measures with additional parsing
 #   TODO: revisit while implementing conditions
