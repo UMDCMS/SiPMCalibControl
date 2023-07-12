@@ -10,7 +10,7 @@ import cmod.gcoder as gcoder
 import json
 import logging
 from enum import Enum
-
+from uuid import UUID
 
 # class BoardType(Enum):
 #   # add more board types as needed
@@ -44,7 +44,7 @@ class Detector(object):
    self.coordinates = {
      "default": jsonmap['coordinates']['default'],
      "calibrated": jsonmap['coordinates']['calibrated'] if not (len(jsonmap['coordinates']['calibrated']) == 0) else [] # a stack
-    }
+   }
 
 
    # TODO: add the conditions calculated per detector
@@ -91,6 +91,7 @@ class Board(object):
  def __init__(self, cmd):
    self.type = ""
    self.description = ""
+   self.id = UUID.uuid4()
    self.detectors = []
    self.calib_routines = []
 #    TODO: add the board conditions
@@ -104,6 +105,7 @@ class Board(object):
  def clear(self):
    self.type = ""
    self.description = ""
+   self.id = -1
    self.detectors = []
    self.calib_routines = []
    self.conditions = {}
@@ -121,17 +123,19 @@ class Board(object):
        jsonmap = json.loads(open(file, 'r').read())
        self.type = jsonmap['type']
        self.description = jsonmap['description']
+       self.id = jsonmap['id'] if 'id' in jsonmap else UUID.uuid4()
        self.calib_routines = jsonmap['calib_routines'] if 'calib_routines' in jsonmap else []
        self.conditions = jsonmap['conditions'] if 'conditions' in jsonmap else {}
 
        for det in jsonmap['detectors']:
           self.detectors.append(Detector(det, self))
+       return True
    else:
    #   TODO add documentation for format of the config file
-     self.logger.error("""
+       self.logger.error("""
        The board config file does not contain the required fields: 'type', 'description', and 'detectors'. Please check the
-       file and the required format and try again.""")
-     return
+        file and the required format and try again.""")
+       return False
 
  def get_detector(self, detid):
    # -1 as detid is the detector's index in the list + 1
@@ -140,6 +144,9 @@ class Board(object):
 
  def get_all_detectors(self):
    return self.detectors
+ 
+ def set_id(self, id):
+   self.id = id
 
 
 #   def calib_dets(self):
