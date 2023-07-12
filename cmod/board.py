@@ -38,6 +38,7 @@ class Detector(object):
  calibration used as the key.)
  """
  def __init__(self, jsonmap, board):
+   self.type = jsonmap['type']
    self.mode = int(jsonmap['mode'])
    self.channel = int(jsonmap['channel'])
    self.coordinates = {
