@@ -93,6 +93,7 @@ class Board(object):
  Class for storing a board type an a list of det x-y positions
  """
  def __init__(self, cmd):
+   self.filename = ""
    self.type = ""
    self.description = ""
    self.id = UUID.uuid4()
@@ -107,6 +108,7 @@ class Board(object):
 
 
  def clear(self):
+   self.filename = ""
    self.type = ""
    self.description = ""
    self.id = -1
@@ -114,17 +116,33 @@ class Board(object):
    self.calib_routines = []
    self.conditions = {}
 
+ def __dict__(self):
+   return {
+     'filename': self.filename,
+     'type': self.type,
+     'description': self.description,
+     'id': self.id,
+     'detectors': [det.__dict__ for det in self.detectors],
+     'calib_routines': self.calib_routines,
+     'conditions': self.conditions
+   }
 
- def load_board(self, file):
+ def save_board(self):
+    with open(self.filename, 'w') as f:
+      f.write(json.dumps(self.__dict__, indent=2))
+
+
+ def load_board(self, filename):
    if any(self.get_all_detectors()) or not self.empty():
      self.logger.warning("""
        The current session is not empty. Loading a new board will erase any
        existing configuration for the current session""")
 
-
+   jsonmap = json.loads(open(filename, 'r').read())
+   self.filename = filename
    # only load the board if the file contains the required fields
    if 'type' in jsonmap and 'description' in jsonmap and 'detectors' in jsonmap and len(jsonmap['detectors'].keys()) > 0:
-       jsonmap = json.loads(open(file, 'r').read())
+       jsonmap = json.loads(open(filename, 'r').read())
        self.type = jsonmap['type']
        self.description = jsonmap['description']
        self.id = jsonmap['id'] if 'id' in jsonmap else UUID.uuid4()
@@ -137,7 +155,7 @@ class Board(object):
             self.detectors.append(Detector(det, self))
           except ValueError as e:
             self.logger.error(f"""
-            Error when loading board in {file}: The entry {detid} in the detectors list in the board config file does not contain all the  required fields: 'type', 'mode', 'channel', and 'coordinates'. Please check the entry and the required format and try again. The following exception was raised: {e.msg}
+            Error when loading board in {filename}: The entry {detid} in the detectors list in the board config file does not contain all the  required fields: 'type', 'mode', 'channel', and 'coordinates'. Please check the entry and the required format and try again. The following exception was raised: {e.msg}
             """)
             self.clear()
             return False
@@ -185,6 +203,8 @@ class Board(object):
        'file': filename
      }
     })
+   
+   self.save_board()
 
 
  def add_visM(self, detid, z, data, filename):
@@ -197,6 +217,9 @@ class Board(object):
      }
     })
 
+   self.save_board()
+
+
 
  def add_lumi_coord(self, detid, z, data):
    self.detectors[detid-1]['coordinates']['calibrated'].append({
@@ -206,6 +229,9 @@ class Board(object):
        'coordinates': data
      }
     })
+
+   self.save_board()
+
 
  def get_latest_entry(self, detid, commandname, z=None):
    for i in range(len(self.detectors[detid-1]['coordinates']['calibrated'])-1, -1, -1):
@@ -231,7 +257,10 @@ class Board(object):
      'data': {
        'separation': h
      }
-                                   })
+    })
+   
+   self.save_board()
+
 
  def vis_coord_hasz(self, detid, z):
    return self.get_latest_entry(detid, 'visualcenterdet', z) is not None
