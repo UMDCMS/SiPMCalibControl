@@ -136,9 +136,8 @@ class Board(object):
           try:
             self.detectors.append(Detector(det, self))
           except ValueError as e:
-            self.logger.error(e.msg)
             self.logger.error(f"""
-            The entry {detid} in the detectors list does not contain all the  required fields: 'type', 'mode', 'channel', and 'coordinates'. Please check the entry and the required format and try again.
+            Error when loading board in {file}: The entry {detid} in the detectors list in the board config file does not contain all the  required fields: 'type', 'mode', 'channel', and 'coordinates'. Please check the entry and the required format and try again. The following exception was raised: {e.msg}
             """)
             self.clear()
             return False
