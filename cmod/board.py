@@ -38,13 +38,16 @@ class Detector(object):
  calibration used as the key.)
  """
  def __init__(self, jsonmap, board):
-   self.type = jsonmap['type']
-   self.mode = int(jsonmap['mode'])
-   self.channel = int(jsonmap['channel'])
-   self.coordinates = {
-     "default": jsonmap['coordinates']['default'],
-     "calibrated": jsonmap['coordinates']['calibrated'] if not (len(jsonmap['coordinates']['calibrated']) == 0) else [] # a stack
-   }
+   try:
+      self.type = jsonmap['type']
+      self.mode = int(jsonmap['mode'])
+      self.channel = int(jsonmap['channel'])
+      self.coordinates = {
+        "default": jsonmap['coordinates']['default'],
+        "calibrated": jsonmap['coordinates']['calibrated'] if len(jsonmap['coordinates']['calibrated']) > 0 else [] # a stack
+      }
+   except KeyError as e:
+     raise ValueError(e.msg)
 
 
    # TODO: add the conditions calculated per detector
@@ -73,6 +76,7 @@ class Detector(object):
 
  def __dict__(self):
    return {
+       'type': self.type,
        'mode': self.mode,
        'channel': self.channel,
        'coordinates': self.coordinates,
@@ -127,14 +131,24 @@ class Board(object):
        self.calib_routines = jsonmap['calib_routines'] if 'calib_routines' in jsonmap else []
        self.conditions = jsonmap['conditions'] if 'conditions' in jsonmap else {}
 
-       for det in jsonmap['detectors']:
-          self.detectors.append(Detector(det, self))
+       for detid in range(1, len(jsonmap['detectors']+1)):
+          det = jsonmap['detectors'][detid-1]
+          try:
+            self.detectors.append(Detector(det, self))
+          except ValueError as e:
+            self.logger.error(e.msg)
+            self.logger.error(f"""
+            The entry {detid} in the detectors list does not contain all the  required fields: 'type', 'mode', 'channel', and 'coordinates'. Please check the entry and the required format and try again.
+            """)
+            self.clear()
+            return False
        return True
    else:
    #   TODO add documentation for format of the config file
        self.logger.error("""
        The board config file does not contain the required fields: 'type', 'description', and 'detectors'. Please check the
         file and the required format and try again.""")
+       self.clear()
        return False
 
  def get_detector(self, detid):
