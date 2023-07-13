@@ -11,18 +11,7 @@ class Conditions(object):
   def __init__(self, cmd):
     self.cmd = cmd
     self.logger = cmd.devlog("Conditions")
-    # gantry conditions should be stored as a dictionary with the following keys:
-    #   {
-    #     "fov_to_gantry_coordinates": {
-    #       'z': 5,
-    #       "transform": [[xx, xy],[yx, yy]]
-    #     },
-    #     "lumi_vs_fov_center": {
-    #       'z': 5,
-    #       "separation": [[xx, xy],[yx, yy]]
-    #     },
-        # "use_count": 0
-    #   }
+    # gantry conditions should be stored as a dictionary
     self.gantry_conditions = {}
     self.gantry_conditions_use_count = 0
     self.gantry_conditions_filename = None
@@ -44,7 +33,7 @@ class Conditions(object):
         },
         "use_count": conditions["use_count"] if "use_count" in conditions else 0
       }
-      
+
       self.increment_use_count()
 
       self.h_list = [self.gantry_conditions["lumi_vs_FOV_center"]["data"]["separation"]]
