@@ -96,7 +96,7 @@ class Board(object):
    self.filename = ""
    self.type = ""
    self.description = ""
-   self.id = UUID.uuid4()
+   self.id = -1
    self.detectors = []
    self.calib_routines = []
 #    TODO: add the board conditions
@@ -145,7 +145,7 @@ class Board(object):
        jsonmap = json.loads(open(filename, 'r').read())
        self.type = jsonmap['type']
        self.description = jsonmap['description']
-       self.id = jsonmap['id'] if 'id' in jsonmap else UUID.uuid4()
+       self.id = jsonmap['id'] if 'id' in jsonmap else -1
        self.calib_routines = jsonmap['calib_routines'] if 'calib_routines' in jsonmap else []
        self.conditions = jsonmap['conditions'] if 'conditions' in jsonmap else {}
 
