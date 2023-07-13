@@ -932,7 +932,6 @@ class savefilecmd(controlcmd):
     tokens.extend([f'{x:.2f}' for x in data])
     self.savefile.write(' '.join(tokens) + '\n')
     self.savefile.flush()
-    return self.filename
 
 
 class singlexycmd(controlcmd):

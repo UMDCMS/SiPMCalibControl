@@ -160,7 +160,7 @@ class visualhscan(cmdbase.hscancmd, cmdbase.savefilecmd, visualmeta):
         reco_x.append(center.x)
         reco_y.append(center.y)
 
-      filename = self.write_standard_line((center.x, center.y), det_id=args.detid)
+      self.write_standard_line((center.x, center.y), det_id=args.detid)
       self.pbar_data(center=f'({center.x:.0f}, {center.y:.0f})',
                      sharp=f'({center.s2:1f}, {center.s4:.1f})')
 
@@ -187,7 +187,7 @@ class visualhscan(cmdbase.hscancmd, cmdbase.savefilecmd, visualmeta):
     ## Saving rounded coordinates
     if not self.board.visM_hasz(detid, self.gcoder.opz) or args.overwrite:
       self.board.add_visM(detid, self.gcoder.opz,
-                          [[fitx[0], fitx[1]], [fity[0], fity[1]]], filename)
+                          [[fitx[0], fitx[1]], [fity[0], fity[1]]], self.filename)
       self.conditions.update_gantry_and_sipm_conditions(CmdType.VISUALHSCAN, detid, args.scanz)
       
     elif self.board.visM_hasz(detid, self.gcoder.opz):
@@ -196,7 +196,7 @@ class visualhscan(cmdbase.hscancmd, cmdbase.savefilecmd, visualmeta):
           Transformation equation for z={args.scanz:.1f} already exists,
           overwrite?""", False):
         self.board.add_visM(detid, self.gcoder.opz,
-                            [[fitx[0], fitx[1]], [fity[0], fity[1]]], filename)
+                            [[fitx[0], fitx[1]], [fity[0], fity[1]]], self.filename)
         self.conditions.update_gantry_and_sipm_conditions(CmdType.VISUALHSCAN, detid, args.scanz)
         
 
