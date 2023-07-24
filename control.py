@@ -7,6 +7,8 @@ import ctlcmd.viscmd as viscmd
 import ctlcmd.picocmd as picocmd
 import ctlcmd.drscmd as drscmd
 import ctlcmd.tbcmd as tbcmd
+import ctlcmd.boardcmd as boardcmd
+import ctlcmd.gantrycmd as gantrycmd
 import cmod.fmt as fmt
 import logging
 import copy
@@ -47,6 +49,10 @@ if __name__ == '__main__':
       getset.savecalib,  #
       getset.loadcalib,  #
       getset.runfile,  #
+      boardcmd.save_board,  #
+      boardcmd.load_board,  #
+      gantrycmd.save_gantry_conditions,  #
+      gantrycmd.load_gantry_conditions,  #
       digicmd.pulse,  #
       digicmd.pwm,  #
       digicmd.setadcref,  #
@@ -121,7 +127,10 @@ if __name__ == '__main__':
     filename = cmd.conditions.get_latest_gantry_conditions_filename()
     if filename is not None:
       # if so, then load the conditions from the file
-      cmd.conditions.load_gantry_conditions(filename)
+      if cmd.conditions.load_gantry_conditions(filename):
+        logger.info(f"Gantry conditions loaded from {filename}.")
+      else:
+        logger.error(f"Gantry conditions loading from {filename} failed.")
 
   cmd.cmdloop()
   del cmd  # This object requires explicit closing!
