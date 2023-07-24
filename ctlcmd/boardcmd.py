@@ -21,7 +21,7 @@ class save_board(cmdbase.controlcmd):
                              '-f',
                              type=argparse.FileType(mode='r'),
                              help="""
-                             The board configuration json filename to save current board session.""",
+                             Overwrite the board configuration json filename to save current board session.""",
                              required=False)
 
   def run(self, args):
