@@ -6,6 +6,7 @@
  positional calibration results. More details will be provided in the per class
  documentations.
 """
+from datetime import time
 import cmod.gcoder as gcoder
 import json
 import logging
@@ -127,9 +128,15 @@ class Board(object):
      'conditions': self.conditions
    }
 
- def save_board(self):
-    with open(self.filename, 'w') as f:
-      f.write(json.dumps(self.__dict__, indent=2))
+ def save_board(self, filename=""):
+    if not(filename == ""):
+      self.filename = filename
+    
+    if self.filename == "":
+      self.filename = f"cfg/{self.type}_{self.id}_{time.strftime('%Y%m%d-%H%M%S')}.json"
+    else:
+      with open(self.filename, 'w') as f:
+        f.write(json.dumps(self.__dict__, indent=2))
 
 
  def load_board(self, filename):

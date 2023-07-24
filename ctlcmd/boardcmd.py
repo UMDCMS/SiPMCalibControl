@@ -8,10 +8,6 @@
 import ctlcmd.cmdbase as cmdbase
 import cmod.fmt as fmt
 import argparse
-import re
-import os
-import sys
-import time
 
 class save_board(cmdbase.controlcmd):
   """
@@ -25,7 +21,8 @@ class save_board(cmdbase.controlcmd):
                              '-f',
                              type=argparse.FileType(mode='r'),
                              help="""
-                             The board configuration json filename to save current board session.""")
+                             The board configuration json filename to save current board session.""",
+                             required=False)
 
   def run(self, args):
     """
@@ -34,13 +31,14 @@ class save_board(cmdbase.controlcmd):
     subsequent settings can still be set if settings for one particular device
     is bad or not available.
     """
-    # add the board conditions
-    if args.filename:
-      try:
-        self.board.save_board(args.filename.name)
-      except RuntimeError as err:
-        self.printerr(str(err))
-        self.printwarn('Board saving has failed, skipping...')
+    try:
+      if args.filename:
+        self.board.save_board(args.filename)
+      else:
+        self.board.save_board()
+    except RuntimeError as err:
+      self.printerr(str(err))
+      self.printwarn('Board saving has failed, skipping...')
 
 class load_board(cmdbase.controlcmd):
   """
@@ -54,7 +52,8 @@ class load_board(cmdbase.controlcmd):
                              '-f',
                              type=argparse.FileType(mode='r'),
                              help="""
-                             The board configuration json filename to load current board session.""")
+                             The board configuration json filename to load current board session.""",
+                             required=True)
 
   def run(self, args):
     """
