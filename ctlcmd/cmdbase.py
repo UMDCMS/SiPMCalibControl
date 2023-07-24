@@ -860,12 +860,12 @@ class savefilecmd(controlcmd):
 
     # Adding boardid to the settings
     self.filename = re.sub('<BOARDID>',
-                      str(self.board.boardid),
+                      str(self.board.id),
                       self.filename,
                       flags=re.IGNORECASE)
     # Adding boardtype to the settings
     self.filename = re.sub('<BOARDTYPE>',
-                      str(self.board.boardtype),
+                      str(self.board.type),
                       self.filename,
                       flags=re.IGNORECASE)
 
@@ -1022,14 +1022,14 @@ class singlexycmd(controlcmd):
     if args.x or args.y:
       raise ValueError('You can either specify det-id or x y, not both')
 
-    if not args.detid in self.board.dets():
+    if not args.detid in self.board.get_all_detectors():
       raise ValueError('Det id was not specified in board type')
 
     current_z = args.z if hasattr(args, 'z') and args.z else \
                  min(args.zlist) if hasattr(args, 'zlist') else \
                  self.gcoder.opz
 
-    det = self.board.get_det(args.detid)
+    det = self.board.get_detector(args.detid)
 
     if self.VISUAL_OFFSET:
       if any(det.vis_coord):
