@@ -14,7 +14,7 @@ class Conditions(object):
     # gantry conditions should be stored as a dictionary
     self.gantry_conditions = {}
     self.gantry_conditions_use_count = 0
-    self.gantry_conditions_filename = None
+    self.gantry_conditions_filename = ""
     self.h_list = []
 
   # loads gantry conditions from a file and returns True if successful, False otherwise
@@ -49,8 +49,10 @@ class Conditions(object):
       return False
 
   # saves gantry conditions to a file
-  def save_gantry_conditions(self):
-    if self.gantry_conditions_filename is None:
+  def save_gantry_conditions(self, filename=""):
+    if filename != "":
+      self.gantry_conditions_filename = filename
+    if self.gantry_conditions_filename == "":
       self.create_gantry_conditions_filename()
       self.increment_use_count()
 
@@ -82,7 +84,7 @@ class Conditions(object):
           self.gantry_conditions["lumi_vs_FOV_center"]["separation"] = ((self.gantry_conditions["lumi_vs_FOV_center"]["separation"]*len(self.h_list)) + h) /  (len(self.h_list)+1)
         # TODO: add the else: an error should be raised such that the operator knows that something is wrong (maybe the gantry head dislodged or was tugged
     elif cmd == CmdType.VISUALHSCAN:
-      visM = cmd.board.getVisM(id, 5)
+      visM = cmd.board.get_visM(id, 5)
       self.gantry_conditions['FOV_to_gantry_coordinates']['z'] = visM['z']
       self.gantry_conditions['FOV_to_gantry_coordinates']['transform'] = visM['data']['transform']
 
