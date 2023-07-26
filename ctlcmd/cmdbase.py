@@ -981,7 +981,7 @@ class singlexycmd(controlcmd):
                        help="Specifying the y coordinate explicitly [mm].")
     group.add_argument('-c',
                        '--detid',
-                       type=str,
+                       type=int,
                        help="""Specify x-y coordinates via det id""")
 
   def parse(self, args):
