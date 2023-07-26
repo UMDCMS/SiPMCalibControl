@@ -100,9 +100,15 @@ class Conditions(object):
     self.gantry_conditions.gc_use_count += 1
     # update the use count antry_ionditionsn the latest conditions file
     # get the latest conditions file
-    filename = Conditions.get_latest_gantry_conditions_filename()
-    # save the conditions to the file
-    self.save_gantry_conditions(filename)
+    try:
+      filename = Conditions.get_latest_gantry_conditions_filename()
+      # save the conditions to the file
+      self.save_gantry_conditions(filename)
+    except FileNotFoundError as e:
+      self.logger.error(e)
+      self.logger.error("""
+        Failed to save the updated gantry conditions use_count. The gantry conditions file does not exist. Please check the
+        file and the required format and try again.""")
 
   # define get, calculate functions for the data quality(long term) conditions and the board conditions
   def get_board_conditions(self):
