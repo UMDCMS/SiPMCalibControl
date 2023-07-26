@@ -45,12 +45,12 @@ class Detector(object):
 
 
    # Additional parsing.
-   if (self.orig_coord[0] > gcoder.GCoder.max_x() or  #
-       self.orig_coord[1] > gcoder.GCoder.max_y() or  #
-       self.orig_coord[0] < 0 or self.orig_coord[1] < 0):
+   if (self.coordinates['default'][0] > gcoder.GCoder.max_x() or  #
+       self.coordinates['default'][1] > gcoder.GCoder.max_y() or  #
+       self.coordinates['default'][0] < 0 or self.coordinates['default'][1] < 0):
      self.logger.warning(f"""
-       The specified detector position (x:{self.orig_coord[0]},
-       y:{self.orig_coord[1]}) is outside of the gantry boundaries
+       The specified detector position (x:{self.coordinates['default'][0]},
+       y:{self.coordinates['default'][1]}) is outside of the gantry boundaries
        (0-{gcoder.GCoder.max_x()},0-{gcoder.GCoder.max_y()}). The expected
        detector position will be not adjusted, but gantry motion might not
        reach it. Which mean any results may be wrong.""")
@@ -58,7 +58,7 @@ class Detector(object):
 
 
  def __str__(self):
-   return str(self.__dict__)
+   return str(self.__dict__())
 
 
  def __dict__(self):
@@ -105,11 +105,10 @@ class Board(object):
 
  def __dict__(self):
    return {
-     'filename': self.filename,
      'type': self.type,
      'description': self.description,
      'id': self.id,
-     'detectors': [det.__dict__ for det in self.detectors],
+     'detectors': [det.__dict__() for det in self.detectors],
      'calib_routines': self.calib_routines,
      'conditions': self.conditions
    }
@@ -122,7 +121,7 @@ class Board(object):
       self.filename = f"cfg/{self.type}_{self.id}_{time.strftime('%Y%m%d-%H%M%S')}.json"
     else:
       with open(self.filename, 'w') as f:
-        f.write(json.dumps(self.__dict__, indent=2))
+        f.write(json.dumps(self.__dict__(), indent=2))
 
 
  def load_board(self, filename):
@@ -188,7 +187,7 @@ class Board(object):
  # Get/Set calibration measures with additional parsing
 #   TODO: revisit while implementing conditions
  def add_vis_coord(self, detid, z, data, filename):
-   self.detectors[detid-1]['coordinates']['calibrated'].append({
+   self.detectors[detid-1].coordinates['calibrated'].append({
      'command': 'visualcenterdet',
      z: self.roundz(z),
      'data': {
@@ -201,7 +200,7 @@ class Board(object):
 
 
  def add_visM(self, detid, z, data, filename):
-   self.detectors[detid-1]['coordinates']['calibrated'].append({
+   self.detectors[detid-1].coordinates['calibrated'].append({
      'command': 'visualhscan',
      'z': self.roundz(z),
      'data': {
@@ -215,7 +214,7 @@ class Board(object):
 
 
  def add_lumi_coord(self, detid, z, data):
-   self.detectors[detid-1]['coordinates']['calibrated'].append({
+   self.detectors[detid-1].coordinates['calibrated'].append({
      'command': 'halign',
      z: self.roundz(z),
      'data': {
@@ -227,8 +226,8 @@ class Board(object):
 
 
  def get_latest_entry(self, detid, commandname, z=None):
-   for i in range(len(self.detectors[detid-1]['coordinates']['calibrated'])-1, -1, -1):
-     entry = self.detectors[detid-1]['coordinates']['calibrated'][i]
+   for i in range(len(self.detectors[detid-1].coordinates['calibrated'])-1, -1, -1):
+     entry = self.detectors[detid-1].coordinates['calibrated'][i]
      if entry['command'] == commandname and (z is None or entry['z'] == self.roundz(z)):
        return entry
    return None
@@ -236,8 +235,8 @@ class Board(object):
  def get_closest_calib_z(self, detid, commandname, current_z):
    z_lst = []
 
-   for i in range(len(self.detectors[detid-1]['coordinates']['calibrated'])-1, -1, -1):
-     entry = self.detectors[detid-1]['coordinates']['calibrated'][i]
+   for i in range(len(self.detectors[detid-1].coordinates['calibrated'])-1, -1, -1):
+     entry = self.detectors[detid-1].coordinates['calibrated'][i]
      if entry['command'] == commandname:
        z_lst.append(entry['z'])
    return min(z_lst, key=lambda x:abs(float(x)-float(current_z)))
@@ -256,7 +255,7 @@ class Board(object):
    return self.get_latest_entry(detid, 'lumi_vis_separation', z)
 
  def add_lumi_vis_separation(self, detid, z, h):
-   self.detectors[detid-1]['coordinates']['calibrated'].append({
+   self.detectors[detid-1].coordinates['calibrated'].append({
      'command': 'lumi_vis_separation', 
      'z': self.roundz(z), 
      'data': {

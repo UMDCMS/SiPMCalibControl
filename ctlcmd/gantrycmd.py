@@ -30,7 +30,7 @@ class save_gantry_conditions(cmdbase.controlcmd):
         self.conditions.save_gantry_conditions(args.filename)
       else:
         self.conditions.save_gantry_conditions()
-      self.printinfo(f"Gantry conditions successfully saved to {args.filename}.")
+      self.printmsg(f"Gantry conditions successfully saved to {args.filename}.")
     except RuntimeError as err:
       self.printerr(str(err))
       self.printwarn(f'Saving gantry conditions to {args.filename} has failed.')
@@ -53,6 +53,6 @@ class load_gantry_conditions(cmdbase.controlcmd):
   def run(self, args):
     if args.filename:
       if self.conditions.load_gantry_conditions(args.filename):
-        self.printinfo(f"Gantry conditions loaded from {args.filename}")
+        self.printmsq(f"Gantry conditions loaded from {args.filename}")
       else:
         self.printerr(f"Gantry conditions loading from {args.filename} failed")

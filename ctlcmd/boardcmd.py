@@ -65,6 +65,6 @@ class load_board(cmdbase.controlcmd):
     # add the board conditions
     if args.filename:
       if self.board.load_board(args.filename):
-        self.printinfo(f"Board loaded from {args.filename.name}")
+        self.printmsg(f"Board loaded from {args.filename}")
       else:
-        self.printerr(f"Board loading from {args.filename.name} failed")
+        self.printerr(f"Board loading from {args.filename} failed")
