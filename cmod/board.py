@@ -134,7 +134,7 @@ class Board(object):
    jsonmap = json.loads(open(filename, 'r').read())
    self.filename = filename
    # only load the board if the file contains the required fields
-   if 'type' in jsonmap and 'description' in jsonmap and 'detectors' in jsonmap and len(jsonmap['detectors'].keys()) > 0:
+   if 'type' in jsonmap and 'description' in jsonmap and 'detectors' in jsonmap and len(jsonmap['detectors']) > 0:
        jsonmap = json.loads(open(filename, 'r').read())
        self.type = jsonmap['type']
        self.description = jsonmap['description']
