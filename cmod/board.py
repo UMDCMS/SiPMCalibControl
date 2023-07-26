@@ -10,20 +10,6 @@ from datetime import time
 import cmod.gcoder as gcoder
 import json
 import logging
-from enum import Enum
-from uuid import UUID
-
-# class BoardType(Enum):
-#   # add more board types as needed
-#   PROD = 'prod'
-#   REF = 'ref'
-#   TEST = 'test'
-
-class CmdType(Enum):
-  # add more commands as needed
-  VISUALCENTERDET = 'visualcenterdet'
-  VISUALHSCAN = 'visualhscan'
-  HALIGN = 'halign'
 
 class Detector(object):
  """

@@ -7,7 +7,6 @@ this will include the luminosity alignment commands, as well as the non-linear
 scan command by moving in z.
 
 """
-from cmod.board import CmdType
 import ctlcmd.cmdbase as cmdbase
 import numpy as np
 from scipy.optimize import curve_fit
@@ -273,13 +272,13 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.savefilecmd):
     ]
     if not self.board.lumi_coord_hasz(detid, args.scanz) or args.overwrite:
       self.board.add_lumi_coord(detid, args.scanz, coords)
-      self.conditions.update_gantry_and_sipm_conditions(CmdType.HALIGN, detid, args.scanz)
+      self.conditions.update_gantry_and_sipm_conditions(self.classname, detid, args.scanz)
     elif self.board.lumi_coord_hasz(detid, args.scanz):
       if self.prompt_yn(f"""A lumi alignment for z={args.scanz:.1f} already
                         exists for the current session, overwrite?""",
                         default=False):
         self.board.add_lumi_coord(detid, args.scanz, coords)
-        self.conditions.update_gantry_and_sipm_conditions(CmdType.HALIGN, detid, args.scanz)
+        self.conditions.update_gantry_and_sipm_conditions('halign', detid, args.scanz)
     
 
     ## Sending gantry to position

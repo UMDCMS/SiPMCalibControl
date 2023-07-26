@@ -4,7 +4,6 @@ viscmd.py
 Commands for interacting and using the visual system for positional calibration.
 
 """
-from cmod.board import CmdType
 import ctlcmd.cmdbase as cmdbase
 import cmod.visual as vis
 import cmod.fmt as fmt
@@ -188,7 +187,7 @@ class visualhscan(cmdbase.hscancmd, cmdbase.savefilecmd, visualmeta):
     if not self.board.visM_hasz(detid, self.gcoder.opz) or args.overwrite:
       self.board.add_visM(detid, self.gcoder.opz,
                           [[fitx[0], fitx[1]], [fity[0], fity[1]]], self.filename)
-      self.conditions.update_gantry_and_sipm_conditions(CmdType.VISUALHSCAN, detid, args.scanz)
+      self.conditions.update_gantry_and_sipm_conditions('visualhscan', detid, args.scanz)
       
     elif self.board.visM_hasz(detid, self.gcoder.opz):
       if self.prompt_yn(
@@ -197,7 +196,7 @@ class visualhscan(cmdbase.hscancmd, cmdbase.savefilecmd, visualmeta):
           overwrite?""", False):
         self.board.add_visM(detid, self.gcoder.opz,
                             [[fitx[0], fitx[1]], [fity[0], fity[1]]], self.filename)
-        self.conditions.update_gantry_and_sipm_conditions(CmdType.VISUALHSCAN, detid, args.scanz)
+        self.conditions.update_gantry_and_sipm_conditions('visualhscan', detid, args.scanz)
         
 
     ## Moving back to center
@@ -315,7 +314,7 @@ class visualcenterdet(cmdbase.singlexycmd, visualmeta):
     if not self.board.vis_coord_hasz(detid, self.gcoder.opz) or args.overwrite:
       self.board.add_vis_coord(detid, self.gcoder.opz,
                                [self.gcoder.opx, self.gcoder.opy])
-      self.conditions.update_gantry_and_sipm_conditions(CmdType.VISUALCENTERDET, detid, args.scanz)
+      self.conditions.update_gantry_and_sipm_conditions('visualcenterdet', detid, args.scanz)
     elif self.board.vis_coord_hasz(detid, self.gcoder.opz):
       if self.prompt_yn(f"""
                         A visual alignment for z={args.scanz:.1f} already exists
@@ -323,7 +322,7 @@ class visualcenterdet(cmdbase.singlexycmd, visualmeta):
                         default=False):
         self.board.add_vis_coord(detid, self.gcoder.opz,
                                  [self.gcoder.opx, self.gcoder.opy])
-        self.conditions.update_gantry_and_sipm_conditions(CmdType.VISUALCENTERDET, detid, args.scanz)
+        self.conditions.update_gantry_and_sipm_conditions('visualcenterdet', detid, args.scanz)
 
     # Luminosity calibrated coordinate doesn't exists. displaying the
     # estimated position from calibration det position
