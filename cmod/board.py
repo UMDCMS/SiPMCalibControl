@@ -142,7 +142,7 @@ class Board(object):
        self.calib_routines = jsonmap['calib_routines'] if 'calib_routines' in jsonmap else []
        self.conditions = jsonmap['conditions'] if 'conditions' in jsonmap else {}
 
-       for detid in range(1, len(jsonmap['detectors']+1)):
+       for detid in range(1, len(jsonmap['detectors'])+1):
           det = jsonmap['detectors'][detid-1]
           try:
             self.detectors.append(Detector(det, self))

@@ -19,7 +19,7 @@ class save_board(cmdbase.controlcmd):
   def add_args(self):
     self.parser.add_argument('--filename',
                              '-f',
-                             type=argparse.FileType(mode='r'),
+                             type=str,
                              help="""
                              Overwrite the board configuration json filename to save current board session.""",
                              required=False)
@@ -50,7 +50,7 @@ class load_board(cmdbase.controlcmd):
   def add_args(self):
     self.parser.add_argument('--filename',
                              '-f',
-                             type=argparse.FileType(mode='r'),
+                             type=str,
                              help="""
                              The board configuration json filename to load current board session.""",
                              required=True)
@@ -64,7 +64,7 @@ class load_board(cmdbase.controlcmd):
     """
     # add the board conditions
     if args.filename:
-      if self.load_board(args.filename):
+      if self.board.load_board(args.filename):
         self.printinfo(f"Board loaded from {args.filename.name}")
       else:
         self.printerr(f"Board loading from {args.filename.name} failed")

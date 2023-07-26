@@ -46,8 +46,6 @@ if __name__ == '__main__':
       getset.history,  #
       getset.logdump,  #
       getset.wait,  #
-      getset.savecalib,  #
-      getset.loadcalib,  #
       getset.runfile,  #
       boardcmd.save_board,  #
       boardcmd.load_board,  #

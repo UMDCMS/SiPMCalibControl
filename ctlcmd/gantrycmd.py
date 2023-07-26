@@ -18,9 +18,9 @@ class save_gantry_conditions(cmdbase.controlcmd):
   def add_args(self):
     self.parser.add_argument('--filename',
                              '-f',
-                             type=argparse.FileType(mode='r'),
+                             type=str,
                              help="""
-                             Overwrite the filename to save current session gantry conditions in."""
+                             Overwrite the filename to save current session gantry conditions in.""",
                              required=False)
 
   def run(self, args):
@@ -35,7 +35,7 @@ class save_gantry_conditions(cmdbase.controlcmd):
       self.printerr(str(err))
       self.printwarn(f'Saving gantry conditions to {args.filename} has failed.')
 
-class load_board(cmdbase.controlcmd):
+class load_gantry_conditions(cmdbase.controlcmd):
   """
   @brief Loading gantry conditions from given filename.
   """
@@ -45,7 +45,7 @@ class load_board(cmdbase.controlcmd):
   def add_args(self):
     self.parser.add_argument('--filename',
                              '-f',
-                             type=argparse.FileType(mode='r'),
+                             type=str,
                              help="""
                              The json file name to load gantry conditions from.""",
                              required=True)

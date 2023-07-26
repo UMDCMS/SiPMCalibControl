@@ -46,8 +46,6 @@ if __name__ == '__main__':
       getset.history,  #
       # getset.logdump,  # Should not attempt to dump log like this
       getset.wait,  #
-      getset.savecalib,  #
-      getset.loadcalib,  #
       getset.runfile,  #
       digicmd.pulse,  #
       digicmd.pwm,  #
