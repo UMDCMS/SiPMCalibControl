@@ -334,8 +334,8 @@ class visualcenterdet(cmdbase.singlexycmd, visualmeta):
       for calibdet in self.board.calib_dets():
         det = self.board.get_det(calibdet)
         if (self.board.vis_coord_hasz(calibdet, currentz)
-            and any(det.lumi_coord)):
-          closestz = min(det.lumi_coord.keys(), key=lambda x: abs(x - currentz))
+            and (self.board.get_latest_entry(args.detid, 'halign') is not None)):
+          closestz =  self.board.get_closest_calib_z(detid, 'halign', currentz)
           deltax = self.board.get_vis_coord(calibdet, currentz)[0] \
                   - self.board.get_lumi_coord(calibdet, closestz)[0]
           deltay = self.board.get_vis_coord(calibdet, currentz)[1] \

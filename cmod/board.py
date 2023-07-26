@@ -246,6 +246,15 @@ class Board(object):
      if entry['command'] == commandname and (z is None or entry['z'] == self.roundz(z)):
        return entry
    return None
+ 
+ def get_closest_calib_z(self, detid, commandname, current_z):
+   z_lst = []
+
+   for i in range(len(self.detectors[detid-1]['coordinates']['calibrated'])-1, -1, -1):
+     entry = self.detectors[detid-1]['coordinates']['calibrated'][i]
+     if entry['command'] == commandname:
+       z_lst.append(entry['z'])
+   return min(z_lst, key=lambda x:abs(float(x)-float(current_z)))
 
  def get_vis_coord(self, detid, z):
    return self.get_latest_entry(detid, 'visualcenterdet', z)
@@ -255,7 +264,10 @@ class Board(object):
    return self.get_latest_entry(detid, 'visualhscan', z)
 
  def get_lumi_coord(self, detid, z):
-   return self.get_latest_entry(detid, 'halign', z)
+   return self.get_latest_entry(detid, 'halign', z)\
+   
+ def get_lumi_vis_separation(self, detid, z):
+   return self.get_latest_entry(detid, 'lumi_vis_separation', z)
 
  def add_lumi_vis_separation(self, detid, z, h):
    self.detectors[detid-1]['coordinates']['calibrated'].append({
