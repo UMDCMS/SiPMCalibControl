@@ -202,7 +202,9 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.savefilecmd):
   def parse(self, args):
     """Only additional parsing is checking the power option."""
     if args.power == None:
+      self.printwarn('in halign parse')
       args.power = self.gpio.pwm_duty(0)
+      self.printwarn('after halign power asign')
     return args
 
   def run(self, args):

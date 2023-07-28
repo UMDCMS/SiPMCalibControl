@@ -1023,8 +1023,9 @@ class singlexycmd(controlcmd):
     if args.x or args.y:
       raise ValueError('You can either specify det-id or x y, not both')
 
-    if not args.detid in self.board.get_all_detectors():
-      raise ValueError('Det id was not specified in board type')
+    if not args.detid in range(0, len(self.board.get_all_detectors())+1):
+      self.printmsg(f"""{self.board.get_all_detectors()}""")
+      raise ValueError(f'Det id was not specified in board type.')
 
     current_z = args.z if hasattr(args, 'z') and args.z else \
                  min(args.zlist) if hasattr(args, 'zlist') else \
