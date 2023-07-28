@@ -59,28 +59,28 @@ class Conditions(object):
   def get_gantry_conditions(self):
     return self.gantry_conditions
   
-  def update_gantry_and_sipm_conditions(self, cmd, detid, z):
-    if cmd == 'visualcenterdet':
-      if cmd.board.lumi_coord_hasz(detid, z):
-        h = cmd.board.get_lumi_coord(detid, z)-cmd.board.get_vis_coord(detid, z)
-        cmd.board.add_lumi_vis_separation(detid, z, h)
+  def update_gantry_and_sipm_conditions(self, cmd_name, detid, z):
+    if cmd_name == 'visualcenterdet':
+      if self.cmd.board.lumi_coord_hasz(detid, z):
+        h = self.cmd.board.get_lumi_coord(detid, z)-self.cmd.board.get_vis_coord(detid, z)
+        self.cmd.board.add_lumi_vis_separation(detid, z, h)
         # check if we have multiple H values out of tolerance with each other,
         if self.is_h_valid(self.h_list, h, 0.5):
           self.h_list.append(h)
           self.gantry_conditions["lumi_vs_FOV_center"]["separation"] = ((self.gantry_conditions["lumi_vs_FOV_center"]['data']["separation"]*len(self.h_list)) + h) /  (len(self.h_list)+1)
         # TODO: add the else: an error should be raised such that the operator knows that something is wrong (maybe the gantry head dislodged or was tugged
-    elif cmd == 'halign':
-      if cmd.board.vis_coord_hasz(detid, z):
-        h = cmd.board.get_lumi_coord(detid, z)-cmd.board.get_vis_coord(detid, z)
-        cmd.board.add_lumi_vis_separation(detid, z, h)
+    elif cmd_name == 'halign':
+      if self.cmd.board.vis_coord_hasz(detid, z):
+        h = self.cmd.board.get_lumi_coord(detid, z)-self.cmd.board.get_vis_coord(detid, z)
+        self.cmd.board.add_lumi_vis_separation(detid, z, h)
 
         # check if we have multiple H values out of tolerance with each other,
         if self.is_h_valid(self.h_list, h, 0.5):
           self.h_list.append(h)
           self.gantry_conditions["lumi_vs_FOV_center"]["separation"] = ((self.gantry_conditions["lumi_vs_FOV_center"]["separation"]*len(self.h_list)) + h) /  (len(self.h_list)+1)
         # TODO: add the else: an error should be raised such that the operator knows that something is wrong (maybe the gantry head dislodged or was tugged
-    elif cmd == 'visualhscan':
-      visM = cmd.board.get_visM(id, 5)
+    elif cmd_name == 'visualhscan':
+      visM = self.cmd.board.get_visM(id, 5)
       self.gantry_conditions['FOV_to_gantry_coordinates']['z'] = visM['z']
       self.gantry_conditions['FOV_to_gantry_coordinates']['transform'] = visM['data']['transform']
 
@@ -141,7 +141,7 @@ class Conditions(object):
     self.gantry_conditions_filename = '{dir}/{timestamp}.json'.format(dir=Conditions.get_gantry_conditions_directory(),
                                                     timestamp=datetime.datetime.now().strftime('%Y%m%d-%H%M'))
     
-    return self.filename
+    return self.gantry_conditions_filename
   
   @staticmethod
   def get_latest_gantry_conditions_filename():

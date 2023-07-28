@@ -14,7 +14,7 @@
             "command": "halign",
             "z": 5,
             "data": {
-              "coorodinates": [21, 24],
+              "coordinates": [21, 24, 22, 23],
               "file": "/srv/output/halign.root"
             }
           }

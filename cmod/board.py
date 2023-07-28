@@ -125,7 +125,7 @@ class Board(object):
 
 
  def load_board(self, filename):
-   if any(self.get_all_detectors()) or not self.empty():
+   if len(self.get_all_detectors()) > 0 or not self.empty():
      self.logger.warning("""
        The current session is not empty. Loading a new board will erase any
        existing configuration for the current session""")
@@ -189,7 +189,7 @@ class Board(object):
  def add_vis_coord(self, detid, z, data, filename):
    self.detectors[detid-1].coordinates['calibrated'].append({
      'command': 'visualcenterdet',
-     z: self.roundz(z),
+     'z': self.roundz(z),
      'data': {
        'coordinates': data,
        'file': filename
@@ -216,7 +216,7 @@ class Board(object):
  def add_lumi_coord(self, detid, z, data):
    self.detectors[detid-1].coordinates['calibrated'].append({
      'command': 'halign',
-     z: self.roundz(z),
+     'z': self.roundz(z),
      'data': {
        'coordinates': data
      }
