@@ -97,7 +97,7 @@ class Conditions(object):
 
   # increments the use count
   def increment_use_count(self):
-    self.gantry_conditions.gc_use_count += 1
+    self.gantry_conditions.use_count += 1
     # update the use count antry_ionditionsn the latest conditions file
     # get the latest conditions file
     try:
