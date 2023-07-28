@@ -136,6 +136,10 @@ def CYAN(message: str) -> str:
   return make_color_text(message, 36)
 
 
+def NOCOLOR(message: str) -> str:
+  return message
+
+
 def oneline_string(text: str) -> str:
   """
   @brief Simplifying multiline text in python to a single line text in python,
@@ -348,26 +352,29 @@ class CmdStreamFormatter(logging.Formatter):
     """
     Formatting of the track stack string to something easier to read.
     """
-    exc_msg = record.msg.splitlines()
-    exc_msg = exc_msg[1:-1]  ## Remove traceback and error line.
-    lines = []
-    for idx in range(0, len(exc_msg), 2):
-      file = re.findall(r'\"[A-Za-z0-9\/\.]+\"', exc_msg[idx])
-      if len(file):  # For non-conventional error messages
-        file = file[0].strip().replace('"', '')
-        file = file.replace(os.getenv('PWD'), '.')
-      else:
-        continue
+    trace_stack = traceback.TracebackException.from_exception(record.msg).stack
 
-      lno = re.findall(r'line\s[0-9]+', exc_msg[idx])
-      if len(lno):  # For non-conventional error messages
-        lno = [int(s) for s in lno[0].split() if s.isdigit()][0]
-      else:
-        continue
+    def get_entries(frame_item):
+      return dict(fileloc=frame_item.filename.replace(os.getenv('PWD'), '.') +
+                  ':' + str(frame_item.lineno),
+                  funcname=frame_item.name,
+                  content=frame_item.line)
 
-      content = exc_msg[idx + 1].strip()
-      lines.append(CYAN(f'{lno:4d}L|') + YELLOW(f'{file}| ') + content)
-    return '\n'.join(lines)
+    tokens = [get_entries(frame) for frame in trace_stack]
+    token_size = {
+        k: max([len(item[k])
+                for item in tokens])
+        for k in tokens[0].keys()
+    }
+
+    def make_line(item):
+      return ''.join([
+          CYAN(item['fileloc'].rjust(token_size['fileloc'] + 1, ' ') + '| '),
+          YELLOW(item['funcname'].ljust(token_size['funcname'] + 1, ' ') + '| '),
+          item['content']
+      ])
+
+    return '\n'.join([make_line(x) for x in tokens])
 
   def interactive_message_parse(self, record):
     msg = record.msg  # To note make modifications!
@@ -415,6 +422,16 @@ class CmdStreamFormatter(logging.Formatter):
 
 
 ### Miscellaneous items
+class ArgumentValueError(ValueError):
+  # Pass
+  pass
+
+
+class ArgumentParseError(ValueError):
+  # Pass
+  pass
+
+
 class ArgumentParser(argparse.ArgumentParser):
   """
   @brief Thin wrapper for overwriting the 'error' method behavior
@@ -425,10 +442,8 @@ class ArgumentParser(argparse.ArgumentParser):
   message. We also add a prefix to help indicate that this is an error that was
   raise from the ArgumentParser's parsing methods.
   """
-  __prefix__ = '[parser_error]'
-
   def error(self, message):
-    raise ValueError(self.__prefix__ + message)
+    raise ArgumentParseError(message)
 
 
 """@}"""

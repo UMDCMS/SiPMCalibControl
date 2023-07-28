@@ -471,26 +471,6 @@ class controlcmd(object):
     """
     pass
 
-  def parse_line(self, line):
-    """
-    @brief Parsing the arguments from the input line using the argparse method.
-
-    This handles the common parsing routines defined in the vanilla
-    ArgumentParser class, then it passes the obtained argument container to
-    subsequent `parse` methods defined in subclasses to allow for more
-    complicated value parsing.
-    """
-    args = self.parser.parse_args(shlex.split(line))
-    # Try additional parsing defined by sub-classes
-    try:
-      return self.__run_mro_method('parse', args)
-    except Exception as err:
-      raise ValueError(f"""
-                       Additional parsing failed. Check available options and
-                       their configurations by running "help {self.classname}"
-                       <br>Original message: {fmt.YELLOW(str(err))}
-                       """)
-
   def do(self, line):
     """
     @brief Method called by the parent controlterm class.
@@ -517,23 +497,27 @@ class controlcmd(object):
       `post_run` method will still be ran in case of interruption, so that
       partial data can still be obtained.
     """
+
+    # Running the argument parsing routine
     try:
-      args = self.parse_line(line)
+      args = self.parser.parse_args(shlex.split(line))
+      args = self.__run_mro_method('parse', args)
+    except (argparse.ArgumentError, fmt.ArgumentParseError) as err:
+      # In-built argparser error
+      self.printerr("Argument format error: \"" + str(err) + '\"<br>' +
+                    self.parser.format_usage())
+      return controlcmd.PARSE_ERROR
+    except fmt.ArgumentValueError as err:
+      self.printerr("Argument value error <br>" + str(err) + '<br>' +
+                    self.parser.format_usage())
+      return controlcmd.PARSE_ERROR
     except Exception as err:
-      # In-built argparse errors should have a more simple output
-      # syntax error in input.
-      if isinstance(err, argparse.ArgumentError):
-        self.printerr(str(err) + '<br>' + self.parser.format_usage())
-      elif str(err).startswith(fmt.ArgumentParser.__prefix__):
-        self.printerr(
-            str(err).replace(fmt.ArgumentParser.__prefix__, '') + '<br>' +
-            self.parser.format_usage())
-      else:
-        # More detailed parsing information is provided in custom parse
-        # failures.
-        self.printtrace(err)
+      self.printerr(
+          f"Unknown Exception type {type(err)}. Report tracestack to developers")
+      self.printtrace(err)
       return controlcmd.PARSE_ERROR
 
+    # Running the main routine
     return_value = controlcmd.EXIT_SUCCESS
 
     self.sighandle.reset()
@@ -549,6 +533,7 @@ class controlcmd(object):
       return_value = controlcmd.EXECUTE_ERROR
     self.sighandle.release()
 
+    # Running the post run routines for clean up.
     try:
       self.__run_mro_method('post_run')
     except Exception as err:
@@ -656,7 +641,7 @@ class controlcmd(object):
     @details Using a custom log-level to trigger a unique formatter. Details of
     the formatting can be found in the fmt.CmdStreamFormatter class.
     """
-    self.logger.log(logging.TRACEBACK, traceback.format_exc())
+    self.logger.log(logging.TRACEBACK, err)
     self.printerr(str(err))  # Printing the original error for clarity.
 
   def start_pbar(self, *args, **kwargs):
@@ -779,24 +764,25 @@ class controlcmd(object):
 class rootfilecmd(controlcmd):
   """
   @brief commands that control saving data to the root file
-  
+
   @ingroup cli_design
-  
-  @details Commands for data which needs to be saved to a root file, this is an 
-  update to the old savefilecmd class which only wrote to a text file. All functions
-  that wish to have their default save location overridden should simply change the 
-  DEFAULT_SAVEFILE static variable.
-  
-  The data of timestamp (ms), detector id, gantry coordinates (mm), measured bias voltage (mv),
-  measured SiPM temp (C), and measured pulser board temp (C) will always be in the root file. 
-  Extra branches with more data will be added based on the commands run. 
-  
-  The saveroot string input by the user can also include placeholder strings to have the filename
-  automatically be modified according other input arguments and/or the state of
-  the system. This allows the same command to be used for different
-  configurations while still have the results be saved in distinct files.
-  Placeholders will be specified in the angle braced. For the full list of
-  special placeholders, as well as how the file parsing is handled, see the
+
+  @details Commands for data which needs to be saved to a root file, this is an
+  update to the old savefilecmd class which only wrote to a text file. All
+  functions that wish to have their default save location overridden should
+  simply change the DEFAULT_SAVEFILE static variable.
+
+  The data of timestamp (ms), detector id, gantry coordinates (mm), measured
+  bias voltage (mv), measured SiPM temp (C), and measured pulser board temp (C)
+  will always be in the root file. Extra branches with more data will be added
+  based on the commands run.
+
+  The saveroot string input by the user can also include placeholder strings to
+  have the filename automatically be modified according other input arguments
+  and/or the state of the system. This allows the same command to be used for
+  different configurations while still have the results be saved in distinct
+  files. Placeholders will be specified in the angle braced. For the full list
+  of special placeholders, as well as how the file parsing is handled, see the
   detailed documentation in the `ctlcmd.cmdbase.savefilecmd.parse` method.
   """
   DEFAULT_ROOTFILE = 'SAVEROOT_<TIMESTAMP>'
@@ -859,9 +845,10 @@ class rootfilecmd(controlcmd):
     """
     @brief Create the root file and the TTree in the root file
 
-    @details This command creates the root file and creates the TTree with the correct
-    data types and names for each branch of the tree. This also saves some extra basic data 
-    like the time the file was created, the Board_ID and Board_Type. This function is only called once.
+    @details This command creates the root file and creates the TTree with the
+    correct data types and names for each branch of the tree. This also saves
+    some extra basic data like the time the file was created, the Board_ID and
+    Board_Type. This function is only called once.
 
     """
     if datatypes is None:
@@ -923,16 +910,19 @@ class rootfilecmd(controlcmd):
 
   def fillroot(self, data, datatypes=None, time=0.0, det_id=-100):
     """
-    @brief Fill the root file with the given data, will create a root file on the first call
+    @brief Fill the root file with the given data, will create a root file on
+    the first call
 
-    @details This command is called to push data to the root file. The first run of this command will create 
-    a root file and the correct TTree based on the input of data and datatypes. The format of data should be 
-    a dictionary with the keys as the branch titles for corresponding data. 
-    datatypes is also a dictionary 
-    
-    whose purpose is to override the rootfilecmd in the case that type() does not work. Branches being filled 
-    will multiple values per call of fill root must set datatypes and must make sure they are inputting a list.
-    Ex: self.fillroot({"testdata":[1,2,3]},datatypes = {"testdata":"var * int64")
+    @details This command is called to push data to the root file. The first run
+    of this command will create a root file and the correct TTree based on the
+    input of data and datatypes. The format of data should be a dictionary with
+    the keys as the branch titles for corresponding data. datatypes is also a
+    dictionary
+
+    whose purpose is to override the rootfilecmd in the case that type() does
+    not work. Branches being filled will multiple values per call of fill root
+    must set datatypes and must make sure they are inputting a list. Ex:
+    self.fillroot({"testdata":[1,2,3]},datatypes = {"testdata":"var * int64")
 
     """
     ##fill data into the root file
@@ -1486,8 +1476,9 @@ class readoutcmd(controlcmd):
   such that the the return can be a singular number representing the readout
   value of triggers.
 
-  Modifications to the readout includes: - The integration window: specified in
-  terms of the ADC timing bin indices. If
+  Modifications to the readout includes:
+
+  - The integration window: specified in terms of the ADC timing bin indices. If
     both are left to be 0, then the entire timing range is used.
   - The windows used to determine pedestal subtraction: specified in terms of
     ADC timing bin indices. If both are left to be 0, the no pedestal
