@@ -21,8 +21,8 @@ class Detector(object):
 
  The calibrated coordinates (either the visually calibrated coordinates and the
  accompanying transformation matrix, or the luminosity aligned coordinates will
- be stored as a dictionary, with the z operation value used for obtaining the
- calibration used as the key.)
+ be stored as a dictionary with their corresponding command names, with the z operation value used for obtaining the
+ calibration.)
  """
  def __init__(self, jsonmap, board):
    try:
@@ -31,16 +31,11 @@ class Detector(object):
       self.channel = int(jsonmap['channel'])
       self.coordinates = {
         "default": jsonmap['coordinates']['default'],
-        "calibrated": jsonmap['coordinates']['calibrated'] if len(jsonmap['coordinates']['calibrated']) > 0 else [] # a stack
+        "calibrated": jsonmap['coordinates']['calibrated'] if len(jsonmap['coordinates']['calibrated']) > 0 else []
       }
    except KeyError as e:
      raise ValueError(e.msg)
 
-
-   # TODO: add the conditions calculated per detector
-   # self.vis_coord = {}
-   # self.vis_M = {}
-   # self.lumi_coord = {}
    self.logger = board.cmd.devlog("Det")
 
 
@@ -54,7 +49,6 @@ class Detector(object):
        (0-{gcoder.GCoder.max_x()},0-{gcoder.GCoder.max_y()}). The expected
        detector position will be not adjusted, but gantry motion might not
        reach it. Which mean any results may be wrong.""")
-       # TODO: handle this in the gantry motions when cannot reach sipm
 
 
  def __str__(self):
@@ -66,10 +60,7 @@ class Detector(object):
        'type': self.type,
        'mode': self.mode,
        'channel': self.channel,
-       'coordinates': self.coordinates,
-       # 'Luminosity coordinates': self.lumi_coord,
-       # 'Visual coordinates': self.vis_coord,
-       # 'FOV transformation': self.vis_M
+       'coordinates': self.coordinates
    }
 
 
@@ -77,7 +68,7 @@ class Detector(object):
 
 class Board(object):
  """
- Class for storing a board type an a list of det x-y positions
+ Class for storing a board config including a list of detectors, calib. routines and board conditions.
  """
  def __init__(self, cmd):
    self.filename = ""
@@ -171,21 +162,7 @@ class Board(object):
  def set_id(self, id):
    self.id = id
 
-
-#   def calib_dets(self):
-#    return sorted([k for k in self.get_all_detectors() if int(k) < 0], reverse=True)
-
-
-#    def add_calib_det(self, detid, mode=-1, channel=-1):
-#     if detid not in self.get_all_detectors() and int(detid) < 0:
-#         self.detectors[detid] = Detector({
-#             "mode": mode,
-#             "channel": channel,
-#             "default coordinates": [-100, -100]
-#         }, self)
-
  # Get/Set calibration measures with additional parsing
-#   TODO: revisit while implementing conditions
  def add_vis_coord(self, detid, z, data, filename):
    self.detectors[detid-1].coordinates['calibrated'].append({
      'command': 'visualcenterdet',
@@ -278,7 +255,6 @@ class Board(object):
    return self.get_latest_entry(detid, 'halign', z) is not None
 
 
-# TODO: why is this needed??
  def empty(self):
    for detid in range(0, len(self.detectors)):
      if (self.get_latest_entry(detid, 'visualcenterdet') is not None or self.get_latest_entry(detid, 'visualhscan') is not None or self.get_latest_entry(detid, 'halign') is not None):
@@ -289,13 +265,3 @@ class Board(object):
  @staticmethod
  def roundz(rawz):
    return round(rawz, 1)
-
-
-
-
-## In file unit testing
-if __name__ == "__main__":
- board = Board()
- board.load_board('cfg/reference_single.json')
- for det in board.detectors:
-   print(det)

@@ -15,7 +15,8 @@ class Conditions(object):
 
   # loads gantry conditions from a file and returns True if successful, False otherwise
   def load_gantry_conditions(self, file):
-    self.gantry_conditions_filename = file
+    orig_gantry_conditions = self.gantry_conditions.copy()
+
     conditions = json.loads(open(file, 'r').read())
     try:
       self.gantry_conditions = {
@@ -30,18 +31,18 @@ class Conditions(object):
         "use_count": conditions["use_count"] if "use_count" in conditions else 0
       }
 
+      self.gantry_conditions_filename = file
       self.increment_use_count()
 
       self.h_list = [self.gantry_conditions["lumi_vs_FOV_center"]["data"]["separation"]]
 
       return True
     except KeyError as e:
-      self.logger.error(e)
-      self.logger.error("""
-        The gantry conditions file does not contain the required gantry conditions:
-        'FOV_to_gantry_coordinates', and 'lumi_vs_FOV_center'. Please check the
-        file and the required format and try again.""")
-      # TODO: might want to add logic that if the required conditions are not provided, run the process to calculate those that are missing or even all of them as don't want to trust an "incomplete" set of conditions
+      self.gantry_conditions = orig_gantry_conditions
+      # warning: the gantry conditions file does not contain the required fields so the gantry conditions will not be loaded
+      self.logger.warn(f"""
+        The gantry conditions file does not contain the required fields. Program will continue without loading the gantry conditions in {file}. {e}
+      """)
       return False
 
   # saves gantry conditions to a file
@@ -98,7 +99,7 @@ class Conditions(object):
   # increments the use count
   def increment_use_count(self):
     self.gantry_conditions.use_count += 1
-    # update the use count antry_ionditionsn the latest conditions file
+    # update the use count gantry_conditions the latest conditions file
     # get the latest conditions file
     try:
       filename = Conditions.get_latest_gantry_conditions_filename()
