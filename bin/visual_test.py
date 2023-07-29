@@ -7,7 +7,6 @@ import visual as vis
 
 vis.current_image_bytes()
 
-
 #image = cv.imread("InFocus.jpg")
 #image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 #lap = cv.Laplacian(image, cv.CV_64F, ksize=5 )

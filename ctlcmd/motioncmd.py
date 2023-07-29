@@ -267,21 +267,21 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.savefilecmd):
 
     ## Saving session information
     coords = [
-      fitval[1],
-      np.sqrt(fitcovar[1][1]), 
-      fitval[2],
-      np.sqrt(fitcovar[1][1])
+        fitval[1],
+        np.sqrt(fitcovar[1][1]), fitval[2],
+        np.sqrt(fitcovar[1][1])
     ]
     if not self.board.lumi_coord_hasz(detid, args.scanz) or args.overwrite:
       self.board.add_lumi_coord(detid, args.scanz, coords)
-      self.conditions.update_gantry_and_sipm_conditions(self.classname, detid, args.scanz)
+      self.conditions.update_gantry_and_sipm_conditions(self.classname, detid,
+                                                        args.scanz)
     elif self.board.lumi_coord_hasz(detid, args.scanz):
       if self.prompt_yn(f"""A lumi alignment for z={args.scanz:.1f} already
                         exists for the current session, overwrite?""",
                         default=False):
         self.board.add_lumi_coord(detid, args.scanz, coords)
-        self.conditions.update_gantry_and_sipm_conditions('halign', detid, args.scanz)
-    
+        self.conditions.update_gantry_and_sipm_conditions(
+            'halign', detid, args.scanz)
 
     ## Sending gantry to position
     if (fitval[1] > 0 and fitval[1] < self.gcoder.max_x() and fitval[2] > 0

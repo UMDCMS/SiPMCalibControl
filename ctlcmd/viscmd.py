@@ -186,18 +186,21 @@ class visualhscan(cmdbase.hscancmd, cmdbase.savefilecmd, visualmeta):
     ## Saving rounded coordinates
     if not self.board.visM_hasz(detid, self.gcoder.opz) or args.overwrite:
       self.board.add_visM(detid, self.gcoder.opz,
-                          [[fitx[0], fitx[1]], [fity[0], fity[1]]], self.filename)
-      self.conditions.update_gantry_and_sipm_conditions('visualhscan', detid, args.scanz)
-      
+                          [[fitx[0], fitx[1]], [fity[0], fity[1]]],
+                          self.filename)
+      self.conditions.update_gantry_and_sipm_conditions('visualhscan', detid,
+                                                        args.scanz)
+
     elif self.board.visM_hasz(detid, self.gcoder.opz):
       if self.prompt_yn(
           f"""
           Transformation equation for z={args.scanz:.1f} already exists,
           overwrite?""", False):
         self.board.add_visM(detid, self.gcoder.opz,
-                            [[fitx[0], fitx[1]], [fity[0], fity[1]]], self.filename)
-        self.conditions.update_gantry_and_sipm_conditions('visualhscan', detid, args.scanz)
-        
+                            [[fitx[0], fitx[1]], [fity[0], fity[1]]],
+                            self.filename)
+        self.conditions.update_gantry_and_sipm_conditions(
+            'visualhscan', detid, args.scanz)
 
     ## Moving back to center
     self.move_gantry(args.x, args.y, args.scanz)
@@ -314,7 +317,8 @@ class visualcenterdet(cmdbase.singlexycmd, visualmeta):
     if not self.board.vis_coord_hasz(detid, self.gcoder.opz) or args.overwrite:
       self.board.add_vis_coord(detid, self.gcoder.opz,
                                [self.gcoder.opx, self.gcoder.opy])
-      self.conditions.update_gantry_and_sipm_conditions('visualcenterdet', detid, args.scanz)
+      self.conditions.update_gantry_and_sipm_conditions('visualcenterdet', detid,
+                                                        args.scanz)
     elif self.board.vis_coord_hasz(detid, self.gcoder.opz):
       if self.prompt_yn(f"""
                         A visual alignment for z={args.scanz:.1f} already exists
@@ -322,7 +326,8 @@ class visualcenterdet(cmdbase.singlexycmd, visualmeta):
                         default=False):
         self.board.add_vis_coord(detid, self.gcoder.opz,
                                  [self.gcoder.opx, self.gcoder.opy])
-        self.conditions.update_gantry_and_sipm_conditions('visualcenterdet', detid, args.scanz)
+        self.conditions.update_gantry_and_sipm_conditions(
+            'visualcenterdet', detid, args.scanz)
 
     # Luminosity calibrated coordinate doesn't exists. displaying the
     # estimated position from calibration det position
@@ -334,7 +339,7 @@ class visualcenterdet(cmdbase.singlexycmd, visualmeta):
         det = self.board.get_det(calibdet)
         if (self.board.vis_coord_hasz(calibdet, currentz)
             and (self.board.get_latest_entry(args.detid, 'halign') is not None)):
-          closestz =  self.board.get_closest_calib_z(detid, 'halign', currentz)
+          closestz = self.board.get_closest_calib_z(detid, 'halign', currentz)
           deltax = self.board.get_vis_coord(calibdet, currentz)[0] \
                   - self.board.get_lumi_coord(calibdet, closestz)[0]
           deltay = self.board.get_vis_coord(calibdet, currentz)[1] \

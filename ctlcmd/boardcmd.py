@@ -9,6 +9,7 @@ import ctlcmd.cmdbase as cmdbase
 import cmod.fmt as fmt
 import argparse
 
+
 class save_board(cmdbase.controlcmd):
   """
   @brief Saving current board session.
@@ -39,6 +40,7 @@ class save_board(cmdbase.controlcmd):
     except RuntimeError as err:
       self.printerr(str(err))
       self.printwarn('Board saving has failed, skipping...')
+
 
 class load_board(cmdbase.controlcmd):
   """

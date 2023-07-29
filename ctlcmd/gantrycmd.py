@@ -8,6 +8,7 @@ import ctlcmd.cmdbase as cmdbase
 import cmod.fmt as fmt
 import argparse
 
+
 class save_gantry_conditions(cmdbase.controlcmd):
   """
   @brief Saving current session gantry conditions.
@@ -34,6 +35,7 @@ class save_gantry_conditions(cmdbase.controlcmd):
     except RuntimeError as err:
       self.printerr(str(err))
       self.printwarn(f'Saving gantry conditions to {args.filename} has failed.')
+
 
 class load_gantry_conditions(cmdbase.controlcmd):
   """

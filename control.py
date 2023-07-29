@@ -120,7 +120,7 @@ if __name__ == '__main__':
         fmt.oneline_string("""
           There was error in the GPIO setup, program will continue but will most
           likely misbehave! Use at your own risk!"""))
-    
+
     # Load the gantry conditions if any are uploaded
     try:
       filename = cmd.conditions.get_latest_gantry_conditions_filename()

@@ -91,6 +91,7 @@ class interrupt(SocketFunction):
     self.session.sighandle.terminate = True
     #send_interrupt(socketio)
 
+
 class prompt_check(SocketFunction):
   """
   Receiving the string used to unlock a prompt section. Notice that the session
@@ -101,5 +102,5 @@ class prompt_check(SocketFunction):
   responsible for further processing and releasing the session if the message
   passes the requirement.
   """
-  def __call__(self,msg):
+  def __call__(self, msg):
     self.session.cmd.session_lock_string = msg

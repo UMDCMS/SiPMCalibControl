@@ -228,6 +228,7 @@ class get(cmdbase.controlcmd):
   def print_drs(self):
     self.printmsg(str(self.drs.is_available()))
 
+
 class history(cmdbase.savefilecmd):
   """
   Getting the input history. Notice that this will only include the user input
