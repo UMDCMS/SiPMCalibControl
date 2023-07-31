@@ -24,15 +24,13 @@ for row in range(8):
       detid = 8 * (row + 1) - column - 1
 
     if z_list[0] > z_list[1]:
-      print(
-          'lowlightcollect --detid {detid} --sample 100000 -z {z} --wipefile'.
-          format(detid=detid, z=z_list[0]))
+      print('lowlightcollect --detid {detid} --sample 100000 -z {z} --wipefile'.
+            format(detid=detid, z=z_list[0]))
     zscan_line = 'zscan --detid {detid} --zlist {l} --sample 100 --wipefile'.format(
         detid=detid, l=' '.join([str(z) for z in z_list]))
     print(zscan_line)
     if z_list[0] < z_list[1]:
-      print(
-          'lowlightcollect --detid {detid} --sample 100000 -z {z} --wipefile'.
-          format(detid=detid, z=z_list[-1]))
+      print('lowlightcollect --detid {detid} --sample 100000 -z {z} --wipefile'.
+            format(detid=detid, z=z_list[-1]))
 
     z_list.reverse()

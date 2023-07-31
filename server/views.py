@@ -281,8 +281,7 @@ class visual(ViewFunction):
   """
   @staticmethod
   def make_jpeg_image_byte(image):
-    return (b'--frame\r\n'
-            b'Content-Type: image/jpeg\r\n\r\n' + image + b'\r\n')
+    return (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + image + b'\r\n')
 
   # Static objects
   @staticmethod

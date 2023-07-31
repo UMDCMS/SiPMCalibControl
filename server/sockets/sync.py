@@ -45,8 +45,6 @@ client side user input.
 #################################################################################
 
 
-
-
 def wait_user_action(socketio, msg):
   """
   Setting to system state to waiting for user action with an accompanying

@@ -86,7 +86,6 @@ def report_useraction():
   return session.waiting_msg
 
 
-
 def report_detid_data(process, detid):
   """
   Returning the simplified data via the detector identification. The standard
@@ -109,8 +108,6 @@ def report_detid_data(process, detid):
       return __default
   except:
     return __default
-
-
 
 
 def report_system_boards():
@@ -208,8 +205,6 @@ def parse_file_xyz(f):
     ans['z'].append(float(tokens[8]))
 
   return ans
-
-
 
 
 def parse_file_zscan(f):

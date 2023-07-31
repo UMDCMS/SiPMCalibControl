@@ -49,17 +49,6 @@ class set(cmdbase.controlcmd):
     cmdbase.controlcmd.__init__(self, cmd)
 
   def add_args(self):
-    self.parser.add_argument('--boardtype',
-                             '-b',
-                             type=argparse.FileType(mode='r'),
-                             help="""
-                             Setting board type via a configuration json file
-                             that lists DET_ID with x-y coordinates.""")
-    self.parser.add_argument('--boardid',
-                             '-i',
-                             type=str,
-                             help="""
-                             Override the existing board id with user string""")
     self.parser.add_argument('--printerdev',
                              type=str,
                              help="""
@@ -86,10 +75,6 @@ class set(cmdbase.controlcmd):
     subsequent settings can still be set if settings for one particular device
     is bad or not available.
     """
-    if args.boardtype:
-      self.set_board(args)
-    if args.boardid:
-      self.board.boardid = args.boardid
     if args.camdev:
       self.set_camera(args)
     if args.printerdev:
@@ -98,13 +83,6 @@ class set(cmdbase.controlcmd):
       self.set_picodevice(args)
     if args.drsdevice:
       self.set_drs(args)
-
-  def set_board(self, args):
-    try:
-      self.board.set_boardtype(args.boardtype.name)
-    except RuntimeError as err:
-      self.printerr(str(err))
-      self.printwarn('Board type setting has failed, skipping...')
 
   def set_camera(self, args):
     """Setting up the camera system, given /dev/video path"""
@@ -177,7 +155,6 @@ class get(cmdbase.controlcmd):
     cmdbase.controlcmd.__init__(self, cmd)
 
   def add_args(self):
-    self.parser.add_argument('--boardtype', action='store_true')
     self.parser.add_argument('--printerdev', action='store_true')
     self.parser.add_argument('--camdev', action='store_true')
     self.parser.add_argument('--align', action='store_true')
@@ -186,8 +163,6 @@ class get(cmdbase.controlcmd):
     self.parser.add_argument('-a', '--all', action='store_true')
 
   def run(self, args):
-    if args.boardtype or args.all:
-      self.print_board()
     if args.printerdev or args.all:
       self.print_printer()
     if args.camdev or args.all:
@@ -198,16 +173,6 @@ class get(cmdbase.controlcmd):
       self.print_pico()
     if args.drs or args.all:
       self.print_drs()
-
-  def print_board(self):
-    table = [('Type:', self.board.boardtype),
-             ('Desc.:', self.board.boarddescription),
-             ('ID:', self.board.boardid)]
-    for detid in self.board.dets():
-      det = self.board.get_det(detid)
-      x, y = det.orig_coord
-      table.append((f'Det:{detid:>4s}', f'x:{x:5.1f}, y:{y:5.1f}'))
-    self.devlog('Board').log(fmt.logging.INT_INFO, '', extra={'table': table})
 
   def print_pico(self):
     logger = self.devlog('PicoUnit')
@@ -262,50 +227,6 @@ class get(cmdbase.controlcmd):
 
   def print_drs(self):
     self.printmsg(str(self.drs.is_available()))
-
-
-class savecalib(cmdbase.controlcmd):
-  """@brief Saving current calibration information into a json file"""
-  def __init__(self, cmd):
-    cmdbase.controlcmd.__init__(self, cmd)
-
-  def add_args(self):
-    self.parser.add_argument('-f',
-                             '--file',
-                             type=argparse.FileType('w'),
-                             required=True,
-                             help='File to save the calibration events to')
-
-  def parse(self, args):
-    if not args.file:
-      raise ValueError('File name must be specified')
-    return args
-
-  def run(self, args):
-    self.printmsg('Saving calibration results to file [{0}]'.format(
-        args.file.name))
-    self.board.save_calib_file(args.file.name)
-
-
-class loadcalib(cmdbase.controlcmd):
-  """@brief Loading calibration information from a json file"""
-  def __init__(self, cmd):
-    cmdbase.controlcmd.__init__(self, cmd)
-
-  def add_args(self):
-    self.parser.add_argument(
-        '-f',
-        '--file',
-        type=argparse.FileType('r'),
-        help='File to load the calibration information from')
-
-  def parse(self, args):
-    if not args.file:
-      raise Exception('Filename must be specified')
-    return args
-
-  def run(self, args):
-    self.board.load_calib_file(args.file.name)
 
 
 class history(cmdbase.savefilecmd):

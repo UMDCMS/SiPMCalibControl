@@ -105,6 +105,7 @@ class picorunblock(cmdbase.savefilecmd):
   """
 
   DEFAULT_SAVEFILE = 'picoblock_<TIMESTAMP>.txt'
+
   def __init__(self, cmd):
     cmdbase.controlcmd.__init__(self, cmd)
 

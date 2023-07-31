@@ -1,0 +1,44 @@
+{
+  "type": "SYS_SINGLE",
+  "description": "Test board with random detectors info",
+  "id": 12345678,
+  "detectors": [
+    {
+      "type": "det",
+      "mode": 3,
+      "channel": 0,
+      "coordinates": {
+        "default": [20, 25],
+        "calibrated": [
+          {
+            "command": "halign",
+            "z": 5,
+            "data": {
+              "coordinates": [21, 24, 22, 23],
+              "file": "/srv/output/halign.root"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "calb_routines": [
+    {
+      "name": "routine name",
+      "description": "description of the routine",
+      "commands": [
+        {
+          "name": "command name",
+          "description": "description of the command",
+          "command": "command string"
+        }
+      ]
+    }
+  ],
+  "conditions": {
+    "Yaml": "/srv/config.yaml",
+    "pedestal_flattening": {},
+    "timing_phase_bit": {},
+    "gain_adjustments": {}
+  }
+}

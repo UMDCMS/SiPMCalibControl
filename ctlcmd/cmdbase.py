@@ -60,6 +60,7 @@ class and method  `__doc__` strings.
 
 [controlcmd]: @ref ctlcmd.cmdbase.controlcmd
 """
+from cmod.conditions import Conditions
 import cmod.gcoder as gcoder
 import cmod.board as board
 import cmod.gpio as gpio
@@ -211,6 +212,7 @@ class controlterm(cmd.Cmd):
     # Instances for hardware control
     self.gcoder = gcoder.GCoder.instance()
     self.board = board.Board(self)
+    self.conditions = Conditions(self)
     self.visual = visual.Visual()
     self.gpio = gpio.GPIO.instance()
     self.pico = pico.PicoUnit.instance() if pico is not None else None
@@ -1072,22 +1074,25 @@ class savefilecmd(controlcmd):
     if not args.savefile:  # Early exit if savefile is not set
       self.savefile = None
       return args
-    filename = args.savefile
+    self.filename = args.savefile
 
     # Adding time stamp filenames
     timestring = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-    filename = re.sub('<TIMESTAMP>', timestring, filename, flags=re.IGNORECASE)
+    self.filename = re.sub('<TIMESTAMP>',
+                           timestring,
+                           self.filename,
+                           flags=re.IGNORECASE)
 
     # Adding boardid to the settings
-    filename = re.sub('<BOARDID>',
-                      str(self.board.boardid),
-                      filename,
-                      flags=re.IGNORECASE)
+    self.filename = re.sub('<BOARDID>',
+                           str(self.board.id),
+                           self.filename,
+                           flags=re.IGNORECASE)
     # Adding boardtype to the settings
-    filename = re.sub('<BOARDTYPE>',
-                      str(self.board.boardtype),
-                      filename,
-                      flags=re.IGNORECASE)
+    self.filename = re.sub('<BOARDTYPE>',
+                           str(self.board.type),
+                           self.filename,
+                           flags=re.IGNORECASE)
 
     # Substituting tokens for argument values
     for action in self.parser._actions:
@@ -1101,13 +1106,13 @@ class savefilecmd(controlcmd):
           pass
         substring = '{0}{1}'.format(string, val)
         substring = re.sub(r'\.', 'p', substring)
-        filename = re.sub('\\<{0}\\>'.format(string),
-                          substring,
-                          filename,
-                          flags=re.IGNORECASE)
+        self.filename = re.sub('\\<{0}\\>'.format(string),
+                               substring,
+                               self.filename,
+                               flags=re.IGNORECASE)
 
     # Opening the file.
-    self.savefile = open(filename, 'w' if args.wipefile else 'a')
+    self.savefile = open(self.filename, 'w' if args.wipefile else 'a')
     return args
 
   def post_run(self):
@@ -1201,7 +1206,7 @@ class singlexycmd(controlcmd):
                        help="Specifying the y coordinate explicitly [mm].")
     group.add_argument('-c',
                        '--detid',
-                       type=str,
+                       type=int,
                        help="""Specify x-y coordinates via det id""")
 
   def parse(self, args):
@@ -1243,41 +1248,55 @@ class singlexycmd(controlcmd):
     if args.x or args.y:
       raise ValueError('You can either specify det-id or x y, not both')
 
-    if not args.detid in self.board.dets():
-      raise ValueError('Det id was not specified in board type')
+    if not args.detid in range(0, len(self.board.get_all_detectors()) + 1):
+      self.printmsg(f"""{self.board.get_all_detectors()}""")
+      raise ValueError(f'Det id was not specified in board type.')
 
     current_z = args.z if hasattr(args, 'z') and args.z else \
                  min(args.zlist) if hasattr(args, 'zlist') else \
                  self.gcoder.opz
 
-    det = self.board.get_det(args.detid)
+    det = self.board.get_detector(args.detid)
 
     if self.VISUAL_OFFSET:
-      if any(det.vis_coord):
-        closest_z = self.find_closest_z(det.vis_coord, current_z)
-        args.x = det.vis_coord[closest_z][0]
-        args.y = det.vis_coord[closest_z][1]
-      elif any(det.lumi_coord):
-        closest_z = self.find_closest_z(det.lumi_coord, current_z)
+      if self.board.get_latest_entry(args.detid, 'visualcenterdet') is not None:
+        closest_z = self.board.get_closest_calib_z(args.detid, 'visualcenterdet',
+                                                   current_z)
+        args.x = self.board.get_vis_coord(args.detid,
+                                          closest_z)['data']['coordinates'][0]
+        args.y = self.board.get_vis_coord(args.detid,
+                                          closest_z)['data']['coordinates'][1]
+      elif self.board.get_latest_entry(args.detid, 'halign') is not None:
+        closest_z = self.board.get_closest_calib_z(args.detid, 'halign',
+                                                   current_z)
         x_offset, y_offset = self.find_xyoffset(current_z)
-        args.x = det.lumi_coord[closest_z][0] + x_offset
-        args.y = det.lumi_coord[closest_z][2] + y_offset
+        args.x = self.board.get_lumi_coord(
+            args.detid, closest_z)['data']['coordinates'][0] + x_offset
+        args.y = self.board.get_lumi_coord(
+            args.detid, closest_z)['data']['coordinates'][2] + y_offset
       else:
         x_offset, y_offset = self.find_xyoffset(current_z)
-        args.x = det.orig_coord[0] + x_offset
-        args.y = det.orig_coord[1] + y_offset
+        args.x = det['coordinates']['default'][0] + x_offset
+        args.y = det['coordinates']['default'][1] + y_offset
     else:
-      if any(det.lumi_coord):
-        closest_z = self.find_closest_z(det.lumi_coord, current_z)
-        args.x = det.lumi_coord[closest_z][0]
-        args.y = det.lumi_coord[closest_z][2]
-      elif any(det.vis_coord):
+      if self.board.get_latest_entry(args.detid, 'halign') is not None:
+        closest_z = self.board.get_closest_calib_z(args.detid, 'halign',
+                                                   current_z)
+        args.x = self.board.get_lumi_coord(args.detid,
+                                           closest_z)['data']['coordinates'][0]
+        args.y = self.board.get_lumi_coord(args.detid,
+                                           closest_z)['data']['coordinates'][2]
+      elif self.board.get_latest_entry(args.detid,
+                                       'visualcenterdet') is not None:
         x_offset, y_offset = self.find_xyoffset(current_z)
-        closest_z = self.find_closest_z(det.vis_coord, current_z)
-        args.x = det.vis_coord[closest_z][0] - x_offset
-        args.y = det.vis_coord[closest_z][1] - y_offset
+        closest_z = self.board.get_closest_calib_z(args.detid, 'visualcenterdet',
+                                                   current_z)
+        args.x = self.board.get_vis_coord(
+            args.detid, closest_z)['data']['coordinates'][0] - x_offset
+        args.y = self.board.get_vis_coord(
+            args.detid, closest_z)['data']['coordinates'][1] - y_offset
       else:
-        args.x, args.y = det.orig_coord
+        args.x, args.y = det['coordinates']['default']
 
     return args
 
@@ -1285,45 +1304,22 @@ class singlexycmd(controlcmd):
     """
     @brief Determining the luminosity/visual alignment offset values.
 
-    @details First we loop over all calibration detectors, and finding if there
-    are any detector that has both a luminosity calibrated coordinates, and
-    visual calibrated coordinates, and create the offset based on the two
-    measurement. If multiple are found, then the "first" calibration detector
-    (the one first calibrated) is used. If no calibration detectors are found, a
+    @details First we loop over all the detectors, and finding if there
+    are any detector that has the lumi_vis_separation. If multiple are found, then the "first" detector is used. If no such detectors are found, a
     default value will be used.
     """
-    if not any(self.board.calib_dets()):
-      return self.DEFAULT_XOFFSET, self.DEFAULT_YOFFSET
 
-    for detid in self.board.calib_dets():
-      lumi_x = None
-      lumi_y = None
-      vis_x = None
-      vis_y = None
-      det = self.board.get_det(detid)
+    for detid in range(0, len(self.board.get_all_detectors())):
 
-      if any(det.lumi_coord):
-        closestz = self.find_closest_z(det.lumi_coord, currentz)
-        lumi_x = det.lumi_coord[closestz][0]
-        lumi_y = det.lumi_coord[closestz][2]
+      closest_z = self.board.get_closest_calib_z(detid, 'lumi_vis_separation',
+                                                 currentz)
+      lumi_vis_separation = self.board.get_lumi_vis_separation(detid, closest_z)
 
-      if any(det.vis_coord):
-        closestz = self.find_closest_z(det.vis_coord, currentz)
-        vis_x = det.vis_coord[closestz][0]
-        vis_y = det.vis_coord[closestz][1]
-
-      if lumi_x and lumi_y and vis_x and vis_y:
-        return vis_x - lumi_x, vis_y - lumi_y
+      if lumi_vis_separation is not None:
+        return lumi_vis_separation['data']['separation'][0], lumi_vis_separation[
+            'data']['separation'][1]
 
     return self.DEFAULT_XOFFSET, self.DEFAULT_YOFFSET
-
-  @staticmethod
-  def find_closest_z(my_map, current_z):
-    """
-    @brief simple static function for comparing finding detector with the
-    closest z value.
-    """
-    return min(my_map.keys(), key=lambda x: abs(float(x) - float(current_z)))
 
 
 class hscancmd(singlexycmd):

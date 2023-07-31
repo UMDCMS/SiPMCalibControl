@@ -6,7 +6,7 @@ d.init()
 #d.startcollect()
 
 print("changing trigger delay")
-d.settrigger(0,-0.1,0,0)
+d.settrigger(0, -0.1, 0, 0)
 
 for _ in range(2):
   d.startcollect()
@@ -17,7 +17,7 @@ for _ in range(2):
   #d.read(1)
 
 print("changing trigger delay")
-d.settrigger(0,-0.10,0,0)
+d.settrigger(0, -0.10, 0, 0)
 for _ in range(2):
   d.startcollect()
   d.timeslice(0)

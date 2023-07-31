@@ -202,7 +202,9 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.rootfilecmd):
   def parse(self, args):
     """Only additional parsing is checking the power option."""
     if args.power == None:
+      self.printwarn('in halign parse')
       args.power = self.gpio.pwm_duty(0)
+      self.printwarn('after halign power asign')
     return args
 
   def run(self, args):
@@ -263,27 +265,25 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.rootfilecmd):
     self.printmsg(f'Best y:' + meas_str(fitval[2], np.sqrt(fitcovar[2][2])))
     self.printmsg(f'Fit  z:' + meas_str(fitval[3], np.sqrt(fitcovar[3][3])))
 
-    detid = str(args.detid)  ## Ensuring string convention in using this
-    ## Generating calibration det id if using det coordinates
-    if not detid in self.board.dets() and int(detid) < 0:
-      self.board.add_calib_det(detid, args.mode, args.channel)
+    detid = int(args.detid)  ## Ensuring int convention in using this
 
     ## Saving session information
+    coords = [
+        fitval[1],
+        np.sqrt(fitcovar[1][1]), fitval[2],
+        np.sqrt(fitcovar[1][1])
+    ]
     if not self.board.lumi_coord_hasz(detid, args.scanz) or args.overwrite:
-      self.board.add_lumi_coord(detid, args.scanz, [
-          fitval[1],
-          np.sqrt(fitcovar[1][1]), fitval[2],
-          np.sqrt(fitcovar[1][1])
-      ])
+      self.board.add_lumi_coord(detid, args.scanz, coords)
+      self.conditions.update_gantry_and_sipm_conditions(self.classname, detid,
+                                                        args.scanz)
     elif self.board.lumi_coord_hasz(detid, args.scanz):
       if self.prompt_yn(f"""A lumi alignment for z={args.scanz:.1f} already
                         exists for the current session, overwrite?""",
                         default=False):
-        self.board.add_lumi_coord(detid, args.scanz, [
-            fitval[1],
-            np.sqrt(fitcovar[1][1]), fitval[2],
-            np.sqrt(fitcovar[1][1])
-        ])
+        self.board.add_lumi_coord(detid, args.scanz, coords)
+        self.conditions.update_gantry_and_sipm_conditions(
+            'halign', detid, args.scanz)
 
     ## Sending gantry to position
     if (fitval[1] > 0 and fitval[1] < self.gcoder.max_x() and fitval[2] > 0
