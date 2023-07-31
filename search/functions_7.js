@@ -13,6 +13,7 @@ var searchData=
   ['inmotion_10',['InMotion',['../classGCoder.html#a6f428ab205517a18865b4d40eac64688',1,'GCoder']]],
   ['is_5fcomplete_11',['is_complete',['../classcmod_1_1TBController_1_1DAQController.html#a539fa3803dd4296c10c0d9e759567ec9',1,'cmod::TBController::DAQController']]],
   ['is_5fdummy_5fdev_12',['is_dummy_dev',['../classctlcmd_1_1getset_1_1set.html#ac5590c1efbe079ef4cc1265bfc6319d3',1,'ctlcmd::getset::set']]],
-  ['isavailable_13',['IsAvailable',['../classDRSContainer.html#a289816cd13fccf79f470acdea240b64f',1,'DRSContainer']]],
-  ['isready_14',['IsReady',['../classDRSContainer.html#aabfe7251199b73071a4de6aec90e584d',1,'DRSContainer::IsReady()'],['../classPicoUnit.html#a117f27b4a04291ffcf225d4d20af963a',1,'PicoUnit::IsReady()']]]
+  ['is_5fh_5fvalid_13',['is_h_valid',['../classcmod_1_1conditions_1_1Conditions.html#a1c76c4b19bb7273c1ef372f30343cce2',1,'cmod::conditions::Conditions']]],
+  ['isavailable_14',['IsAvailable',['../classDRSContainer.html#a289816cd13fccf79f470acdea240b64f',1,'DRSContainer']]],
+  ['isready_15',['IsReady',['../classDRSContainer.html#aabfe7251199b73071a4de6aec90e584d',1,'DRSContainer::IsReady()'],['../classPicoUnit.html#a117f27b4a04291ffcf225d4d20af963a',1,'PicoUnit::IsReady()']]]
 ];

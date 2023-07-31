@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['info_0',['INFO',['../group__Logging.html#ga0967fa5a36408da22b8419854edf61ad',1,'cmod::fmt']]],
-  ['int_5finfo_1',['INT_INFO',['../group__Logging.html#ga560d6908d6df31d619d5fd6804068278',1,'cmod::fmt']]]
+  ['hw_5fdebug_0',['HW_DEBUG',['../group__Logging.html#ga7da5ece7a653db4dbde17e502193c2bc',1,'cmod::fmt']]]
 ];

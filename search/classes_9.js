@@ -2,7 +2,8 @@ var searchData=
 [
   ['lightoff_0',['lightoff',['../classctlcmd_1_1digicmd_1_1lightoff.html',1,'ctlcmd::digicmd']]],
   ['lighton_1',['lighton',['../classctlcmd_1_1digicmd_1_1lighton.html',1,'ctlcmd::digicmd']]],
-  ['loadcalib_2',['loadcalib',['../classctlcmd_1_1getset_1_1loadcalib.html',1,'ctlcmd::getset']]],
-  ['logdump_3',['logdump',['../classctlcmd_1_1getset_1_1logdump.html',1,'ctlcmd.getset.logdump'],['../classviews_1_1logdump.html',1,'views.logdump']]],
-  ['lowlightcollect_4',['lowlightcollect',['../classctlcmd_1_1motioncmd_1_1lowlightcollect.html',1,'ctlcmd::motioncmd']]]
+  ['load_5fboard_2',['load_board',['../classctlcmd_1_1boardcmd_1_1load__board.html',1,'ctlcmd::boardcmd']]],
+  ['load_5fgantry_5fconditions_3',['load_gantry_conditions',['../classctlcmd_1_1gantrycmd_1_1load__gantry__conditions.html',1,'ctlcmd::gantrycmd']]],
+  ['logdump_4',['logdump',['../classctlcmd_1_1getset_1_1logdump.html',1,'ctlcmd.getset.logdump'],['../classviews_1_1logdump.html',1,'views.logdump']]],
+  ['lowlightcollect_5',['lowlightcollect',['../classctlcmd_1_1motioncmd_1_1lowlightcollect.html',1,'ctlcmd::motioncmd']]]
 ];

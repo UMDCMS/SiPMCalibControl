@@ -6,9 +6,10 @@ var searchData=
   ['lighton_3',['lighton',['../classctlcmd_1_1digicmd_1_1lighton.html',1,'ctlcmd::digicmd']]],
   ['lightsoff_4',['LightsOff',['../classGPIO.html#a75176b22349f882963287a792ab40f56',1,'GPIO']]],
   ['lightson_5',['LightsOn',['../classGPIO.html#a98e4005a7a71c97e7b0f395db0c1dec5',1,'GPIO']]],
-  ['loadcalib_6',['loadcalib',['../classctlcmd_1_1getset_1_1loadcalib.html',1,'ctlcmd::getset']]],
-  ['logdump_7',['logdump',['../classctlcmd_1_1getset_1_1logdump.html',1,'ctlcmd.getset.logdump'],['../classviews_1_1logdump.html',1,'views.logdump']]],
-  ['logger_8',['logger',['../classctlcmd_1_1cmdbase_1_1controlcmd.html#a6e977c7801173553ca3ca25fc50ded34',1,'ctlcmd::cmdbase::controlcmd']]],
-  ['logging_9',['Logging',['../group__Logging.html',1,'']]],
-  ['lowlightcollect_10',['lowlightcollect',['../classctlcmd_1_1motioncmd_1_1lowlightcollect.html',1,'ctlcmd::motioncmd']]]
+  ['load_5fboard_6',['load_board',['../classctlcmd_1_1boardcmd_1_1load__board.html',1,'ctlcmd::boardcmd']]],
+  ['load_5fgantry_5fconditions_7',['load_gantry_conditions',['../classctlcmd_1_1gantrycmd_1_1load__gantry__conditions.html',1,'ctlcmd::gantrycmd']]],
+  ['logdump_8',['logdump',['../classctlcmd_1_1getset_1_1logdump.html',1,'ctlcmd.getset.logdump'],['../classviews_1_1logdump.html',1,'views.logdump']]],
+  ['logger_9',['logger',['../classctlcmd_1_1cmdbase_1_1controlcmd.html#a6e977c7801173553ca3ca25fc50ded34',1,'ctlcmd::cmdbase::controlcmd']]],
+  ['logging_10',['Logging',['../group__Logging.html',1,'']]],
+  ['lowlightcollect_11',['lowlightcollect',['../classctlcmd_1_1motioncmd_1_1lowlightcollect.html',1,'ctlcmd::motioncmd']]]
 ];
