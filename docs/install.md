@@ -13,11 +13,15 @@ on a [Raspberry Pi 3B+][raspi] running a [ArchLinux ARMv8][archarm] host, though
 any Linux-based ARMv8 system should work, as long as one can set up system
 permissions and can install an up-to-date version of docker.
 
-First, we clone the code repository:
+First, we clone the code repository and pull the remote dependencies. Notice
+that because some external dependencies are hosted in private repositories
+(which will prompt a login message), you will need to make sure you have
+permission to download the files of interest.
 
 ```bash
 git clone https://github.com/UMDCMS/SiPMCalibControl.git
 cd SiPMCalibControl
+./external/fetch_external.sh
 ```
 
 ### Setting up system permissions
