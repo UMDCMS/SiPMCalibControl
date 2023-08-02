@@ -98,7 +98,9 @@ $(function() {
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This typically assumes that the readout device (ADC/picoscope/drs4 or otherwise) has been properly set up with the correct range and settings, and this class will provide the new "self.readout" method to subsequent commands such that the the return can be a singular number representing the readout value of triggers.</p>
-<p>Modifications to the readout includes: - The integration window: specified in terms of the ADC timing bin indices. If both are left to be 0, then the entire timing range is used.</p><ul>
+<p>Modifications to the readout includes:</p>
+<ul>
+<li>The integration window: specified in terms of the ADC timing bin indices. If both are left to be 0, then the entire timing range is used.</li>
 <li>The windows used to determine pedestal subtraction: specified in terms of ADC timing bin indices. If both are left to be 0, the no pedestal subtraction is performed.</li>
 <li>The number of waveforms to perform data collection. Notice that depending on the data collection routine of interest, the samples specified will either be stored as is, or be the number of samples used for averaging. In the case of scope like readouts, averaged values will have the uncertainty divided by the square root of the number of waveforms used (to account for intrinsice Poisson uncertainties)</li>
 </ul>
@@ -162,9 +164,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3a1f810b20fe32278cf87c1193ae5758 inherit pub_methods_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a3a1f810b20fe32278cf87c1193ae5758">add_args</a> (self)</td></tr>
 <tr class="memdesc:a3a1f810b20fe32278cf87c1193ae5758 inherit pub_methods_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adding arguments to the command.  <br /></td></tr>
 <tr class="separator:a3a1f810b20fe32278cf87c1193ae5758 inherit pub_methods_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a042092fd58f6fab6cb8ba60ea17596cb inherit pub_methods_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a042092fd58f6fab6cb8ba60ea17596cb">parse_line</a> (self, line)</td></tr>
-<tr class="memdesc:a042092fd58f6fab6cb8ba60ea17596cb inherit pub_methods_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parsing the arguments from the input line using the argparse method.  <br /></td></tr>
-<tr class="separator:a042092fd58f6fab6cb8ba60ea17596cb inherit pub_methods_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67666389af58b2a0e261a0c79ea35df6 inherit pub_methods_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classctlcmd_1_1cmdbase_1_1controlcmd.html#a67666389af58b2a0e261a0c79ea35df6">do</a> (self, line)</td></tr>
 <tr class="memdesc:a67666389af58b2a0e261a0c79ea35df6 inherit pub_methods_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method called by the parent controlterm class.  <br /></td></tr>
 <tr class="separator:a67666389af58b2a0e261a0c79ea35df6 inherit pub_methods_classctlcmd_1_1cmdbase_1_1controlcmd"><td class="memSeparator" colspan="2">&#160;</td></tr>
