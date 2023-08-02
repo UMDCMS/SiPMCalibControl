@@ -4,6 +4,7 @@
 import zmq, yaml, time, paramiko, copy, uproot, os
 import awkward as ak
 import cmod.fmt as fmt
+import cmod.rocv2 as rocv2
 
 
 class TBController(object):
@@ -14,8 +15,8 @@ class TBController(object):
 
   @details The object defined in this module sets up the connections to the
   tileboard tester over an network connection to allow for fast/slow control and
-  data extraction. The client objects defined in this object is based on the
-  objects found in the official [hexa-board control software][zmq_controller],
+  data pulling. The client objects defined in this object is based on the
+  objects found in the official [hexaboard control software][zmq_controller],
   with additional specialization and process reduction to make the easier to
   interface with the framework used for controlling other subsystems. We also
   assume that the appropriate firmware, software and utility scripts have
@@ -36,10 +37,14 @@ class TBController(object):
     class.
 
   This main container class includes the actual instances for a slow (i2c)
-  control, fast control, fast readout socket connection triplet. as well as a
+  control, fast control, fast readout socket connection triplet, as well as a
   paramiko ssh connection to the tileboard tester to allow for additional
   control over the system (tileboard server startup and data format conversion).
-  For the implementation of the various classes, we stick with the paradigm of
+  This class expects the slow/fast control servers to be running on the
+  tileboard tester, and the readout server to be running on same machine the
+  control instance in on but outside the main docker container instance
+  (localhost will still work for connecting with the data puller server). For
+  the implementation of the various classes, we stick with the paradigm of
   having the the constructor do nothing, and have the instance be properly
   initialized on some `init` call.
 
@@ -53,7 +58,6 @@ class TBController(object):
 
   [zmq_controller]:
   https://gitlab.cern.ch/hgcal-daq-sw/hexactrl-script/-/blob/master/zmq_controler.py
-
   """
   def __init__(self):
     """
@@ -63,7 +67,7 @@ class TBController(object):
     instances, as that should be handled by the `init` method.
     """
     self.daq_socket = DAQController()
-    self.cli_socket = DAQController()
+    self.pull_socket = DAQController()
     self.i2c_socket = I2CController()
     self.ssh_control = paramiko.SSHClient()
     self.ssh_control.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -71,10 +75,11 @@ class TBController(object):
   def init(self,
            ip,
            daq_port,
-           cli_port,
+           pull_port,
            i2c_port,
            config_file,
            ssh_key,
+           pull_ip='localhost',
            restart_server=False):
     """
     @brief Setting up the various socket connections.
@@ -97,11 +102,11 @@ class TBController(object):
 
     # Connecting the sockets
     self.daq_socket.init(ip=ip, port=daq_port, config_file=config_file)
-    self.cli_socket.init(ip=ip, port=cli_port, config_file=config_file)
     self.i2c_socket.init(ip=ip, port=i2c_port, config_file=config_file)
+    self.pull_socket.init(ip=pull_ip, port=cli_port, config_file=config_file)
 
-    # Additional settings - override the server IP settings
-    self.cli_socket.yaml_config['global']['serverIP'] = self.daq_socket.ip
+    # Letting the data puller understand where to pull the data from.
+    self.pull_socket.yaml_config['global']['serverIP'] = self.daq_socket.ip
 
   def tb_serverup(self):
     """Starting the server instances via an ssh command."""
@@ -123,7 +128,7 @@ class TBController(object):
 
   def acquire(self, n_events):
     """
-    @brief Acquiring N_events worth of data.
+    @brief Acquiring n_events worth of data.
 
     @details Flushing the data puller configurations to the zmq-client instance.
     We split this into a separate function in case we need to run multiple data
@@ -133,52 +138,24 @@ class TBController(object):
     # Number of events is set by the the daq_socket yaml configuration
     self.daq_socket.yaml_config['daq']['NEvents'] = str(n_events)
     # Additional settings for the client
-    self.remote_dir = '/home/HGCAL_dev/DataTemp/'
-    self.remote_name = 'remote_acquire'
-    self.cli_socket.yaml_config['global']['outputDirectory'] = self.remote_dir
-    self.cli_socket.yaml_config['global']['run_type'] = self.remote_name
+    remote_dir = '/tmp/'
+    remote_name = 'data_acquire'
 
-    self.cli_socket.configure()
+    self.pull_socket.yaml_config['global']['outputDirectory'] = remote_dir
+    self.pull_socket.yaml_config['global']['run_type'] = remote_name
+
+    self.pull_socket.configure()
     self.daq_socket.configure()
 
-    self.cli_socket.start()
+    self.pull_socket.start()
     self.daq_socket.start()
     while not self.daq_socket.is_complete():
       time.sleep(0.01)
     self.daq_socket.stop()
-    self.cli_socket.stop()
+    self.pull_socket.stop()
 
-    time.sleep(0.1)  # Sleep 10ms for output to be complete
-
-    arr = self._get_raw_root_data()
-
-    ### Additional array manipulation
-    # Shifting the channel values according to half index to make all readout
-    # channel unique immediately
-    arr['channel'] = arr.channel + arr.half * 36
-
-    # Returning the array results
-    return arr
-
-  def _get_raw_root_data(self):
-    raw_file = f'{self.remote_dir}/{self.remote_name}0.raw'
-    root_file = f'{self.remote_dir}/{self.remote_name}0.root'
-    local_file = f'/tmp/{self.remote_name}.root'
-
-    # Paramiko to perform parse the file to a root file
-    self.tbssh_command(' '.join([
-        '/home/HGCAL_dev/sw/hexactrl-sw/bin/unpack',  #
-        '-i', raw_file, '-o', root_file,  #
-    ]))
-
-    # Copying the remote file over to the a local directory
-    ftp_client = self.ssh_control.open_sftp()
-    ftp_client.get(root_file, local_file)
-    ftp_client.close()
-
-    # Create an array to contain the various objects
-    with uproot.open(local_file) as f:
-      return f['unpacker_data/hgcroc'].arrays()  # Returning as awkward array!
+    time.sleep(0.1)  # Sleep 100ms for output to be complete
+    return rocv2.from_raw(f'{remote_dir}/{remote_name}0.raw')
 
   def tbssh_command(self, cmd):
     """
