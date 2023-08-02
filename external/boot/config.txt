@@ -1,0 +1,6 @@
+# See /boot/overlays/README for all available options
+dtparam=i2c=on
+dtoverlay=pwm-2chan
+gpu_mem=128
+initramfs initramfs-linux.img followkernel
+dtparam=i2c_arm=on
