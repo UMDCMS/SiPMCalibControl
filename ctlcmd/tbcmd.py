@@ -88,7 +88,7 @@ class tb_saveconfig(cmdbase.savefilecmd):
         if 'roc_s' in k  # I2C settings will always have a prefix
     }
     full_config['daq'] = self.tbc.daq_socket.yaml_config['daq']
-    full_config['global'] = self.tbc.cli_socket.yaml_config['global']
+    full_config['global'] = self.tbc.pull_socket.yaml_config['global']
 
     yaml.dump(full_config, self.savefile)
 
