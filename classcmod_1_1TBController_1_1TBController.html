@@ -91,20 +91,19 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="classcmod_1_1TBController_1_1TBController-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">cmod.TBController.TBController Class Reference<div class="ingroups"><a class="el" href="group__hardware.html">Hardware Interface</a></div></div></div>
 </div><!--header-->
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The object defined in this module sets up the connections to the tileboard tester over an network connection to allow for fast/slow control and data extraction. The client objects defined in this object is based on the objects found in the official <a href="https://gitlab.cern.ch/hgcal-daq-sw/hexactrl-script/-/blob/master/zmq_controler.py">hexa-board control software</a>, with additional specialization and process reduction to make the easier to interface with the framework used for controlling other subsystems. We also assume that the appropriate firmware, software and utility scripts have already been setup on the tileboard tester unit.</p>
+<div class="textblock"><p>The object defined in this module sets up the connections to the tileboard tester over an network connection to allow for fast/slow control and data pulling. The client objects defined in this object is based on the objects found in the official <a href="https://gitlab.cern.ch/hgcal-daq-sw/hexactrl-script/-/blob/master/zmq_controler.py">hexaboard control software</a>, with additional specialization and process reduction to make the easier to interface with the framework used for controlling other subsystems. We also assume that the appropriate firmware, software and utility scripts have already been setup on the tileboard tester unit.</p>
 <p>To avoid clutter, the detailed implementation of the various socket classes will not completely listed in the hardware group, and this main container class will only contain the high-level functions. You can still find out how the various sockets are implemented in the following links</p>
 <ul>
 <li>For a generic overview of how a ZMQ socket is defined and used in the context of the hexaboard control software, see the <a class="el" href="classcmod_1_1TBController_1_1ZMQController.html" title="Common ZQM client class.">cmod.TBController.ZMQController</a> class.</li>
 <li>For the ZMQ socket that is specialized for the slow (I2C) controls, see the <a class="el" href="classcmod_1_1TBController_1_1I2CController.html" title="Specialized ZMQController class for I2C slow controls.">cmod.TBController.I2CController</a> class.</li>
 <li>For the ZQM sockets that are specialized for fast control and data extraction from the tileboard, see the <a class="el" href="classcmod_1_1TBController_1_1DAQController.html" title="Specialization for the fast control and readout socket instances.">cmod.TBController.DAQController</a> class.</li>
 </ul>
-<p>This main container class includes the actual instances for a slow (i2c) control, fast control, fast readout socket connection triplet. as well as a paramiko ssh connection to the tileboard tester to allow for additional control over the system (tileboard server startup and data format conversion). For the implementation of the various classes, we stick with the paradigm of having the the constructor do nothing, and have the instance be properly initialized on some <code>init</code> call.</p>
+<p>This main container class includes the actual instances for a slow (i2c) control, fast control, fast readout socket connection triplet, as well as a paramiko ssh connection to the tileboard tester to allow for additional control over the system (tileboard server startup and data format conversion). This class expects the slow/fast control servers to be running on the tileboard tester, and the readout server to be running on same machine the control instance in on but outside the main docker container instance (localhost will still work for connecting with the data puller server). For the implementation of the various classes, we stick with the paradigm of having the the constructor do nothing, and have the instance be properly initialized on some <code>init</code> call.</p>
 <p>One pattern that we will not attempt to abstract further the data acquisition routine:</p>
 <ul>
 <li>We first push the data pulling configurations the server</li>
@@ -123,9 +122,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7fc4937984bb9e71b933fc3fbc32c956"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcmod_1_1TBController_1_1TBController.html#a7fc4937984bb9e71b933fc3fbc32c956">__init__</a> (self)</td></tr>
 <tr class="memdesc:a7fc4937984bb9e71b933fc3fbc32c956"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creating the instances of the controller sockets.  <br /></td></tr>
 <tr class="separator:a7fc4937984bb9e71b933fc3fbc32c956"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b0bf6d300a5bfbbf4d3ec0c9f6182cb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcmod_1_1TBController_1_1TBController.html#a3b0bf6d300a5bfbbf4d3ec0c9f6182cb">init</a> (self, ip, daq_port, cli_port, i2c_port, config_file, ssh_key, restart_server=False)</td></tr>
-<tr class="memdesc:a3b0bf6d300a5bfbbf4d3ec0c9f6182cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting up the various socket connections.  <br /></td></tr>
-<tr class="separator:a3b0bf6d300a5bfbbf4d3ec0c9f6182cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc3b25d53ebb6fcbb48c204c72ac38ff"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcmod_1_1TBController_1_1TBController.html#adc3b25d53ebb6fcbb48c204c72ac38ff">init</a> (self, ip, daq_port, pull_port, i2c_port, config_file, ssh_key, pull_ip='localhost', restart_server=False)</td></tr>
+<tr class="memdesc:adc3b25d53ebb6fcbb48c204c72ac38ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting up the various socket connections.  <br /></td></tr>
+<tr class="separator:adc3b25d53ebb6fcbb48c204c72ac38ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a532cc2c05fcc1c7cfe1ee21504dd4b61"><td class="memItemLeft" align="right" valign="top"><a id="a532cc2c05fcc1c7cfe1ee21504dd4b61" name="a532cc2c05fcc1c7cfe1ee21504dd4b61"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>tb_serverup</b> (self)</td></tr>
 <tr class="memdesc:a532cc2c05fcc1c7cfe1ee21504dd4b61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starting the server instances via an ssh command. <br /></td></tr>
@@ -135,7 +134,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a30f8546bccfd6310cfd389581af97eef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Closing the server instances. <br /></td></tr>
 <tr class="separator:a30f8546bccfd6310cfd389581af97eef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f8b8200f5112a9705e8fc5446e572a2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcmod_1_1TBController_1_1TBController.html#a7f8b8200f5112a9705e8fc5446e572a2">acquire</a> (self, n_events)</td></tr>
-<tr class="memdesc:a7f8b8200f5112a9705e8fc5446e572a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Acquiring N_events worth of data.  <br /></td></tr>
+<tr class="memdesc:a7f8b8200f5112a9705e8fc5446e572a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Acquiring n_events worth of data.  <br /></td></tr>
 <tr class="separator:a7f8b8200f5112a9705e8fc5446e572a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc14c7057ffedcc9db1e7db79b1d5c9a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcmod_1_1TBController_1_1TBController.html#acc14c7057ffedcc9db1e7db79b1d5c9a">tbssh_command</a> (self, cmd)</td></tr>
 <tr class="memdesc:acc14c7057ffedcc9db1e7db79b1d5c9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Passing a command to tileboard tester to be executed.  <br /></td></tr>
@@ -155,27 +154,15 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a35e927ecbb8a36b82c7c8dd6433423e2"><td class="memItemLeft" align="right" valign="top"><a id="a35e927ecbb8a36b82c7c8dd6433423e2" name="a35e927ecbb8a36b82c7c8dd6433423e2"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>daq_socket</b></td></tr>
 <tr class="separator:a35e927ecbb8a36b82c7c8dd6433423e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a547b1cade1ca6169f894b7083ee8e58f"><td class="memItemLeft" align="right" valign="top"><a id="a547b1cade1ca6169f894b7083ee8e58f" name="a547b1cade1ca6169f894b7083ee8e58f"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>cli_socket</b></td></tr>
-<tr class="separator:a547b1cade1ca6169f894b7083ee8e58f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9d26fd7ae2fd9806ca427d654dcc29d"><td class="memItemLeft" align="right" valign="top"><a id="ad9d26fd7ae2fd9806ca427d654dcc29d" name="ad9d26fd7ae2fd9806ca427d654dcc29d"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>pull_socket</b></td></tr>
+<tr class="separator:ad9d26fd7ae2fd9806ca427d654dcc29d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70f62f0b581a1b1d3b69516cc16fd16b"><td class="memItemLeft" align="right" valign="top"><a id="a70f62f0b581a1b1d3b69516cc16fd16b" name="a70f62f0b581a1b1d3b69516cc16fd16b"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>i2c_socket</b></td></tr>
 <tr class="separator:a70f62f0b581a1b1d3b69516cc16fd16b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2826baca874e77d2ccbcd2a8230cffa1"><td class="memItemLeft" align="right" valign="top"><a id="a2826baca874e77d2ccbcd2a8230cffa1" name="a2826baca874e77d2ccbcd2a8230cffa1"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ssh_control</b></td></tr>
 <tr class="separator:a2826baca874e77d2ccbcd2a8230cffa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad4ce8ce2f9cc88839b3c52b587266f90"><td class="memItemLeft" align="right" valign="top"><a id="ad4ce8ce2f9cc88839b3c52b587266f90" name="ad4ce8ce2f9cc88839b3c52b587266f90"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>remote_dir</b></td></tr>
-<tr class="separator:ad4ce8ce2f9cc88839b3c52b587266f90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a157516485d2cf4f945c2b4696e9dade3"><td class="memItemLeft" align="right" valign="top"><a id="a157516485d2cf4f945c2b4696e9dade3" name="a157516485d2cf4f945c2b4696e9dade3"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>remote_name</b></td></tr>
-<tr class="separator:a157516485d2cf4f945c2b4696e9dade3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:a25f16b85673aca6e04d4cb8ddfff451d"><td class="memItemLeft" align="right" valign="top"><a id="a25f16b85673aca6e04d4cb8ddfff451d" name="a25f16b85673aca6e04d4cb8ddfff451d"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>_get_raw_root_data</b> (self)</td></tr>
-<tr class="separator:a25f16b85673aca6e04d4cb8ddfff451d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a7fc4937984bb9e71b933fc3fbc32c956" name="a7fc4937984bb9e71b933fc3fbc32c956"></a>
@@ -270,8 +257,8 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a3b0bf6d300a5bfbbf4d3ec0c9f6182cb" name="a3b0bf6d300a5bfbbf4d3ec0c9f6182cb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b0bf6d300a5bfbbf4d3ec0c9f6182cb">&#9670;&#160;</a></span>init()</h2>
+<a id="adc3b25d53ebb6fcbb48c204c72ac38ff" name="adc3b25d53ebb6fcbb48c204c72ac38ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc3b25d53ebb6fcbb48c204c72ac38ff">&#9670;&#160;</a></span>init()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -298,7 +285,7 @@ Protected Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>cli_port</em>, </td>
+          <td class="paramname"><em>pull_port</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -317,6 +304,12 @@ Protected Member Functions</h2></td></tr>
           <td></td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>ssh_key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>pull_ip</em> = <code>'localhost'</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

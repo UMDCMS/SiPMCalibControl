@@ -89,9 +89,10 @@ $(function() {
 <div class="textblock"><h2>Deploying the Calibration Control programs</h2>
 <p>The dependencies required to compile and run the program is handled by <a href="https://docs.docker.com/">docker</a> with the <code>Dockerfile</code> found at the root directory of the project. This ensures that all deployments will run under the same set of packages to avoid setup specific issues from entering production.</p>
 <p>Additional device permission setup is still required for the various data collection and control interface. The current configuration is designed to work on a <a href="https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/">Raspberry Pi 3B+</a> running a <a href="https://archlinuxarm.org/about/downloads">ArchLinux ARMv8</a> host, though any Linux-based ARMv8 system should work, as long as one can set up system permissions and can install an up-to-date version of docker.</p>
-<p>First, we clone the code repository:</p>
+<p>First, we clone the code repository and pull the remote dependencies. Notice that because some external dependencies are hosted in private repositories (which will prompt a login message), you will need to make sure you have permission to download the files of interest.</p>
 <div class="fragment"><div class="line">git clone https://github.com/UMDCMS/SiPMCalibControl.git</div>
 <div class="line">cd SiPMCalibControl</div>
+<div class="line">./external/fetch_external.sh</div>
 </div><!-- fragment --><h3>Setting up system permissions</h3>
 <p>Modify the <code>/boot/config.txt</code> file so that PWM and I2C interfaces are available: add the following lines to the <em>after</em> the kernel loading line:</p>
 <div class="fragment"><div class="line">dtoverlay=pwm-2chan</div>

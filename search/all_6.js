@@ -13,5 +13,8 @@ var searchData=
   ['flushtobuffer_10',['FlushToBuffer',['../classPicoUnit.html#a09d233d75d0f37cfed84de96c69c1fb9',1,'PicoUnit']]],
   ['forcestop_11',['ForceStop',['../classDRSContainer.html#a9345ab991a7e9c26a4d8064ddafad685',1,'DRSContainer']]],
   ['format_12',['format',['../group__Logging.html#ga1bd2cb12884357f2d7309c476a1e4ae3',1,'cmod::fmt::CmdStreamFormatter']]],
-  ['format_5ftable_13',['format_table',['../group__Logging.html#gaa92142b200259855ce8786bfc034ea8d',1,'cmod::fmt::CmdStreamFormatter']]]
+  ['format_5ftable_13',['format_table',['../group__Logging.html#gaa92142b200259855ce8786bfc034ea8d',1,'cmod::fmt::CmdStreamFormatter']]],
+  ['from_5fraw_14',['from_raw',['../namespacecmod_1_1rocv2.html#abefd11ed6d7e45eb947bbe1cc1baf6b3',1,'cmod::rocv2']]],
+  ['from_5froot_15',['from_root',['../namespacecmod_1_1rocv2.html#a661942e82fd26d3de1b19d9f3ecf3f75',1,'cmod::rocv2']]],
+  ['from_5funpack_16',['from_unpack',['../namespacecmod_1_1rocv2.html#a443719e1a91118c47781610377e8dc9d',1,'cmod::rocv2']]]
 ];
