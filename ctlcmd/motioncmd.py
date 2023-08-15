@@ -58,7 +58,7 @@ class moveto(cmdbase.singlexycmd):
                              help="Specifying the z coordinate explicitly [mm].")
 
   def parse(self, args):
-    if not args.z: args.z = self.gcoder.opz
+    if not args.z: args.z = self.gcoder.get_opz()
     return args
 
   def run(self, args):
@@ -72,7 +72,7 @@ class getcoord(cmdbase.controlcmd):
 
   def run(self, args):
     self.printmsg('x:{0:.1f} y:{1:.1f} z:{2:.1f}'.format(
-        self.gcoder.cx, self.gcoder.cy, self.gcoder.cz))
+        self.gcoder.get_cx(), self.gcoder.get_cy(), self.gcoder.get_cz()))
 
 
 class disablestepper(cmdbase.controlcmd):
@@ -92,7 +92,7 @@ class disablestepper(cmdbase.controlcmd):
                              help='Disable z axis stepper motors')
 
   def run(self, args):
-    self.gcoder.disablestepper(args.x, args.y, args.z)
+    self.gcoder.disable_stepper(args.x, args.y, args.z)
 
 
 class enablestepper(cmdbase.controlcmd):
@@ -112,7 +112,7 @@ class enablestepper(cmdbase.controlcmd):
                              help='Activate z axis stepper motors')
 
   def run(self, args):
-    self.gcoder.enablestepper(args.x, args.y, args.z)
+    self.gcoder.enable_stepper(args.x, args.y, args.z)
 
 
 class movespeed(cmdbase.controlcmd):
@@ -171,7 +171,7 @@ class sendhome(cmdbase.controlcmd):
     return args
 
   def run(self, args):
-    self.gcoder.sendhome(args.x, args.y, args.z)
+    self.gcoder.send_home(args.x, args.y, args.z)
 
 
 class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.rootfilecmd):
@@ -286,8 +286,8 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.rootfilecmd):
             'halign', detid, args.scanz)
 
     ## Sending gantry to position
-    if (fitval[1] > 0 and fitval[1] < self.gcoder.max_x() and fitval[2] > 0
-        and fitval[2] < self.gcoder.max_y()):
+    if (fitval[1] > 0 and fitval[1] < self.gcoder.get_max_x() and fitval[2] > 0
+        and fitval[2] < self.gcoder.get_max_y()):
       self.move_gantry(fitval[1], fitval[2], args.scanz)
     else:
       self.printwarn("""Fit position is out of gantry bounds, the gantry will not

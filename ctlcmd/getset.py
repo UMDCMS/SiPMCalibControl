@@ -33,7 +33,7 @@ class exit(cmdbase.controlcmd):
       self.move_gantry(1, 1, 1)
       # Activate send home
       try:
-        self.gcoder.sendhome(True, True, True)
+        self.gcoder.send_home(True, True, True)
       except Exception as err:
         pass
       return cmdbase.controlcmd.TERMINATE_SESSION
@@ -100,7 +100,7 @@ class set(cmdbase.controlcmd):
         and args.printerdev != self.gcoder.dev_path):
       try:
         self.gcoder.init(args.printerdev)
-        printset = self.gcoder.getsettings()
+        printset = self.gcoder.get_settings()
         printset = printset.split('\necho:')
         self.devlog('GCoder').info('<br>'.join(printset))
       except RuntimeError as err:
@@ -187,9 +187,9 @@ class get(cmdbase.controlcmd):
     level = fmt.logging.INT_INFO
     logger.log(level, 'device: ' + str(self.gcoder.dev_path))
     logger.log(
-        level, f'current coordinates:' + f' x{self.gcoder.opx:.1f}' +
-        f' y{self.gcoder.opy:.1f}' + f' z{self.gcoder.opz:.1f}')
-    settings = self.gcoder.getsettings().split('\necho:')
+        level, f'current coordinates:' + f' x{self.gcoder.get_opx():.1f}' +
+        f' y{self.gcoder.get_opy():.1f}' + f' z{self.gcoder.get_opz():.1f}')
+    settings = self.gcoder.get_settings().split('\necho:')
     logging.log(level, '\n'.join(line))
 
   def print_camera(self):

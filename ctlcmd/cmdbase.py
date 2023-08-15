@@ -209,15 +209,16 @@ class controlterm(cmd.Cmd):
     """
     cmd.Cmd.__init__(self, **base_kwargs)
 
-    # Instances for hardware control
-    self.gcoder = gcoder.GCoder.instance()
     self.board = board.Board(self)
     self.conditions = Conditions(self)
-    self.visual = visual.Visual()
-    self.gpio = gpio.GPIO.instance()
-    self.pico = pico.PicoUnit.instance() if pico is not None else None
-    self.drs = drs.DRS.instance() if drs is not None else None
     self.tbc = tbc.TBController()
+    self.client = None # TODO Placeholder for the client object
+    # Instances for hardware control
+    # self.gcoder = gcoder.GCoder.instance()
+    self.visual = visual.Visual()
+    # self.gpio = gpio.GPIO.instance()
+    self.pico = pico.PicoUnit.instance() if pico is not None else None
+    # self.drs = drs.DRS.instance() if drs is not None else None
 
     # Session control
     self.sighandle = controlsignalhandle()
@@ -677,9 +678,9 @@ class controlcmd(object):
     """
     self.pbar.set_postfix({
         'Gantry':
-        '({x:0.1f},{y:0.1f},{z:0.1f})'.format(x=self.gcoder.opx,
-                                              y=self.gcoder.opy,
-                                              z=self.gcoder.opz),
+        '({x:0.1f},{y:0.1f},{z:0.1f})'.format(x=self.gcoder.get_opx(),
+                                              y=self.gcoder.get_opy(),
+                                              z=self.gcoder.get_opz()),
         'LV':
         f'{self.gpio.adc_read(2)/1000:5.3f}V',
         'PT':
@@ -714,18 +715,18 @@ class controlcmd(object):
     try:
       # Try to move the gantry. Even if it fails there will be fail safes
       # in other classes
-      self.gcoder.moveto(x, y, z)
+      self.gcoder.move_to(x, y, z)
       while self.gcoder.in_motion(x, y, z):
         self.check_handle()  # Allowing for interuption
         time.sleep(0.01)  ## Updating position in 0.01 second increments
     except Exception as e:
       # Setting internal coordinates to the designated position anyway.
-      self.gcoder.opx = x
-      self.gcoder.opy = y
-      self.gcoder.opz = z
-      self.gcoder.cx = x
-      self.gcoder.cy = y
-      self.gcoder.cz = z
+      self.gcoder.set_opx(x)
+      self.gcoder.set_opy(y)
+      self.gcoder.set_opz(z)
+      self.gcoder.set_cx(x)
+      self.gcoder.set_cy(y)
+      self.gcoder.set_cz(z)
       pass
 
   def prompt_input(self, message, allowed=None) -> str:
@@ -857,14 +858,14 @@ class rootfilecmd(controlcmd):
       datatypes = {}
     self.rootfile = uproot.recreate(self.saveroot)
     standard_dict = {
-        "time": np.float32,
-        "det_id": int,
-        "gantry_x": np.float32,
-        "gantry_y": np.float32,
-        "gantry_z": np.float32,
-        "led_bv": np.float32,
-        "led_temp": np.float32,
-        "sipm_temp": np.float32
+      "time": np.float32,
+      "det_id": int,
+      "gantry_x": np.float32,
+      "gantry_y": np.float32,
+      "gantry_z": np.float32,
+      "led_bv": np.float32,
+      "led_temp": np.float32,
+      "sipm_temp": np.float32
     }
     self.specific_dict = {**{title: type(data[title]) for title in data}}
 
@@ -934,9 +935,9 @@ class rootfilecmd(controlcmd):
     if data != "dump":
       self.saveddata["standard"]["time"].append(time)
       self.saveddata["standard"]["det_id"].append(det_id)
-      self.saveddata["standard"]["gantry_x"].append(self.gcoder.opx)
-      self.saveddata["standard"]["gantry_y"].append(self.gcoder.opy)
-      self.saveddata["standard"]["gantry_z"].append(self.gcoder.opz)
+      self.saveddata["standard"]["gantry_x"].append(self.gcoder.get_opx())
+      self.saveddata["standard"]["gantry_y"].append(self.gcoder.get_opy())
+      self.saveddata["standard"]["gantry_z"].append(self.gcoder.get_opz())
       self.saveddata["standard"]["led_bv"].append(self.gpio.adc_read(2))
       self.saveddata["standard"]["led_temp"].append(self.gpio.ntc_read(0))
       self.saveddata["standard"]["sipm_temp"].append(self.gpio.rtd_read(1))
@@ -1136,9 +1137,9 @@ class savefilecmd(controlcmd):
     tokens.append(f'{time:.2f}')
     tokens.append(f'{det_id}')
     tokens.extend([
-        f'{self.gcoder.opx:.1f}',  #
-        f'{self.gcoder.opy:.1f}',  #
-        f'{self.gcoder.opz:.1f}'
+        f'{self.gcoder.get_opx():.1f}',  #
+        f'{self.gcoder.get_opy():.1f}',  #
+        f'{self.gcoder.get_opz():.1f}'
     ])
     tokens.extend([
         f'{self.gpio.adc_read(2):.2f}',  #
@@ -1231,8 +1232,8 @@ class singlexycmd(controlcmd):
     """
     if args.detid == None:  # Early exits if the detector ID is not used
       args.detid = -100
-      if not args.x: args.x = self.gcoder.opx
-      if not args.y: args.y = self.gcoder.opy
+      if not args.x: args.x = self.gcoder.get_opx()
+      if not args.y: args.y = self.gcoder.get_opy()
       return args
 
     if args.x or args.y:
@@ -1244,7 +1245,7 @@ class singlexycmd(controlcmd):
 
     current_z = args.z if hasattr(args, 'z') and args.z else \
                  min(args.zlist) if hasattr(args, 'zlist') else \
-                 self.gcoder.opz
+                 self.gcoder.get_opz()
 
     det = self.board.get_detector(args.detid)
 
@@ -1631,7 +1632,7 @@ class readoutcmd(controlcmd):
 
     readout_list = []
     try:  # Stopping the stepper motors for cleaner readout
-      self.gcoder.disablestepper(False, False, True)
+      self.gcoder.disable_stepper(False, False, True)
     except:  # In case the gcode interface is not available, do nothing
       pass
 
@@ -1645,7 +1646,7 @@ class readoutcmd(controlcmd):
       readout_list = self.read_model(args)
 
     try:  # Re-enable the stepper motors
-      self.gcoder.enablestepper(True, True, True)
+      self.gcoder.enable_stepper(True, True, True)
     except:  # In the case that the gcode interface isn't availabe, do nothing.
       pass
 
@@ -1742,9 +1743,9 @@ class readoutcmd(controlcmd):
     channels are set to be SiPM-like, while the odd channels are set to be
     LED-like.
     """
-    x = self.gcoder.opx
-    y = self.gcoder.opy
-    z = self.gcoder.opz
+    x = self.gcoder.get_opx()
+    y = self.gcoder.get_opy()
+    z = self.gcoder.get_opz()
 
     # Hard coding the "position" of the dummy inputs
     det_x = 100 + (300. / 8.) * (args.channel % 8)

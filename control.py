@@ -66,7 +66,9 @@ if __name__ == '__main__':
       tbcmd.tbset,  #
       tbcmd.tb_saveconfig,  #
       tbcmd.tb_levelped,  #
-      tbcmd.tb_test,
+      tbcmd.tb_test,  #
+      connectioncmd.establish_exclusive_connection_server,  #
+      connectioncmd.release_exclusive_connection_server
   ])
   # Duplicating the session to allow for default override.
   prog_parser = copy.deepcopy(cmd.set.parser)
