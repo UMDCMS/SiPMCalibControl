@@ -46,19 +46,19 @@ class drsset(cmdbase.controlcmd):
   def set_trigger(self, args):
     ## Getting default values if settings do not exists
     if not args.triggerchannel:
-      args.triggerchannel = self.drs.trigger_channel()
+      args.triggerchannel = self.drs.get_trigger_channel()
     if not args.triggerlevel:
-      args.triggerlevel = self.drs.trigger_level()
+      args.triggerlevel = self.drs.get_trigger_level()
     if not args.triggerdelay:
-      args.triggerdelay = self.drs.trigger_delay()
+      args.triggerdelay = self.drs.get_trigger_delay()
     if not args.triggerdirection:
-      args.triggerdirection = self.drs.trigger_direction()
+      args.triggerdirection = self.drs.get_trigger_direction()
 
     # End function if nothing has changed
-    if (args.triggerchannel == self.drs.trigger_channel()
-        and args.triggerlevel == self.drs.trigger_level()
-        and args.triggerdelay == self.drs.trigger_delay()
-        and args.triggerdirection == self.drs.trigger_direction()):
+    if (args.triggerchannel == self.drs.get_trigger_channel()
+        and args.triggerlevel == self.drs.get_trigger_level()
+        and args.triggerdelay == self.drs.get_trigger_delay()
+        and args.triggerdirection == self.drs.get_trigger_direction()):
       return
 
     self.drs.set_trigger(args.triggerchannel, args.triggerlevel,
@@ -161,11 +161,11 @@ class drsrun(cmdbase.savefilecmd):
     ##TODO: decide what to do with this vs the root file, add to root file or keep with txt file?
     if self.savefile.tell() == 0:
       self.savefile.write("{time} {bits} {adcval}\n".format(
-          time=1.0 / self.drs.rate(), bits=4, adcval=0.1))
+          time=1.0 / self.drs.get_rate(), bits=4, adcval=0.1))
       self.savefile.flush()
 
     for _ in self.start_pbar(range(args.numevents)):
-      self.drs.startcollect()
+      self.drs.start_collect()
       tstart = time.time()
       while not self.drs.is_ready():
         self.check_handle()
@@ -177,14 +177,14 @@ class drsrun(cmdbase.savefilecmd):
         # triggers indefinitely, useful for stand along testing.
         tnow = time.time()
         if args.waittrigger != 0 and (tnow - tstart) * 1000 > args.waittrigger:
-          self.drs.forcestop()
+          self.drs.force_stop()
           time.sleep(0.001)
 
       if not args.sum:
-        line = self.drs.waveformstr(args.channel)
+        line = self.drs.get_waveform(args.channel)
         self.savefile.write("{line}\n".format(line=line))
       else:
-        line = self.drs.waveformsum(args.channel, args.intstart, args.intstop,
+        line = self.drs.get_waveformsum(args.channel, args.intstart, args.intstop,
                                     args.pedstart, args.pedstop)
         self.savefile.write("{line}\n".format(line=line))
 

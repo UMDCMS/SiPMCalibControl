@@ -1705,7 +1705,7 @@ class readoutcmd(controlcmd):
     """
     val = []
     for _ in range(args.samples):
-      self.drs.startcollect()
+      self.drs.start_collect()
       while not self.drs.is_ready():
         self._fire_trigger()
       val.append(
