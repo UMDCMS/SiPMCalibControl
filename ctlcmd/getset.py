@@ -33,7 +33,7 @@ class exit(cmdbase.controlcmd):
       self.move_gantry(1, 1, 1)
       # Activate send home
       try:
-        self.gcoder.send_home(True, True, True)
+        self.client.gcoder.send_home(True, True, True)
       except Exception as err:
         pass
       return cmdbase.controlcmd.TERMINATE_SESSION
@@ -97,10 +97,10 @@ class set(cmdbase.controlcmd):
   def set_printer(self, args):
     """Setting up the gantry system, given the /dev/USB path"""
     if (not self.is_dummy_dev(args.printerdev, 'Printer')
-        and args.printerdev != self.gcoder.dev_path):
+        and args.printerdev != self.client.gcoder.dev_path):
       try:
-        self.gcoder.init(args.printerdev)
-        printset = self.gcoder.get_settings()
+        self.client.gcoder.init(args.printerdev)
+        printset = self.client.gcoder.get_settings()
         printset = printset.split('\necho:')
         self.devlog('GCoder').info('<br>'.join(printset))
       except RuntimeError as err:
@@ -129,7 +129,7 @@ class set(cmdbase.controlcmd):
         self.printwarn("DRS device is not available, ignoring...")
       else:
         try:
-          self.drs.init()
+          self.client.drs.init()
         except RuntimeError as err:
           self.devlog('DRSContainer').error(str(err))
           self.printwarn('DRS device is not properly set!')
@@ -185,11 +185,11 @@ class get(cmdbase.controlcmd):
   def print_printer(self):
     logger = self.devlog("GCoder")
     level = fmt.logging.INT_INFO
-    logger.log(level, 'device: ' + str(self.gcoder.dev_path))
+    logger.log(level, 'device: ' + str(self.client.gcoder.dev_path))
     logger.log(
-        level, f'current coordinates:' + f' x{self.gcoder.get_opx():.1f}' +
-        f' y{self.gcoder.get_opy():.1f}' + f' z{self.gcoder.get_opz():.1f}')
-    settings = self.gcoder.get_settings().split('\necho:')
+        level, f'current coordinates:' + f' x{self.client.gcoder.get_opx():.1f}' +
+        f' y{self.client.gcoder.get_opy():.1f}' + f' z{self.client.gcoder.get_opz():.1f}')
+    settings = self.client.gcoder.get_settings().split('\necho:')
     logging.log(level, '\n'.join(line))
 
   def print_camera(self):
@@ -226,7 +226,7 @@ class get(cmdbase.controlcmd):
                 det.vis_coord[z][0], det.vis_coord[z][1], z))
 
   def print_drs(self):
-    self.printmsg(str(self.drs.is_available()))
+    self.printmsg(str(self.client.drs.is_available()))
 
 
 class history(cmdbase.savefilecmd):

@@ -38,7 +38,7 @@ class rungcode(cmdbase.controlcmd):
     as soon as the internal state of the printer is modified, rather than when
     the command actually finishes execution.
     """
-    retstr = self.gcoder.run_gcode(args.cmd, 0, int(1e5))
+    retstr = self.client.gcoder.run_gcode(args.cmd, 0, int(1e5))
     retstr = retstr.split('\necho:')
     for line in retstr:
       self.printmsg(line, extra={'device': 'Printer'})
@@ -58,7 +58,7 @@ class moveto(cmdbase.singlexycmd):
                              help="Specifying the z coordinate explicitly [mm].")
 
   def parse(self, args):
-    if not args.z: args.z = self.gcoder.get_opz()
+    if not args.z: args.z = self.client.gcoder.get_opz()
     return args
 
   def run(self, args):
@@ -72,7 +72,7 @@ class getcoord(cmdbase.controlcmd):
 
   def run(self, args):
     self.printmsg('x:{0:.1f} y:{1:.1f} z:{2:.1f}'.format(
-        self.gcoder.get_cx(), self.gcoder.get_cy(), self.gcoder.get_cz()))
+        self.client.gcoder.get_cx(), self.client.gcoder.get_cy(), self.client.gcoder.get_cz()))
 
 
 class disablestepper(cmdbase.controlcmd):
@@ -92,7 +92,7 @@ class disablestepper(cmdbase.controlcmd):
                              help='Disable z axis stepper motors')
 
   def run(self, args):
-    self.gcoder.disable_stepper(args.x, args.y, args.z)
+    self.client.gcoder.disable_stepper(args.x, args.y, args.z)
 
 
 class enablestepper(cmdbase.controlcmd):
@@ -112,7 +112,7 @@ class enablestepper(cmdbase.controlcmd):
                              help='Activate z axis stepper motors')
 
   def run(self, args):
-    self.gcoder.enable_stepper(args.x, args.y, args.z)
+    self.client.gcoder.enable_stepper(args.x, args.y, args.z)
 
 
 class movespeed(cmdbase.controlcmd):
@@ -139,7 +139,7 @@ class movespeed(cmdbase.controlcmd):
     return args
 
   def run(self, args):
-    self.gcoder.set_speed_limit(args.x, args.y, args.z)
+    self.client.gcoder.set_speed_limit(args.x, args.y, args.z)
 
 
 class sendhome(cmdbase.controlcmd):
@@ -171,7 +171,7 @@ class sendhome(cmdbase.controlcmd):
     return args
 
   def run(self, args):
-    self.gcoder.send_home(args.x, args.y, args.z)
+    self.client.gcoder.send_home(args.x, args.y, args.z)
 
 
 class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.rootfilecmd):
@@ -203,7 +203,7 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.rootfilecmd):
     """Only additional parsing is checking the power option."""
     if args.power == None:
       self.printwarn('in halign parse')
-      args.power = self.gpio.pwm_duty(0)
+      args.power = self.client.gpio.pwm_duty(0)
       self.printwarn('after halign power asign')
     return args
 
@@ -220,7 +220,7 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.rootfilecmd):
     - Fitting results is either saved to the calibration cache, or is prompted
       to be saved, depending on the current state of the calibration.
     """
-    self.gpio.pwm(0, args.power, 1e5)
+    self.client.gpio.pwm(0, args.power, 1e5)
     lumi = []
     unc = []
     total = len(args.x)
@@ -286,8 +286,8 @@ class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.rootfilecmd):
             'halign', detid, args.scanz)
 
     ## Sending gantry to position
-    if (fitval[1] > 0 and fitval[1] < self.gcoder.get_max_x() and fitval[2] > 0
-        and fitval[2] < self.gcoder.get_max_y()):
+    if (fitval[1] > 0 and fitval[1] < self.client.gcoder.get_max_x() and fitval[2] > 0
+        and fitval[2] < self.client.gcoder.get_max_y()):
       self.move_gantry(fitval[1], fitval[2], args.scanz)
     else:
       self.printwarn("""Fit position is out of gantry bounds, the gantry will not
@@ -325,7 +325,7 @@ class zscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.readoutcmd,
   def parse(self, args):
     """Setting power list to current value if it doesn't exist"""
     if not args.power:
-      args.power = [self.gpio.pwm_duty(0)]  ## Getting the PWM value
+      args.power = [self.client.gpio.pwm_duty(0)]  ## Getting the PWM value
     return args
 
   def run(self, args):
@@ -344,7 +344,7 @@ class zscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.readoutcmd,
         [(z, p) for z in args.zlist for p in args.power]):
       self.check_handle()
       self.move_gantry(args.x, args.y, z)
-      self.gpio.pwm(0, power, 1e5)  # Maximum PWM frequency
+      self.client.gpio.pwm(0, power, 1e5)  # Maximum PWM frequency
 
       lumival = 0
       uncval = 0
@@ -399,7 +399,7 @@ class lowlightcollect(cmdbase.singlexycmd, cmdbase.readoutcmd,
     function in-case of user cutoff.
     """
     if not args.power:
-      args.power = self.gpio.pwm_duty(0)
+      args.power = self.client.gpio.pwm_duty(0)
     ## Modifying the sample argument to make monitoring simpler:
     args.nparts = (args.samples // 1000) + 1
     args.samples = 1000
@@ -414,7 +414,7 @@ class lowlightcollect(cmdbase.singlexycmd, cmdbase.readoutcmd,
     standard format. Progress will be printed for every 1000 data collections.
     """
     self.move_gantry(args.x, args.y, args.z)
-    self.gpio.pwm(0, args.power, 1e5)
+    self.client.gpio.pwm(0, args.power, 1e5)
     for _ in self.start_pbar(range(args.nparts)):
       self.check_handle()
       readout = self.readout(args, average=False)
@@ -455,7 +455,7 @@ class timescan(cmdbase.readoutcmd, cmdbase.rootfilecmd):
 
   def parse(self, args):
     if not args.testpwm:
-      args.testpwm = [self.gpio.pwm_duty(0)]
+      args.testpwm = [self.client.gpio.pwm_duty(0)]
     return args
 
   def run(self, args):
@@ -465,7 +465,7 @@ class timescan(cmdbase.readoutcmd, cmdbase.rootfilecmd):
     for it in self.start_pbar(args.nslice):
       self.check_handle()
       if (it % args.pwmslices == 0):
-        self.gpio.pwm(0, args.testpwm[pwmindex], 1e5)
+        self.client.gpio.pwm(0, args.testpwm[pwmindex], 1e5)
         pwmindex = (pwmindex + 1) % len(args.testpwm)
 
       lumival, uncval = self.readout(args, average=True)

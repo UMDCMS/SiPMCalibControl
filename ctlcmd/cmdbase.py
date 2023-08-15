@@ -678,15 +678,15 @@ class controlcmd(object):
     """
     self.pbar.set_postfix({
         'Gantry':
-        '({x:0.1f},{y:0.1f},{z:0.1f})'.format(x=self.gcoder.get_opx(),
-                                              y=self.gcoder.get_opy(),
-                                              z=self.gcoder.get_opz()),
+        '({x:0.1f},{y:0.1f},{z:0.1f})'.format(x=self.client.gcoder.get_opx(),
+                                              y=self.client.gcoder.get_opy(),
+                                              z=self.client.gcoder.get_opz()),
         'LV':
-        f'{self.gpio.adc_read(2)/1000:5.3f}V',
+        f'{self.client.gpio.adc_read(2)/1000:5.3f}V',
         'PT':
-        f'{self.gpio.ntc_read(0):4.1f}C',
+        f'{self.client.gpio.ntc_read(0):4.1f}C',
         'ST':
-        f'{self.gpio.rtd_read(1):4.1f}C',
+        f'{self.client.gpio.rtd_read(1):4.1f}C',
         **kwargs
     })
 
@@ -715,18 +715,18 @@ class controlcmd(object):
     try:
       # Try to move the gantry. Even if it fails there will be fail safes
       # in other classes
-      self.gcoder.move_to(x, y, z)
-      while self.gcoder.in_motion(x, y, z):
+      self.client.gcoder.move_to(x, y, z)
+      while self.client.gcoder.in_motion(x, y, z):
         self.check_handle()  # Allowing for interuption
         time.sleep(0.01)  ## Updating position in 0.01 second increments
     except Exception as e:
       # Setting internal coordinates to the designated position anyway.
-      self.gcoder.set_opx(x)
-      self.gcoder.set_opy(y)
-      self.gcoder.set_opz(z)
-      self.gcoder.set_cx(x)
-      self.gcoder.set_cy(y)
-      self.gcoder.set_cz(z)
+      self.client.gcoder.set_opx(x)
+      self.client.gcoder.set_opy(y)
+      self.client.gcoder.set_opz(z)
+      self.client.gcoder.set_cx(x)
+      self.client.gcoder.set_cy(y)
+      self.client.gcoder.set_cz(z)
       pass
 
   def prompt_input(self, message, allowed=None) -> str:
@@ -935,12 +935,12 @@ class rootfilecmd(controlcmd):
     if data != "dump":
       self.saveddata["standard"]["time"].append(time)
       self.saveddata["standard"]["det_id"].append(det_id)
-      self.saveddata["standard"]["gantry_x"].append(self.gcoder.get_opx())
-      self.saveddata["standard"]["gantry_y"].append(self.gcoder.get_opy())
-      self.saveddata["standard"]["gantry_z"].append(self.gcoder.get_opz())
-      self.saveddata["standard"]["led_bv"].append(self.gpio.adc_read(2))
-      self.saveddata["standard"]["led_temp"].append(self.gpio.ntc_read(0))
-      self.saveddata["standard"]["sipm_temp"].append(self.gpio.rtd_read(1))
+      self.saveddata["standard"]["gantry_x"].append(self.client.gcoder.get_opx())
+      self.saveddata["standard"]["gantry_y"].append(self.client.gcoder.get_opy())
+      self.saveddata["standard"]["gantry_z"].append(self.client.gcoder.get_opz())
+      self.saveddata["standard"]["led_bv"].append(self.client.gpio.adc_read(2))
+      self.saveddata["standard"]["led_temp"].append(self.client.gpio.ntc_read(0))
+      self.saveddata["standard"]["sipm_temp"].append(self.client.gpio.rtd_read(1))
 
       for title1 in data:
         for title2 in self.saveddata["specific"]:
@@ -1137,14 +1137,14 @@ class savefilecmd(controlcmd):
     tokens.append(f'{time:.2f}')
     tokens.append(f'{det_id}')
     tokens.extend([
-        f'{self.gcoder.get_opx():.1f}',  #
-        f'{self.gcoder.get_opy():.1f}',  #
-        f'{self.gcoder.get_opz():.1f}'
+        f'{self.client.gcoder.get_opx():.1f}',  #
+        f'{self.client.gcoder.get_opy():.1f}',  #
+        f'{self.client.gcoder.get_opz():.1f}'
     ])
     tokens.extend([
-        f'{self.gpio.adc_read(2):.2f}',  #
-        f'{self.gpio.ntc_read(0):.3f}',  #
-        f'{self.gpio.rtd_read(1):.3f}'  #
+        f'{self.client.gpio.adc_read(2):.2f}',  #
+        f'{self.client.gpio.ntc_read(0):.3f}',  #
+        f'{self.client.gpio.rtd_read(1):.3f}'  #
     ])
     tokens.extend([f'{x:.2f}' for x in data])
     self.savefile.write(' '.join(tokens) + '\n')
@@ -1232,8 +1232,8 @@ class singlexycmd(controlcmd):
     """
     if args.detid == None:  # Early exits if the detector ID is not used
       args.detid = -100
-      if not args.x: args.x = self.gcoder.get_opx()
-      if not args.y: args.y = self.gcoder.get_opy()
+      if not args.x: args.x = self.client.gcoder.get_opx()
+      if not args.y: args.y = self.client.gcoder.get_opy()
       return args
 
     if args.x or args.y:
@@ -1245,7 +1245,7 @@ class singlexycmd(controlcmd):
 
     current_z = args.z if hasattr(args, 'z') and args.z else \
                  min(args.zlist) if hasattr(args, 'zlist') else \
-                 self.gcoder.get_opz()
+                 self.client.gcoder.get_opz()
 
     det = self.board.get_detector(args.detid)
 
@@ -1632,7 +1632,7 @@ class readoutcmd(controlcmd):
 
     readout_list = []
     try:  # Stopping the stepper motors for cleaner readout
-      self.gcoder.disable_stepper(False, False, True)
+      self.client.gcoder.disable_stepper(False, False, True)
     except:  # In case the gcode interface is not available, do nothing
       pass
 
@@ -1646,7 +1646,7 @@ class readoutcmd(controlcmd):
       readout_list = self.read_model(args)
 
     try:  # Re-enable the stepper motors
-      self.gcoder.enable_stepper(True, True, True)
+      self.client.gcoder.enable_stepper(True, True, True)
     except:  # In the case that the gcode interface isn't availabe, do nothing.
       pass
 
@@ -1669,7 +1669,7 @@ class readoutcmd(controlcmd):
     """
     val = []
     for _ in range(args.samples):
-      val.append(self.gpio.adc_read(args.channel))
+      val.append(self.client.gpio.adc_read(args.channel))
       ## Sleeping for random time in ADC to avoid 60Hz aliasing
       time.sleep(1 / 200 * np.random.random())
     return val
@@ -1705,11 +1705,11 @@ class readoutcmd(controlcmd):
     """
     val = []
     for _ in range(args.samples):
-      self.drs.start_collect()
-      while not self.drs.is_ready():
+      self.client.drs.start_collect()
+      while not self.client.drs.is_ready():
         self._fire_trigger()
       val.append(
-          self.drs.waveformsum(args.channel, args.intstart, args.intstop,
+          self.client.drs.waveformsum(args.channel, args.intstart, args.intstop,
                                args.pedstart, args.pedstop))
 
     return val
@@ -1719,7 +1719,7 @@ class readoutcmd(controlcmd):
     Helper function for firing trigger for the scope-like readouts.
     """
     try:  # For standalone runs with external trigger
-      self.gpio.pulse(n, wait)
+      self.client.gpio.pulse(n, wait)
     except:  # Do nothing if trigger system isn't accessible
       pass
 
@@ -1743,16 +1743,16 @@ class readoutcmd(controlcmd):
     channels are set to be SiPM-like, while the odd channels are set to be
     LED-like.
     """
-    x = self.gcoder.get_opx()
-    y = self.gcoder.get_opy()
-    z = self.gcoder.get_opz()
+    x = self.client.gcoder.get_opx()
+    y = self.client.gcoder.get_opy()
+    z = self.client.gcoder.get_opz()
 
     # Hard coding the "position" of the dummy inputs
     det_x = 100 + (300. / 8.) * (args.channel % 8)
     det_y = 100 + (300. / 8.) * (args.channel // 8)
 
     r0 = ((x - det_x)**2 + (y - det_y)**2)**0.5
-    pwm = self.gpio.pwm_duty(0)
+    pwm = self.client.gpio.pwm_duty(0)
 
     if self._is_counting(args):
       ## This is a typical readout, expect a SiPM output,

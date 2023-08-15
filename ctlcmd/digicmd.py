@@ -33,7 +33,7 @@ class pulse(cmdbase.controlcmd):
     # Splitting into 1000 chunks
     for i in range(args.n // 100):
       self.check_handle()
-      self.gpio.pulse(100, args.wait)
+      self.client.gpio.pulse(100, args.wait)
 
 
 class pwm(cmdbase.controlcmd):
@@ -62,7 +62,7 @@ class pwm(cmdbase.controlcmd):
                              help='Base frequency of the PWM')
 
   def run(self, args):
-    self.gpio.pwm(args.channel, args.duty, args.frequency)
+    self.client.gpio.pwm(args.channel, args.duty, args.frequency)
 
 
 class setadcref(cmdbase.controlcmd):
@@ -90,7 +90,7 @@ class setadcref(cmdbase.controlcmd):
 
   def run(self, args):
     for channel in args.channel:
-      self.gpio.adc_setref(channel, args.val)
+      self.client.gpio.adc_setref(channel, args.val)
 
 
 class showadc(cmdbase.controlcmd):
@@ -102,12 +102,12 @@ class showadc(cmdbase.controlcmd):
 
   def run(self, args):
     self.printdump('', [  #
-        ('LED', f'{self.gpio.ntc_read(0):5.2f}C',
-         f'{self.gpio.adc_read(0):5.1f}mV'),  #
-        ('SiPM', f'{self.gpio.rtd_read(1):5.2f}C',
-         f'{self.gpio.adc_read(1):5.1f}mV'),  #
-        ('PWM0', '', f'{self.gpio.adc_read(2):6.1f}mV'),  #
-        ('PWM1', '', f'{self.gpio.adc_read(3):6.1f}mV'),  #
+        ('LED', f'{self.client.gpio.ntc_read(0):5.2f}C',
+         f'{self.client.gpio.adc_read(0):5.1f}mV'),  #
+        ('SiPM', f'{self.client.gpio.rtd_read(1):5.2f}C',
+         f'{self.client.gpio.adc_read(1):5.1f}mV'),  #
+        ('PWM0', '', f'{self.client.gpio.adc_read(2):6.1f}mV'),  #
+        ('PWM1', '', f'{self.client.gpio.adc_read(3):6.1f}mV'),  #
     ])
 
 
@@ -117,7 +117,7 @@ class lighton(cmdbase.controlcmd):
     cmdbase.controlcmd.__init__(self, cmd)
 
   def run(self, args):
-    self.gpio.light_on()
+    self.client.gpio.light_on()
 
 
 class lightoff(cmdbase.controlcmd):
@@ -126,4 +126,4 @@ class lightoff(cmdbase.controlcmd):
     cmdbase.controlcmd.__init__(self, cmd)
 
   def run(self, line):
-    self.gpio.light_off()
+    self.client.gpio.light_off()

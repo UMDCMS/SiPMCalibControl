@@ -145,8 +145,8 @@ class picorunblock(cmdbase.savefilecmd):
 
       while not self.pico.isready():
         self.check_handle()
-        if self.gpio.gpio_status():
-          self.gpio.pulse(int(self.pico.ncaptures / 10), 100)
+        if self.client.gpio.gpio_status():
+          self.client.gpio.pulse(int(self.pico.ncaptures / 10), 100)
 
       self.pico.flushbuffer()
 
@@ -191,7 +191,7 @@ class picorange(cmdbase.controlcmd):
       while 1:
         self.pico.startrapidblocks()
         while not self.pico.isready():
-          self.gpio.pulse(self.pico.ncaptures, 500)
+          self.client.gpio.pulse(self.pico.ncaptures, 500)
         self.pico.flushbuffer()
 
         wmax = self.pico.waveformmax(args.channel)

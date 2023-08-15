@@ -186,19 +186,19 @@ class visualhscan(cmdbase.hscancmd, visualmeta, cmdbase.rootfilecmd):
     #   self.board.add_calib_det(args.detid)
 
     ## Saving rounded coordinates
-    if not self.board.visM_hasz(detid, self.gcoder.get_opz()) or args.overwrite:
-      self.board.add_visM(detid, self.gcoder.get_opz(),
+    if not self.board.visM_hasz(detid, self.client.gcoder.get_opz()) or args.overwrite:
+      self.board.add_visM(detid, self.client.gcoder.get_opz(),
                           [[fitx[0], fitx[1]], [fity[0], fity[1]]],
                           self.filename)
       self.conditions.update_gantry_and_sipm_conditions('visualhscan', detid,
                                                         args.scanz)
 
-    elif self.board.visM_hasz(detid, self.gcoder.get_opz()):
+    elif self.board.visM_hasz(detid, self.client.gcoder.get_opz()):
       if self.prompt_yn(
           f"""
           Transformation equation for z={args.scanz:.1f} already exists,
           overwrite?""", False):
-        self.board.add_visM(detid, self.gcoder.get_opz(),
+        self.board.add_visM(detid, self.client.gcoder.get_opz(),
                             [[fitx[0], fitx[1]], [fity[0], fity[1]]],
                             self.filename)
         self.conditions.update_gantry_and_sipm_conditions(
@@ -292,18 +292,18 @@ class visualcenterdet(cmdbase.singlexycmd, visualmeta):
       ])
 
       motionxy = np.linalg.solve(
-          np.array(self.board.get_visM(args.calibdet, self.gcoder.get_opz())), deltaxy)
+          np.array(self.board.get_visM(args.calibdet, self.client.gcoder.get_opz())), deltaxy)
       ## Early exit if difference from center is small
       if np.linalg.norm(motionxy) < 0.1: break
-      self.move_gantry(self.gcoder.get_opx() + motionxy[0],
-                       self.gcoder.get_opy() + motionxy[1], self.gcoder.get_opz())
+      self.move_gantry(self.client.gcoder.get_opx() + motionxy[0],
+                       self.client.gcoder.get_opy() + motionxy[1], self.client.gcoder.get_opz())
       time.sleep(args.vwait)  ## Waiting for the gantry to stop moving
 
     center = self.visual.get_latest()
     self.printmsg(
       'Gantry position: x={0:.1f} y={1:.1f} | '\
       'Det FOV position: x={2:.1f} y={3:.1f}'.
-        format(self.gcoder.get_opx(), self.gcoder.get_opy(), center.x, center.y))
+        format(self.client.gcoder.get_opx(), self.client.gcoder.get_opy(), center.x, center.y))
     self.printmsg(
       'Det corner coordinate: '\
       '[{0:d},{1:d}], [{2},{3}], [{4},{5}], [{6},{7}]'.format(
@@ -316,27 +316,27 @@ class visualcenterdet(cmdbase.singlexycmd, visualmeta):
 
     detid = str(args.detid)
 
-    if not self.board.vis_coord_hasz(detid, self.gcoder.get_opz()) or args.overwrite:
-      self.board.add_vis_coord(detid, self.gcoder.get_opz(),
-                               [self.gcoder.get_opx(), self.gcoder.get_opy()])
+    if not self.board.vis_coord_hasz(detid, self.client.gcoder.get_opz()) or args.overwrite:
+      self.board.add_vis_coord(detid, self.client.gcoder.get_opz(),
+                               [self.client.gcoder.get_opx(), self.client.gcoder.get_opy()])
       self.conditions.update_gantry_and_sipm_conditions('visualcenterdet', detid,
                                                         args.scanz)
-    elif self.board.vis_coord_hasz(detid, self.gcoder.get_opz()):
+    elif self.board.vis_coord_hasz(detid, self.client.gcoder.get_opz()):
       if self.prompt_yn(f"""
                         A visual alignment for z={args.scanz:.1f} already exists
                         for the current session, overwrite?""",
                         default=False):
-        self.board.add_vis_coord(detid, self.gcoder.get_opz(),
-                                 [self.gcoder.get_opx(), self.gcoder.get_opy()])
+        self.board.add_vis_coord(detid, self.client.gcoder.get_opz(),
+                                 [self.client.gcoder.get_opx(), self.client.gcoder.get_opy()])
         self.conditions.update_gantry_and_sipm_conditions(
             'visualcenterdet', detid, args.scanz)
 
     # Luminosity calibrated coordinate doesn't exists. displaying the
     # estimated position from calibration det position
-    if not self.board.lumi_coord_hasz(detid, self.gcoder.get_opz()):
+    if not self.board.lumi_coord_hasz(detid, self.client.gcoder.get_opz()):
       deltax = None
       deltay = None
-      currentz = self.gcoder.get_opz()
+      currentz = self.client.gcoder.get_opz()
       for calibdet in self.board.calib_dets():
         det = self.board.get_det(calibdet)
         if (self.board.vis_coord_hasz(calibdet, currentz)
@@ -348,7 +348,7 @@ class visualcenterdet(cmdbase.singlexycmd, visualmeta):
                   - self.board.get_lumi_coord(calibdet, closestz)[2]
         if deltax != None and deltay != None:
           self.printmsg('Estimated Lumi center: x={0} y={1}'.format(
-              self.gcoder.get_opx() - deltax, self.gcoder.get_opy() - deltay))
+              self.client.gcoder.get_opx() - deltax, self.client.gcoder.get_opy() - deltay))
 
 
 class visualmaxsharp(cmdbase.singlexycmd, cmdbase.zscancmd, visualmeta):
