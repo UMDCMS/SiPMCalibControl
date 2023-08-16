@@ -14,7 +14,7 @@ var searchData=
   ['device_5fsettings_11',['device_settings',['../classviews_1_1device__settings.html',1,'views']]],
   ['digicmd_2epy_12',['digicmd.py',['../digicmd_8py.html',1,'']]],
   ['diodemodel_13',['DiodeModel',['../classcmod_1_1readoutmodel_1_1DiodeModel.html',1,'cmod::readoutmodel']]],
-  ['disablestepper_14',['disablestepper',['../classctlcmd_1_1motioncmd_1_1disablestepper.html',1,'ctlcmd::motioncmd']]],
+  ['disablestepper_14',['disablestepper',['../classctlcmd_1_1gcodercmd_1_1disablestepper.html',1,'ctlcmd.gcodercmd.disablestepper'],['../classctlcmd_1_1motioncmd_1_1disablestepper.html',1,'disablestepper']]],
   ['disablestepper_15',['DisableStepper',['../classGCoder.html#a9d3e4704be17c626698aebdb87761d7a',1,'GCoder']]],
   ['do_16',['do',['../classctlcmd_1_1cmdbase_1_1controlcmd.html#a67666389af58b2a0e261a0c79ea35df6',1,'ctlcmd::cmdbase::controlcmd']]],
   ['drs_20settings_17',['DRS settings',['../group__cli__readout0__drs.html',1,'']]],
@@ -22,9 +22,9 @@ var searchData=
   ['drscalib_19',['drscalib',['../classctlcmd_1_1drscmd_1_1drscalib.html',1,'ctlcmd::drscmd']]],
   ['drscontainer_20',['DRSContainer',['../classDRSContainer.html',1,'']]],
   ['drsrun_21',['drsrun',['../classctlcmd_1_1drscmd_1_1drsrun.html',1,'ctlcmd::drscmd']]],
-  ['drsset_22',['drsset',['../classctlcmd_1_1drscmd_1_1drsset.html',1,'ctlcmd::drscmd']]],
-  ['dump_5fjson_23',['dump_json',['../group__Logging.html#gab5b34a3609cbee79a74fe6bfead0cece',1,'cmod::fmt::FIFOHandler']]],
-  ['dump_5flines_24',['dump_lines',['../group__Logging.html#ga33d018fe5d5a96f74d0773e9147cfa1e',1,'cmod::fmt::FIFOHandler']]],
+  ['drsset_22',['drsset',['../classctlcmd_1_1drscmd_1_1drsset.html',1,'']]],
+  ['dump_5fjson_23',['dump_json',['../group__Logging.html#gabab4b7d386ddf3b2de0ff43d8debec5f',1,'cmod::fmt::FIFOHandler']]],
+  ['dump_5flines_24',['dump_lines',['../group__Logging.html#gaa2332e5619b32d10cc49f30c05120927',1,'cmod::fmt::FIFOHandler']]],
   ['dumpbuffer_25',['DumpBuffer',['../classDRSContainer.html#a20718f6583a34aa81409f6a62e11aaa0',1,'DRSContainer::DumpBuffer()'],['../classPicoUnit.html#a16948c9c89e8400e45966e927adac5d6',1,'PicoUnit::DumpBuffer() const']]],
   ['dumpinfo_26',['DumpInfo',['../classPicoUnit.html#a464dbf3658239aa76debf0f31b5d8f8e',1,'PicoUnit']]]
 ];

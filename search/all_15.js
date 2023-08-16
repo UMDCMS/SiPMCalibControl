@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['wait_0',['wait',['../classctlcmd_1_1getset_1_1wait.html',1,'ctlcmd::getset']]],
-  ['wait_5ffixed_5ftime_1',['wait_fixed_time',['../classctlcmd_1_1getset_1_1wait.html#acfd6023fe10a74b308c270fcf5d82c01',1,'ctlcmd::getset::wait']]],
+  ['wait_0',['wait',['../classctlcmd_1_1cmdbase_1_1wait.html',1,'ctlcmd::cmdbase']]],
+  ['wait_5ffixed_5ftime_1',['wait_fixed_time',['../classctlcmd_1_1cmdbase_1_1wait.html#a002f2bbd6f1d51e6294ea2e25c64c54f',1,'ctlcmd::cmdbase::wait']]],
   ['waitready_2',['WaitReady',['../classDRSContainer.html#a7d8bc7ff4d3448c01381f92dad482b4e',1,'DRSContainer']]],
   ['waittillready_3',['WaitTillReady',['../classPicoUnit.html#a49f117fe6e89f2f1158e9ae01e1a0cad',1,'PicoUnit']]],
   ['warning_4',['warning',['../classsession_1_1GUISession.html#a7b81e6a5812448ab2f465439b52e3a9b',1,'session::GUISession']]],

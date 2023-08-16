@@ -6,8 +6,8 @@ var searchData=
   ['description_5fstr_3',['description_str',['../classctlcmd_1_1cmdbase_1_1controlcmd.html#a8c19e4a8942aa8c6a9069c855b9280fb',1,'ctlcmd::cmdbase::controlcmd']]],
   ['disablestepper_4',['DisableStepper',['../classGCoder.html#a9d3e4704be17c626698aebdb87761d7a',1,'GCoder']]],
   ['do_5',['do',['../classctlcmd_1_1cmdbase_1_1controlcmd.html#a67666389af58b2a0e261a0c79ea35df6',1,'ctlcmd::cmdbase::controlcmd']]],
-  ['dump_5fjson_6',['dump_json',['../group__Logging.html#gab5b34a3609cbee79a74fe6bfead0cece',1,'cmod::fmt::FIFOHandler']]],
-  ['dump_5flines_7',['dump_lines',['../group__Logging.html#ga33d018fe5d5a96f74d0773e9147cfa1e',1,'cmod::fmt::FIFOHandler']]],
+  ['dump_5fjson_6',['dump_json',['../group__Logging.html#gabab4b7d386ddf3b2de0ff43d8debec5f',1,'cmod::fmt::FIFOHandler']]],
+  ['dump_5flines_7',['dump_lines',['../group__Logging.html#gaa2332e5619b32d10cc49f30c05120927',1,'cmod::fmt::FIFOHandler']]],
   ['dumpbuffer_8',['DumpBuffer',['../classDRSContainer.html#a20718f6583a34aa81409f6a62e11aaa0',1,'DRSContainer::DumpBuffer()'],['../classPicoUnit.html#a16948c9c89e8400e45966e927adac5d6',1,'PicoUnit::DumpBuffer() const']]],
   ['dumpinfo_9',['DumpInfo',['../classPicoUnit.html#a464dbf3658239aa76debf0f31b5d8f8e',1,'PicoUnit']]]
 ];
