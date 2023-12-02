@@ -1,0 +1,33 @@
+.mainContainer {
+  display: flex;
+  flex-direction: row;
+  /* align-items: center; */
+  justify-content: space-between;
+  width: 100%;
+  flex-wrap: wrap;
+  /* add space between items */
+  gap: 0.25rem;
+}
+
+.centerContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border: orange 2px solid;
+  /* add space between items */
+  /* gap: 0.25rem; */
+}
+
+.monitoring {
+  /* make this flex item take 30% of the width of the mmain parent flexbox container */
+  flex-basis: 20%;
+  border: green 2px solid;
+}
+
+.calibration {
+  flex-basis: 20%;
+  align-self: strech;
+  border: red 2px solid;
+}

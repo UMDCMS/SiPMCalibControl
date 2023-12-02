@@ -81,6 +81,7 @@ class Board(object):
     self.conditions = {}
 
     self.cmd = cmd  # Reference to main object
+    self.update_handler = None  # Callback function for when the board is changed
     self.logger = self.cmd.devlog("Board")
 
   def clear(self):
@@ -111,6 +112,10 @@ class Board(object):
     else:
       with open(self.filename, 'w') as f:
         f.write(json.dumps(self.__dict__(), indent=2))
+      
+      self.logger.info(f"Board config saved to {self.filename}")
+      if(self.update_handler):
+        self.update_handler()
 
   def load_board(self, filename):
     if len(self.get_all_detectors()) > 0 or not self.empty():
@@ -149,6 +154,9 @@ class Board(object):
         file and the required format and try again.""")
       self.clear()
       return False
+
+  def set_update_handler(self, handler):
+    self.update_handler = handler
 
   def get_detector(self, detid):
     # -1 as detid is the detector's index in the list + 1

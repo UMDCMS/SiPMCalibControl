@@ -16,12 +16,12 @@
 
 
 """
-from flask import Flask, request
-from flask_socketio import SocketIO
-from threading import Thread
+# from flask import Flask, request
+# from flask_socketio import SocketIO
+# from threading import Thread
 
-import server.views as views
-import server.sockets as sockets
+# import views as views
+# import sockets as sockets
 import ctlcmd.cmdbase as cmdbase  # For the command line session
 import cmod.fmt as fmt
 
@@ -63,6 +63,19 @@ class GUIcontrolterm(cmdbase.controlterm):
       cmdinst.sighandle = self.sighandle
 
     self.session_lock_string = ''
+
+     # add handler for whenever the board is changed or loaded
+    self.board.set_update_handler(self.board_handler)
+
+  def board_handler(self, board):
+    """
+    @brief Handler for whenever the board is changed or loaded
+
+    @details This handler will be called whenever the board is loaded or
+    changed. Here we will be updating the board instance in the session object
+    to match the current board instance.
+    """
+    self.socketio.emit('board-update', board.__dict__())
 
   def init_log_format(self):
     """
@@ -106,7 +119,7 @@ class GUIcontrolterm(cmdbase.controlterm):
       if self.session_lock_string != __DEFAULT_IMPOSSIBLE_STRING__:
         if allowed is not None and self.session_lock_string not in allowed:
           self.devlog(device).error(
-              fmt.oneline_string(f"""Illegal value: "{self.session_lock_string}
+              fmt.oneline_string(f"""Illegal value: {self.session_lock_string}
                                   valid inputs: {allowed}"""))
           self.session_lock_string = __DEFAULT_IMPOSSIBLE_STRING__
         else:
@@ -233,7 +246,7 @@ class GUISession(object):
 
     # Additional initialization routines
     self.__init_log_handlers__()
-    self.__init_flask__()
+    # self.__init_flask__()
     self.__init_socketio__()
     self.__init_calibration_defaults__()
 
@@ -281,30 +294,30 @@ class GUISession(object):
     self.mon_log.addHandler(self.mon_handle)
     self.mon_log.addHandler(self.sock_handle)
 
-  def __init_flask__(self):
-    """
-    @brief Setting up the application URL response methods.
+  # def __init_flask__(self):
+  #   """
+  #   @brief Setting up the application URL response methods.
 
-    @details Implementation of these methods can be found in the views.py file.
-    Here we add a thin wrapper so that the session instance can be used by the
-    view function instances.
-    """
-    # Forcing a debug server for easier handling of server shutdown (This )
-    self.app.debug = True
-    for url, vfunc in [
-        ('/', 'index'),  #
-        ('/devicesettings', 'device_settings'),
-        ('/geometry/<boardtype>', 'geometry'),  #
-        ('/report/<reporttype>', 'status'),  #
-        ('/databyfile/<process>/<filename>', 'databyfile'),  #
-        # ('/databyprocess/<process>/<detid>', 'databyprocess'),  #
-        ('/visual', 'visual'),  #
-        ('/logdump/<logtype>', 'logdump'),  #
-    ]:
-      setattr(self, f'view_{vfunc}', getattr(views, vfunc)(self))
-      self.app.add_url_rule(url,
-                            endpoint=url,
-                            view_func=getattr(self, f'view_{vfunc}').__call__)
+  #   @details Implementation of these methods can be found in the views.py file.
+  #   Here we add a thin wrapper so that the session instance can be used by the
+  #   view function instances.
+  #   """
+  #   # Forcing a debug server for easier handling of server shutdown (This )
+  #   self.app.debug = True
+  #   for url, vfunc in [
+  #       ('/', 'index'),  #
+  #       ('/devicesettings', 'device_settings'),
+  #       ('/geometry/<boardtype>', 'geometry'),  #
+  #       ('/report/<reporttype>', 'status'),  #
+  #       ('/databyfile/<process>/<filename>', 'databyfile'),  #
+  #       # ('/databyprocess/<process>/<detid>', 'databyprocess'),  #
+  #       ('/visual', 'visual'),  #
+  #       ('/logdump/<logtype>', 'logdump'),  #
+  #   ]:
+  #     setattr(self, f'view_{vfunc}', getattr(views, vfunc)(self))
+  #     self.app.add_url_rule(url,
+  #                           endpoint=url,
+  #                           view_func=getattr(self, f'view_{vfunc}').__call__)
 
   def __init_socketio__(self):
     """
@@ -321,6 +334,7 @@ class GUISession(object):
     for event, sfunc in socket_lookup:
       setattr(self, f'socket_{sfunc}', getattr(sockets, sfunc)(self))
       self.socketio.on_event(event, getattr(self, f'socket_{sfunc}').__call__)
+      
 
   def __init_calibration_defaults__(self):
     ## Stuff related to the generation of standard commands

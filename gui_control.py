@@ -3,7 +3,7 @@
 Script used to initiate the GUI server instance. The main documentation will be
 given in the files of the server/ directory
 """
-import server.session as ss
+import gui.server.session as ss
 import ctlcmd.cmdbase as cmdbase
 import ctlcmd.motioncmd as motioncmd
 import ctlcmd.getset as getset

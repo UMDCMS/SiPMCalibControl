@@ -20,7 +20,7 @@ this class is sufficient for the second type of signal processing. An additional
 the state checking and locking routine.
 """
 
-import server.session as ss
+import session as ss
 import cmod.fmt as fmt
 
 
