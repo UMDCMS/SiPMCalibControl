@@ -1,17 +1,326 @@
 """
-viscmd.py
 
-Commands for interacting and using the visual system for positional calibration.
+analysiscmd.py
+
+Analysis level command.
 
 """
 import ctlcmd.cmdbase as cmdbase
-import cmod.visual as vis
-import cmod.fmt as fmt
 import numpy as np
 from scipy.optimize import curve_fit
 import time
-import cv2
-import copy
+
+
+class halign(cmdbase.readoutcmd, cmdbase.hscancmd, cmdbase.rootfilecmd):
+  """
+  @brief Running horizontal alignment procedure by luminosity readout vs and xy
+  grid scan motion.
+  """
+
+  DEFAULT_ROOTFILE = 'halign_<BOARDTYPE>_<BOARDID>_<DETID>_<SCANZ>_<TIMESTAMP>.root'
+
+  def __init__(self, cmd):
+    cmdbase.controlcmd.__init__(self, cmd)
+
+  def add_args(self):
+    """
+    @brief Adding the overwrite and power settings
+    """
+    self.parser.add_argument('--overwrite',
+                             action='store_true',
+                             help="""Forcing the storage of scan results as
+                             session information""")
+    self.parser.add_argument('--power',
+                             '-p',
+                             type=float,
+                             help="""The PWM duty cycle to set the pulser board
+                             during the luminosity scan.""")
+
+  def parse(self, args):
+    """Only additional parsing is checking the power option."""
+    if args.power == None:
+      self.printwarn('in halign parse')
+      args.power = self.gpio.pwm_duty(0)
+      self.printwarn('after halign power asign')
+    return args
+
+  def run(self, args):
+    """
+    @details The command routine is as followed:
+    - Given the list of parsed coordinates in the arguments, we loop over the
+      coordinates and take a luminosity measurement at each of the coordinate.
+      Results are aggregated into a and array, and a measurement result is
+      listed for each measurement performed in the output save file.
+    - The results is fitted to the inverse square model, the initial fit
+      results is estimated with the center coordinates taken to be the
+      estimated luminosity center.
+    - Fitting results is either saved to the calibration cache, or is prompted
+      to be saved, depending on the current state of the calibration.
+    """
+    self.gpio.pwm(0, args.power, 1e5)
+    lumi = []
+    unc = []
+    total = len(args.x)
+
+    n = 0
+    test1 = []
+    test2 = []
+    ## Running over mesh.
+    for xval, yval in self.start_pbar(zip(args.x, args.y)):
+      self.check_handle()
+      self.move_gantry(xval, yval, args.scanz)
+      lumival, uncval = self.readout(args, average=True)
+      self.fillroot({"lumival": lumival, "uncval": uncval}, det_id=args.detid)
+      self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}')
+      lumi.append(abs(lumival))
+      unc.append(uncval)
+    # Performing fit
+    p0 = (
+        max(lumi) * ((args.scanz + 2)**2),  #
+        np.mean(args.x),  #
+        np.mean(args.y),  #
+        args.scanz,  #
+        min(lumi))
+    try:
+      fitval, fitcovar = curve_fit(halign.model,
+                                   np.vstack((args.x, args.y)),
+                                   lumi,
+                                   p0=p0,
+                                   sigma=unc,
+                                   maxfev=1000000)
+    except Exception as err:
+      self.printerr(f"""
+                    Lumi fit failed to converge, check output stored in file
+                    {self.savefile.name} for collected values""")
+      self.move_gantry(args.x, args.y, args.scanz)
+      raise err
+
+    def meas_str(v, u):
+      return f'{v:.1f}+-{u:.2f}'
+
+    self.printmsg(f'Best x:' + meas_str(fitval[1], np.sqrt(fitcovar[1][1])))
+    self.printmsg(f'Best y:' + meas_str(fitval[2], np.sqrt(fitcovar[2][2])))
+    self.printmsg(f'Fit  z:' + meas_str(fitval[3], np.sqrt(fitcovar[3][3])))
+
+    detid = int(args.detid)  ## Ensuring int convention in using this
+
+    ## Saving session information
+    coords = [
+        fitval[1],
+        np.sqrt(fitcovar[1][1]), fitval[2],
+        np.sqrt(fitcovar[1][1])
+    ]
+    if not self.board.lumi_coord_hasz(detid, args.scanz) or args.overwrite:
+      self.board.add_lumi_coord(detid, args.scanz, coords)
+      self.conditions.update_gantry_and_sipm_conditions(self.classname, detid,
+                                                        args.scanz)
+    elif self.board.lumi_coord_hasz(detid, args.scanz):
+      if self.prompt_yn(f"""A lumi alignment for z={args.scanz:.1f} already
+                        exists for the current session, overwrite?""",
+                        default=False):
+        self.board.add_lumi_coord(detid, args.scanz, coords)
+        self.conditions.update_gantry_and_sipm_conditions(
+            'halign', detid, args.scanz)
+
+    ## Sending gantry to position
+    if (fitval[1] > 0 and fitval[1] < self.gcoder.max_x() and fitval[2] > 0
+        and fitval[2] < self.gcoder.max_y()):
+      self.move_gantry(fitval[1], fitval[2], args.scanz)
+    else:
+      self.printwarn("""Fit position is out of gantry bounds, the gantry will not
+      attempt to move there""")
+
+  @staticmethod
+  def model(xydata, N, x0, y0, z, p):
+    """Inverse square model used for fitting"""
+    x, y = xydata
+    D = (x - x0)**2 + (y - y0)**2 + z**2
+    return (N * z / D**1.5) + p
+
+
+class zscan(cmdbase.singlexycmd, cmdbase.zscancmd, cmdbase.readoutcmd,
+            cmdbase.rootfilecmd):
+  """
+  Performing the intensity scan give a list of scanning z coordinates and the
+  list of biassing power.
+  """
+
+  DEFAULT_ROOTFILE = 'zscan_<BOARDTYPE>_<BOARDID>_<DETID>_<TIMESTAMP>.root'
+
+  def __init__(self, cmd):
+    cmdbase.controlcmd.__init__(self, cmd)
+
+  def add_args(self):
+    """Adding the power settings (accepts list)"""
+    self.parser.add_argument('--power',
+                             '-p',
+                             nargs='*',
+                             type=float,
+                             help="""Give a list of pwm duty cycle values to
+                             try for each coordinate point""")
+
+  def parse(self, args):
+    """Setting power list to current value if it doesn't exist"""
+    if not args.power:
+      args.power = [self.gpio.pwm_duty(0)]  ## Getting the PWM value
+    return args
+
+  def run(self, args):
+    """
+    @details For each of the z values and PWM power value listed in the
+    arguments, we move the gantry over to the cooridnates, set the PWM
+    settings, and take a measurement. The measurement is then saved to the
+    standard data format. As there are no fitting done here, the command simply
+    exists once all data collection is complete.
+    """
+    lumi = []
+    unc = []
+    # Ordering is important! Grouping z values together as the bottle neck is in
+    # motion speed
+    for z, power in self.start_pbar(
+        [(z, p) for z in args.zlist for p in args.power]):
+      self.check_handle()
+      self.move_gantry(args.x, args.y, z)
+      self.gpio.pwm(0, power, 1e5)  # Maximum PWM frequency
+
+      lumival = 0
+      uncval = 0
+      while 1:
+        lumival, uncval = self.readout(args, average=True)
+        if args.mode == cmdbase.readoutcmd.Mode.MODE_PICO:
+          wmax = self.pico.waveformmax(args.channel)
+          current_range = self.pico.rangeA() if args.channel == 0 \
+                          else self.pico.rangeB()
+          if wmax < 100 and current_range > self.pico.rangemin():
+            self.pico.setrange(args.channel, current_range - 1)
+          elif wmax > 200 and current_range < self.pico.rangemax():
+            self.pico.setrange(args.channel, current_range + 1)
+          else:
+            break
+        else:
+          break
+
+      lumi.append(lumival)
+      unc.append(uncval)
+      self.fillroot({"lumival": lumival, "uncval": uncval}, det_id=args.detid)
+      self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}')
+
+
+class lowlightcollect(cmdbase.singlexycmd, cmdbase.readoutcmd,
+                      cmdbase.rootfilecmd):
+  """@brief Collection of low light data at a single gantry position, data will
+  be collected without averaging."""
+  DEFAULT_ROOTFILE = 'lowlight_<BOARDTYPE>_<BOARDID>_<DETID>_<TIMESTAMP>.root'
+
+  def __init__(self, cmd):
+    cmdbase.controlcmd.__init__(self, cmd)
+
+  def add_args(self):
+    """@brief adding the additional arguments"""
+    self.parser.add_argument('-z',
+                             type=float,
+                             default=300,
+                             help="""z height to perform the low light
+                             collection result. (units: mm)""")
+    self.parser.add_argument('--power',
+                             '-p',
+                             type=float,
+                             help="""PWM duty cycle for data collection, using
+                             current value if not specified""")
+
+  def parse(self, args):
+    """
+    @details As the number of samples passed to the readoutcmd class is typically
+    very large for the readout settings. Here we split the samples into segments
+    of 1000 data collections as this will help to monitor and segment the
+    function in-case of user cutoff.
+    """
+    if not args.power:
+      args.power = self.gpio.pwm_duty(0)
+    ## Modifying the sample argument to make monitoring simpler:
+    args.nparts = (args.samples // 1000) + 1
+    args.samples = 1000
+    return args
+
+  def run(self, args):
+    """
+    @brief Running low light collection.
+
+    @details Operation of this command relatively straight forwards, simply run
+    the readout command multiple times with no averaging and write to a file in
+    standard format. Progress will be printed for every 1000 data collections.
+    """
+    self.move_gantry(args.x, args.y, args.z)
+    self.gpio.pwm(0, args.power, 1e5)
+    for _ in self.start_pbar(range(args.nparts)):
+      self.check_handle()
+      readout = self.readout(args, average=False)
+      readout = readout.tolist()
+      self.fillroot({"readout": readout}, {"readout": "var * float64"},
+                    det_id=args.detid)
+      self.pbar_data(Lumi=f'{readout[-1]:.2}')
+
+
+class timescan(cmdbase.readoutcmd, cmdbase.rootfilecmd):
+  """
+  Generate a log of the readout in terms relative to time.
+  """
+  DEFAULT_ROOTFILE = 'tscan_<TIMESTAMP>.root'
+
+  def __init__(self, cmd):
+    cmdbase.controlcmd.__init__(self, cmd)
+
+  def add_args(self):
+    self.parser.add_argument('--nslice',
+                             type=int,
+                             default=30,
+                             help='total number of measurement to take')
+    self.parser.add_argument('--interval',
+                             type=float,
+                             default=1,
+                             help='Time interval between measurements (seconds)')
+    self.parser.add_argument('--testpwm',
+                             type=float,
+                             nargs='*',
+                             help="""PWM duty cycle values to cycle through
+                             while performing test""")
+    self.parser.add_argument('--pwmslices',
+                             type=int,
+                             default=10,
+                             help="""Number of time slices to take for a given
+                             PWM test value""")
+
+  def parse(self, args):
+    if not args.testpwm:
+      args.testpwm = [self.gpio.pwm_duty(0)]
+    return args
+
+  def run(self, args):
+    start_time = time.time_ns()
+    pwmindex = 0
+
+    for it in self.start_pbar(args.nslice):
+      self.check_handle()
+      if (it % args.pwmslices == 0):
+        self.gpio.pwm(0, args.testpwm[pwmindex], 1e5)
+        pwmindex = (pwmindex + 1) % len(args.testpwm)
+
+      lumival, uncval = self.readout(args, average=True)
+      s2 = self.visual.get_latest().s2
+      s4 = self.visual.get_latest().s4
+      sample_time = time.time_ns()
+      timestamp = (sample_time - start_time) / 1e9
+      self.fillroot({
+          "lumival": lumival,
+          "uncval": uncval,
+          "S2": s2,
+          "S4": s4
+      },
+                    time=timestamp,
+                    det_id=-100)
+      self.pbar_data(Lumi=f'{lumival:.2f}+-{uncval:.2f}',
+                     Sharp=f'({s2:.1f}, {s4:.1f})')
+      time.sleep(args.interval)
 
 
 class visualmeta(cmdbase.controlcmd):
@@ -43,65 +352,6 @@ class visualmeta(cmdbase.controlcmd):
 
   def post_run(self):
     cv2.destroyAllWindows()
-
-
-class visualset(cmdbase.controlcmd):
-  """@brief Defining the parameters used for finding the detector in the field of view."""
-  def __init__(self, cmd):
-    cmdbase.controlcmd.__init__(self, cmd)
-
-  def add_args(self):
-    self.parser.add_argument('--threshold',
-                             '-t',
-                             type=float,
-                             help="""
-                             Grayscale threshold to perform contouring algorithm
-                             [0-255]""")
-    self.parser.add_argument('--blur',
-                             '-b',
-                             type=int,
-                             help="""
-                             Blur size to perform to the image before contouring
-                             to avoid picking up noise [pixels]""")
-    self.parser.add_argument('--lumi',
-                             '-l',
-                             type=int,
-                             help="""
-                             Maximum luminosity threshold of the interior of a
-                             contour to be selected as a det candidate (typically
-                             0-255)""")
-    self.parser.add_argument('--size',
-                             '-s',
-                             type=int,
-                             help="""
-                             Minimum size of a contour to be selected as a det
-                             candidate [pixels]""")
-    self.parser.add_argument('--ratio',
-                             '-r',
-                             type=float,
-                             help="""
-                             Maximum Ratio of the two dimension of a contour to
-                             be selected as a det candidate (>1)""")
-    self.parser.add_argument('--poly',
-                             '-p',
-                             type=float,
-                             help="""
-                             Relative tolerance for performing polygon
-                             approximation algorithm (0, 1)""")
-
-  def run(self, args):
-    if args.threshold:
-      self.visual.threshold = args.threshold
-    if args.blur:
-      self.visual.blur_range = args.blur
-    if args.lumi:
-      self.visual.lumi_cutoff = args.lumi
-    if args.size:
-      self.visual.size_cutoff = args.size
-    if args.ratio:
-      self.visual.ratio_cutoff = args.ratio
-    if args.poly:
-      self.visual.poly_range = args.poly
 
 
 class visualhscan(cmdbase.hscancmd, visualmeta, cmdbase.rootfilecmd):
@@ -353,7 +603,8 @@ class visualcenterdet(cmdbase.singlexycmd, visualmeta):
 
 class visualmaxsharp(cmdbase.singlexycmd, cmdbase.zscancmd, visualmeta):
   """
-  @brief Moving the gantry to the position such that the image sharpness is maximized.
+  @brief Moving the gantry to the position such that the image sharpness is
+  maximized.
   """
   """
   The user is required to input the z points to scan for maximum sharpness.
@@ -447,26 +698,6 @@ class visualmaxsharp(cmdbase.singlexycmd, cmdbase.zscancmd, visualmeta):
       return a * exp(-(z - z0)**2 / (2 * b**2)) + c
 
 
-class visualsaveframe(cmdbase.controlcmd):
-  """
-  @brief Saving the current image to some path
-  """
-  def __init__(self, cmd):
-    cmdbase.controlcmd.__init__(self, cmd)
-
-  def add_args(self):
-    self.parser.add_argument('--saveimg',
-                             type=str,
-                             required=True,
-                             help='Local path to store image file')
-    self.parser.add_argument('--raw',
-                             action='store_true',
-                             help='Store raw image or processes image')
-
-  def run(self, args):
-    self.visual.save_image(args.saveimg, args.raw)
-
-
 class visualzscan(cmdbase.singlexycmd, cmdbase.zscancmd, visualmeta,
                   cmdbase.rootfilecmd):
   """
@@ -507,37 +738,3 @@ class visualzscan(cmdbase.singlexycmd, cmdbase.zscancmd, visualmeta,
       self.pbar_data(sharpness=f'({center.s2:.1f}, {center.s4:.1f})',
                      reco=f'({center.x:.0f}, {center.y:.0f})',
                      measure=f'({center.area:.0f}, {center.maxmeas:.0f})')
-
-
-class visualshowdet(visualmeta):
-  """@brief Display of detector position, until termination signal is obtained."""
-  def __init__(self, cmd):
-    cmdbase.controlcmd.__init__(self, cmd)
-
-  def add_args(self):
-    self.parser.add_argument('--raw',
-                             '-r',
-                             action='store_true',
-                             help="""
-                             Show the raw image without image processing
-                             lines""")
-
-  def parse(self, args):
-    args.monitor = True  # Forcing to be true.
-    return args
-
-  def run(self, args):
-    self.printmsg("PRESS CTL+C to stop the command")
-    self.printmsg("Legend")
-    self.printmsg("Failed contor ratio requirement")
-    self.printmsg(fmt.GREEN("Failed area luminosity requirement"))
-    self.printmsg(fmt.YELLOW("Failed rectangular approximation"))
-    self.printmsg(fmt.CYAN("Candidate contour (not largest)"))
-    while True:
-      try:
-        self.check_handle()
-      except:
-        break
-
-      self.show_img(args, args.raw)
-      time.sleep(args.vwait)

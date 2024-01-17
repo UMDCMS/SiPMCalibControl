@@ -42,6 +42,8 @@ import json
 import argparse
 import numpy as np
 
+from typing import List
+
 ##
 # @{
 # @brief Defining the custom level This should match what is defined the src/logging.cc
@@ -267,7 +269,7 @@ class FIFOHandler(logging.Handler):
       line += f':::{remove_newline(str(extra_dict))}'
     return line
 
-  def dump_lines(self, file_obj, exclude: list[int]):
+  def dump_lines(self, file_obj, exclude: List[int]):
     """
     @brief Write records to a file in line-based format
 
@@ -282,7 +284,7 @@ class FIFOHandler(logging.Handler):
         if __all_logging_levels__[record.levelno] not in exclude
     ]
 
-  def dump_json(self, file_obj, exclude: list[int]):
+  def dump_json(self, file_obj, exclude: List[int]):
     """
     @brief Write records to a file in json-based format
 

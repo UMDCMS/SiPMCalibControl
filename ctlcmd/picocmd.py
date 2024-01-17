@@ -1,18 +1,24 @@
 import ctlcmd.cmdbase as cmdbase
 
 
-class picoset(cmdbase.controlcmd):
+class set_pico(cmdbase.controlcmd):
   """@brief Setting picoscope operation parameters"""
   def __init__(self, cmd):
     cmdbase.controlcmd.__init__(self, cmd)
 
   def add_args(self):
+    # Setting the device
+    self.parser.add_argument('--devpath',
+                             type=str,
+                             help="""Path to the picoscope device""")
+
+    # Setting the range
     self.parser.add_argument('--range',
                              type=int,
                              help="""
-                             Voltage range by index, use command "get --pico" for
-                             the list of available numbers, both channel will be
-                             set to the same range index""")
+                             Voltage range by index, use command "get --pico"
+                             for the list of available numbers, both channel
+                             will be set to the same range index""")
 
     ## Trigger related settings
     self.parser.add_argument('--triggerchannel',
@@ -24,8 +30,8 @@ class picoset(cmdbase.controlcmd):
     self.parser.add_argument('--triggerdirection',
                              type=int,
                              help="""
-                             Index representing the direction of the trigger. See
-                             the outputs of "get --pico" for the available
+                             Index representing the direction of the trigger.
+                             See the outputs of "get --pico" for the available
                              numbers""")
     self.parser.add_argument('--triggerlevel',
                              type=float,
@@ -62,9 +68,17 @@ class picoset(cmdbase.controlcmd):
                              block""")
 
   def run(self, args):
+    self.set_device(args)
     self.set_range(args)
     self.set_trigger(args)
     self.set_blocks(args)
+
+  def set_device(self, args):
+    if not args.devpath: return  # Early exit if not setting path
+    self.printwarn(
+        "Picoscope device is currently automatically detected by libusb")
+    if self.pico is None:
+      self.pico.init()
 
   def set_range(self, args):
     if args.range:
@@ -96,6 +110,15 @@ class picoset(cmdbase.controlcmd):
         or args.postsamples != self.pico.postsamples
         or args.ncaptures != self.pico.ncaptures):
       self.pico.setblocknums(args.ncaptures, args.postsamples, args.presamples)
+
+
+class get_pico(cmdbase.controlcmd):
+  """@brief get picoscope settings"""
+  def __init__(self, cmd):
+    cmdbase.controlcmd.__init__(self, cmd)
+
+  def run(self, args):
+    pass
 
 
 class picorunblock(cmdbase.savefilecmd):
@@ -161,8 +184,10 @@ class picorunblock(cmdbase.savefilecmd):
 
 
 class picorange(cmdbase.controlcmd):
-  """@brief Automatically setting the voltage range of the picoscope based on a
-  few set waveforms of data."""
+  """
+  @brief Automatically setting the voltage range of the picoscope based on a few
+  set waveforms of data.
+  """
   def __init__(self, cmd):
     cmdbase.controlcmd.__init__(self, cmd)
 

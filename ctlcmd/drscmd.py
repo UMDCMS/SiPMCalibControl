@@ -1,14 +1,17 @@
 import ctlcmd.cmdbase as cmdbase
 import time
-#import ctypes
 
 
-class drsset(cmdbase.controlcmd):
-  """@brief Setting DRS4 readout operation parameters"""
+class set_drs(cmdbase.controlcmd):
+  """@brief Setting DRS4 device and readout operation parameters"""
   def __init__(self, cmd):
     cmdbase.controlcmd.__init__(self, cmd)
 
   def add_args(self):
+    self.parser.add_argument('--devpath',
+                             type=str,
+                             help="""Device path to the DRS""")
+
     self.parser.add_argument('--triggerchannel',
                              type=int,
                              help="""
@@ -43,6 +46,21 @@ class drsset(cmdbase.controlcmd):
                              help="""
                              Number of samples to collect after trigger cell""")
 
+  def run(self, args):
+    """Argument will be handled by sub functions"""
+
+    self.set_device(args)
+    self.set_trigger(args)
+    self.set_collection(args)
+
+  def set_device(self, args):
+    if not args.devpath:  # Early exist if no device path is specified
+      return
+
+    self.printwarn("DRS device is currently automatically detected by libusb")
+    if self.drs is None:
+      self.drs.init()
+
   def set_trigger(self, args):
     ## Getting default values if settings do not exists
     if not args.triggerchannel:
@@ -70,9 +88,15 @@ class drsset(cmdbase.controlcmd):
     if args.samplerate != None:
       self.drs.set_rate(args.samplerate)
 
+
+class get_drs(cmdbase.controlcmd):
+  """@brief Getting the DRS device path and settings"""
+  def __init__(self, cmd):
+    cmdbase.controlcmd.__init__(self, cmd)
+
   def run(self, args):
-    self.set_trigger(args)
-    self.set_collection(args)
+    # TODO: Implement proper configuration dump
+    self.devlog('DRS').log("DRS is available?", str(self.drs.is_available()))
 
 
 class drscalib(cmdbase.controlcmd):

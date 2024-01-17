@@ -9,12 +9,28 @@ import ctlcmd.cmdbase as cmdbase
 import time
 
 
+class set_digi(cmdbase.controlcmd):
+  """@brief Initializing the GPIO devices"""
+  def __init__(self, cmd):
+    cmdbase.controlcmd.__init__(self, cmd)
+
+  def run(self, args):
+    self.gpio.init()
+
+
+class get_digi(cmdbase.controlcmd):
+  """@brief Getting GPIO device settings"""
+  def __init__(self, cmd):
+    cmdbase.controlcmd.__init__(self, cmd)
+
+  def run(self, args):
+    pass
+
+
 class pulse(cmdbase.controlcmd):
   """
-  Running the trigger for a certain about of pulses with alternative wait
-  options.
-
-  @details this is some test
+  @brief Running the trigger for a certain about of pulses with alternative
+  wait options.
   """
   def __init__(self, cmd):
     cmdbase.controlcmd.__init__(self, cmd)

@@ -1759,3 +1759,267 @@ class readoutcmd(controlcmd):
     else:
       ## This is a linear photo diode readout
       return self.diode.read_model(r0, z, pwm, args.samples)
+
+
+"""
+Commands that doesn't directly uses any hardware system.
+"""
+
+
+class exit(controlcmd):
+  """@brief Command for exiting the main session"""
+  def __init__(self, cmd):
+    controlcmd.__init__(self, cmd)
+
+  def run(self, args):
+    if self.prompt_yn("""Exiting this will terminate the session and all
+                      calibration variables (results are still on disk). Are you
+                      sure you want to exit?""",
+                      default=False):
+      self.printmsg("Sending gantry home...")
+      # Fast motion to somewhere close to home
+      self.move_gantry(1, 1, 1)
+      # Activate send home
+      try:
+        self.gcoder.sendhome(True, True, True)
+      except Exception as err:
+        pass
+      return controlcmd.TERMINATE_SESSION
+
+
+class history(savefilecmd):
+  """
+  Getting the input history. Notice that this will only include the user input
+  history. Commands in the runfile will note be expanded.
+  """
+  DEFAULT_SAVEFILE = None  # Do not attempt to save the command history on call.
+
+  def __init__(self, cmd):
+    controlcmd.__init__(self, cmd)
+
+  def add_args(self):
+    self.parser.add_argument('--successful',
+                             '-s',
+                             action='store_true',
+                             help="""
+                             Keep only the commands the successfully executed
+                             without error (user interuptions would be treated
+                             as errors!)""")
+
+  def run(self, args):
+    """
+    Getting the command execution record based on the the logging entries.
+    """
+    cmd_record = [
+        x for x in self.cmd.mem_handle.record_list
+        if x.levelno == fmt.logging.CMD_HIST and 'stop' in x.args
+    ]
+    if args.successful:  # Additional filtering for successfully executed commands
+      cmd_record = [x for x in cmd_record if x.args[1] == self.EXIT_SUCCESS]
+
+    self.screen_history(cmd_record)
+    if self.savefile:
+      self.file_history(cmd_record)
+
+  def screen_history(self, cmd_record):
+    """
+    @brief Printing the cmd history dump to screen
+
+    @details We will only include the exceution status and the command itself
+    (no time stamps!) for a brevity.
+    """
+    def stat_str(stat_no):
+      return fmt.RED(   "[PARSE ERROR ]") if stat_no == self.PARSE_ERROR else \
+             fmt.RED(   "[EXEC ERROR  ]") if stat_no == self.EXECUTE_ERROR else \
+             fmt.YELLOW("[INTERRUPTED ]") if stat_no == self.TERMINATE_CMD else \
+             fmt.GREEN( "[EXEC SUCCESS]")
+
+    cmd_lines = [stat_str(x.args[1]) + ' ' + x.msg for x in cmd_record]
+    if len(cmd_lines):
+      self.logger.log(fmt.logging.INT_INFO, '\n'.join(cmd_lines))
+
+  def file_history(self, cmd_record):
+    """
+    @brief Saving the cmd history dump to the savefile
+
+    @details The first 2 columns would be the time stamp (for potentially
+    debugging), and the exit status string. The latter entires would be the
+    command executed.
+    """
+    def stat_str(record):
+      """Converting execute status code to human readable string"""
+      stat_no = record.args[1]
+      return "PARSE_ERROR"   if stat_no == self.PARSE_ERROR else   \
+             "EXECUTE_ERROR" if stat_no == self.EXECUTE_ERROR else \
+             "INTERRUPTED"   if stat_no == self.TERMINATE_CMD else \
+             "EXIT_SUCCESS"
+
+    for rec in cmd_record:
+      self.savefile.write(
+          f'{fmt.record_timestamp(rec):s} {stat_str(rec):15s} {rec.msg:s}\n')
+
+
+class logdump(savefilecmd):
+  """
+  @brief Dumping log entries into to a file.
+  """
+  DEFAULT_SAVEFILE = 'logdump_<TIMESTAMP>.log'
+
+  def __init__(self, cmd):
+    controlcmd.__init__(self, cmd)
+
+  def add_args(self):
+    self.parser.add_argument('--exclude',
+                             '-x',
+                             type=str,
+                             nargs='*',
+                             choices=list(fmt.__all_logging_levels__.values()),
+                             default=['TRACEBACK', 'HW_DEBUG', 'INT_INFO'],
+                             help="""Removing log-levels to avoid being too
+                                  verbose in output file. Default =
+                                  %(default)s""")
+    self.parser.add_argument('--format',
+                             type=str,
+                             choices=['line', 'json'],
+                             default='line',
+                             help="""Format to dump the file into (json is
+                                  eaiser to reconstruct for advanced processing,
+                                  but difficult for command-line based
+                                  piping operations (Default=%(default)s)""")
+
+  def run(self, args):
+    """
+    As log parsing is more verbose, here will call the in-built method in the
+    fmt file for processing the file.
+    """
+    if args.format == 'line':
+      self.cmd.mem_handle.dump_lines(self.savefile, exclude=args.exclude)
+    else:
+      self.cmd.mem_handle.dump_json(self.savefile, exclude=args.exclude)
+
+
+class wait(controlcmd):
+  """
+  @brief Suspending the interactive session for N seconds, or until a
+  confirmation string is entered by user. Wait can be terminated early using
+  Ctl+C.
+
+  <help link>
+  """
+  def __init__(self, cmd):
+    controlcmd.__init__(self, cmd)
+
+  def add_args(self):
+    group = self.parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('--time',
+                       '-t',
+                       type=float,
+                       help='Time to suspend session (seconds)')
+    group.add_argument('--message',
+                       type=str,
+                       nargs='+',
+                       help="""The first string would be the key that that user
+                            inputs to release the wait, the trailing string
+                            would be a message to display during wait time""")
+
+  def parse(self, args):
+    if args.time:  # Pausing by time
+      if args.time < 0:
+        raise ValueError('Pause time must be positive!')
+    else:  # Pausing by message:
+      args.userkey = args.message[0]
+      args.message = ' '.join(
+          args.message[1:]) + f'<br>Enter [{args.userkey}] to continue: '
+    return args
+
+  def run(self, args):
+    if args.time:
+      self.wait_fixed_time(args)
+    else:
+      self.wait_user_input(args)
+
+  def wait_fixed_time(self, args):
+    """Waiting for a fixed time. Here we also include a progress bar for easier
+    checking of progress (We are expecting wait times on the order of seconds"""
+    start_time = time.time()
+    prev_time = start_time
+    curr_time = start_time
+    self.start_pbar(total=int(args.time))
+    while (curr_time - start_time) < args.time:
+      self.check_handle()
+      time.sleep(0.01)
+      curr_time = time.time()
+      if curr_time - prev_time > 1.0:
+        self.pbar.update()
+        self.pbar_data(Total=args.time)
+        prev_time = curr_time
+    if self.pbar.n != self.pbar.total:
+      # Forcing complete progress bard to appear.
+      self.pbar.update(self.pbar.total - self.pbar.n)
+
+  def wait_user_input(self, args):
+    self.prompt_input(args.message, allowed=[args.userkey])
+
+
+class runfile(controlcmd):
+  """
+  @brief Running a file with a list of commands.
+  """
+  """
+  Notice that while runfiles can be called recursively, you cannot call runfiles
+  that have already been called, as this will cause infinite recursion. If any
+  command in the command file fails, the whole runfile call will be terminated
+  to prevent user error from damaging the gantry.
+  """
+  def __init__(self, cmd):
+    controlcmd.__init__(self, cmd)
+
+  def add_args(self):
+    self.parser.add_argument('file',
+                             nargs=1,
+                             type=str,
+                             help="""
+                             Runfile to use. Relative paths will be evaluated
+                             from the current working directory.""")
+
+  def parse(self, args):
+    """Making sure the target is a readable file."""
+    args.file = args.file[0]
+    if not os.path.isfile(args.file):
+      raise fmt.ArgumentValueError('Specified path is not a file!')
+    return args
+
+  def run(self, args):
+    """
+    The command will infer a runfile stack in the controlterm instance to keep
+    track of which files has already been invoked by the runfile command. The
+    last file in the stack will be opened and executed per-line.
+    """
+    if not hasattr(self.cmd, 'runfile_stack'):
+      self.cmd.runfile_stack = []
+
+    if args.file in self.cmd.runfile_stack:
+      self.error_exit_run(f"""
+        File [{args.file}] has already been called! This indicates there is some
+        error in user logic. Exiting the top level runfile command.""")
+    else:
+      self.cmd.runfile_stack.append(args.file)
+
+    with open(args.file) as f:
+      for line in f.readlines():
+        line = line.strip()
+        self.check_handle()
+        self.printmsg(line)
+        status = self.cmd.onecmd(line)
+        if status != cmdbase.controlcmd.EXIT_SUCCESS:
+          self.error_exit_run(f"""
+            Command [{line}] in file [{args.file}] has failed. Exiting top level
+            runfile command.""")
+    self.cmd.runfile_stack.pop(-1)
+
+  def post_run(self, msg):
+    """
+    Save exit on error to ensure that the runfile stack is properly cleared out.
+    """
+    self.cmd.runfile_stack = []
+    raise ValueError(msg)

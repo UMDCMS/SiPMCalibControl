@@ -361,7 +361,8 @@ Visual::FindDetector( const cv::Mat& img )
   }
   const auto  contours = FindContours( img );
   const auto& hulls    = contours.at( 0 );
-  const auto  ans      = hulls.empty() ? empty_return : MakeResult( img, hulls.at(
+  const auto  ans      = hulls.empty() ? empty_return : MakeResult( img,
+                                                                    hulls.at(
                                                                       0 ) );
   display = MakeDisplay( img, contours );
   return ans;
@@ -393,8 +394,7 @@ Visual::FindContours( const cv::Mat& img ) const
 
   // Calculating all contour properties
   for( const auto& cont : contours ){
-    const double size = GetContourSize(
-      cont );
+    const double size = GetContourSize( cont );
     if( size < size_cutoff ){
       continue;
     }
