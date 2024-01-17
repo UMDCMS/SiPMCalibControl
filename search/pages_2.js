@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['installation_20instructions_0',['Installation instructions',['../install.html',1,'']]]
+  ['helper_0',['Python modules for session management helper',['../md__2github_2workspace_2cmod_2README.html',1,'']]]
 ];

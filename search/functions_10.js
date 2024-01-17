@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['view_0',['view',['../classviews_1_1ViewFunction.html#aefef685789374e8a9bfab7ea911c4664',1,'views.ViewFunction.view()'],['../classviews_1_1index.html#a27a521ddcb38f255ec58ed27f317ccc3',1,'views.index.view()'],['../classviews_1_1expert.html#a1ea19cec71f17b70be59914cbb02d7ce',1,'views.expert.view()'],['../classviews_1_1playground.html#a0e56d4be5bbc6a36c7d1a4caae961e4e',1,'views.playground.view()'],['../classviews_1_1geometry.html#a109c3c2fe0db11b77d678b6ae166e9f2',1,'views.geometry.view()'],['../classviews_1_1status.html#a10b9979d797b588cfca1b8cf0af5b8d6',1,'views.status.view()'],['../classviews_1_1device__settings.html#a525317c3af80df38259abf2e29ca449a',1,'views.device_settings.view()'],['../classviews_1_1databyfile.html#a3a3c77c34b2d057fe9b30b895e01dcdf',1,'views.databyfile.view()'],['../classviews_1_1visual.html#a9a72df5896d745c9774f0b38e7789e84',1,'views.visual.view()'],['../classviews_1_1logdump.html#a92edf6f6622bdd873f080ecf52ca2836',1,'views.logdump.view()']]],
-  ['voltagerangemax_1',['VoltageRangeMax',['../classPicoUnit.html#a6f92d2256d04dca26fe9178fdc67bd11',1,'PicoUnit']]],
-  ['voltagerangemin_2',['VoltageRangeMin',['../classPicoUnit.html#a98240d3d0f2ec02446c72768df0a56ad',1,'PicoUnit']]]
+  ['voltagerangemax_0',['VoltageRangeMax',['../classPicoUnit.html#a6f92d2256d04dca26fe9178fdc67bd11',1,'PicoUnit']]],
+  ['voltagerangemin_1',['VoltageRangeMin',['../classPicoUnit.html#a98240d3d0f2ec02446c72768df0a56ad',1,'PicoUnit']]]
 ];

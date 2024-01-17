@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['sipm_20calibration_20control_20program_0',['SiPM Calibration Control Program',['../index.html',1,'']]]
+  ['program_0',['SiPM Calibration Control Program',['../index.html',1,'']]],
+  ['python_20modules_20for_20session_20management_20helper_1',['Python modules for session management helper',['../md__2github_2workspace_2cmod_2README.html',1,'']]]
 ];

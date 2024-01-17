@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['gpio_20settings_0',['GPIO settings',['../group__cli__readout3__gpio.html',1,'']]],
-  ['gui_20design_1',['GUI Design',['../group__gui__design.html',1,'']]]
+  ['debugging_20command_20and_20miscelleneous_20commands_0',['System Debugging command and Miscelleneous commands',['../group__cli__debug.html',1,'']]],
+  ['drs_20settings_1',['DRS settings',['../group__cli__readout0__drs.html',1,'']]]
 ];

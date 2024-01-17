@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['cli_20framework_0',['CLI Framework',['../group__cli__design.html',1,'']]],
-  ['command_20line_20interface_20manual_1',['Command Line Interface Manual',['../group__cli.html',1,'']]]
+  ['analysis_20level_20commands_0',['SiPM Analysis-Level commands',['../group__cli0__analysis.html',1,'']]],
+  ['and_20miscelleneous_20commands_1',['System Debugging command and Miscelleneous commands',['../group__cli__debug.html',1,'']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['gui_20manual_0',['GUI manual',['../gui.html',1,'']]]
+  ['for_20session_20management_20helper_0',['Python modules for session management helper',['../md__2github_2workspace_2cmod_2README.html',1,'']]]
 ];

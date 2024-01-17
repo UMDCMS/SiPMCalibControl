@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['logging_0',['Logging',['../group__Logging.html',1,'']]]
+  ['framework_0',['CLI Framework',['../group__cli__design.html',1,'']]]
 ];

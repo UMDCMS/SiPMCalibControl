@@ -6,9 +6,7 @@ var searchData=
   ['enablestepper_3',['enablestepper',['../classctlcmd_1_1gcodercmd_1_1enablestepper.html',1,'ctlcmd.gcodercmd.enablestepper'],['../classctlcmd_1_1motioncmd_1_1enablestepper.html',1,'enablestepper']]],
   ['enablestepper_4',['EnableStepper',['../classGCoder.html#a0f730927cf344cb4e42a2549e9604787',1,'GCoder']]],
   ['endloopthread_5',['EndLoopThread',['../classVisual.html#a60dbf5ab56b489a1cbf6ab95ce372453',1,'Visual']]],
-  ['error_6',['error',['../classsession_1_1GUISession.html#afa364bdb075b8d1f9a1df153bd4e2e28',1,'session::GUISession']]],
-  ['error_7',['ERROR',['../group__Logging.html#ga46f4be836a3b56f7c7f9f45c35449ab0',1,'cmod::fmt']]],
-  ['execute_8',['execute',['../classsockets_1_1ActionRequest.html#af0fdfbcd0daa855c7729c8f559818a2f',1,'sockets.ActionRequest.execute()'],['../classsockets_1_1run__single__cmd.html#a65c9479cf7e9fd6f030d9bd6c0bdb44b',1,'sockets.run_single_cmd.execute()']]],
-  ['exit_9',['exit',['../classctlcmd_1_1cmdbase_1_1exit.html',1,'ctlcmd::cmdbase']]],
-  ['expert_10',['expert',['../classviews_1_1expert.html',1,'views']]]
+  ['error_6',['ERROR',['../group__Logging.html#ga46f4be836a3b56f7c7f9f45c35449ab0',1,'cmod::fmt']]],
+  ['exit_7',['exit',['../classctlcmd_1_1cmdbase_1_1exit.html',1,'ctlcmd::cmdbase']]],
+  ['extraction_20commands_8',['Waveform Extraction commands',['../group__cli1__waveform.html',1,'']]]
 ];

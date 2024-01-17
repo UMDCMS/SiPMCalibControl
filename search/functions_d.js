@@ -12,7 +12,7 @@ var searchData=
   ['setreferencevoltage_9',['SetReferenceVoltage',['../classGPIO.html#acf34da61c5ba82757da46e59928fb093',1,'GPIO']]],
   ['setsamples_10',['SetSamples',['../classDRSContainer.html#a1a22af517cf74630c1e60ec26bbb66e6',1,'DRSContainer']]],
   ['setspeedlimit_11',['SetSpeedLimit',['../classGCoder.html#ab5fd4da405a16c662eea1375e02ba4c7',1,'GCoder']]],
-  ['settrigger_12',['SetTrigger',['../classPicoUnit.html#a0c3224fe57ac5dfe68c59087916e6e71',1,'PicoUnit::SetTrigger()'],['../classDRSContainer.html#abe43936afad4e00e5c3cea3d88896340',1,'DRSContainer::SetTrigger()']]],
+  ['settrigger_12',['SetTrigger',['../classDRSContainer.html#abe43936afad4e00e5c3cea3d88896340',1,'DRSContainer::SetTrigger()'],['../classPicoUnit.html#a0c3224fe57ac5dfe68c59087916e6e71',1,'PicoUnit::SetTrigger(const int16_t channel, const int16_t direction, const float level, const unsigned delay, const int16_t maxwait)']]],
   ['setvoltagerange_13',['SetVoltageRange',['../classPicoUnit.html#ad55129dfd713ecc58400048fc05f9224',1,'PicoUnit']]],
   ['sharpness_14',['sharpness',['../classVisual.html#a60e32aa20fc5c512d3fd820083e8df39',1,'Visual']]],
   ['socket_5fcheck_15',['socket_check',['../classcmod_1_1TBController_1_1ZMQController.html#a1e4b43134a11caf9c12a70c611307631',1,'cmod::TBController::ZMQController']]],

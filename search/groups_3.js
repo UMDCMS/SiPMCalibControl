@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['hardware_20interface_0',['Hardware Interface',['../group__hardware.html',1,'']]]
+  ['extraction_20commands_0',['Waveform Extraction commands',['../group__cli1__waveform.html',1,'']]]
 ];

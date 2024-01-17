@@ -26,8 +26,8 @@ var menudata={children:[
 {text:"Main Page",url:"index.html"},
 {text:"CLI manual",url:"group__cli.html"},
 {text:"CLI design",url:"group__cli__design.html"},
-{text:"GUI manual",url:"gui.html"},
-{text:"GUI design",url:"group__gui__design.html"},
+{text:"GUI manual",url:"@ref gui"},
+{text:"GUI design",url:"@ref gui_design"},
 {text:"Hardware implementations",url:"group__hardware.html"},
 {text:"Classes",url:"annotated.html",children:[
 {text:"Class List",url:"annotated.html"},
@@ -53,7 +53,6 @@ var menudata={children:[
 {text:"u",url:"functions_u.html#index_u"},
 {text:"v",url:"functions_v.html#index_v"},
 {text:"w",url:"functions_w.html#index_w"},
-{text:"z",url:"functions_z.html#index_z"},
 {text:"~",url:"functions_~.html#index__7E"}]},
 {text:"Functions",url:"functions_func.html",children:[
 {text:"_",url:"functions_func.html#index__5F"},

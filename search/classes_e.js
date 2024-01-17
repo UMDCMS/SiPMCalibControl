@@ -11,11 +11,6 @@ var searchData=
   ['set_5fvisual_8',['set_visual',['../classctlcmd_1_1visualcmd_1_1set__visual.html',1,'ctlcmd::visualcmd']]],
   ['setadcref_9',['setadcref',['../classctlcmd_1_1digicmd_1_1setadcref.html',1,'ctlcmd::digicmd']]],
   ['showadc_10',['showadc',['../classctlcmd_1_1digicmd_1_1showadc.html',1,'ctlcmd::digicmd']]],
-  ['shutdown_11',['shutdown',['../classsession_1_1shutdown.html',1,'session']]],
-  ['singlexycmd_12',['singlexycmd',['../classctlcmd_1_1cmdbase_1_1singlexycmd.html',1,'ctlcmd::cmdbase']]],
-  ['sipmmodel_13',['SiPMModel',['../classcmod_1_1readoutmodel_1_1SiPMModel.html',1,'cmod::readoutmodel']]],
-  ['socket_5fconnect_14',['socket_connect',['../classsockets_1_1socket__connect.html',1,'sockets']]],
-  ['socketfunction_15',['SocketFunction',['../classsockets_1_1SocketFunction.html',1,'sockets']]],
-  ['sockettqdm_16',['SocketTQDM',['../classsession_1_1SocketTQDM.html',1,'session']]],
-  ['status_17',['status',['../classviews_1_1status.html',1,'views']]]
+  ['singlexycmd_11',['singlexycmd',['../classctlcmd_1_1cmdbase_1_1singlexycmd.html',1,'ctlcmd::cmdbase']]],
+  ['sipmmodel_12',['SiPMModel',['../classcmod_1_1readoutmodel_1_1SiPMModel.html',1,'cmod::readoutmodel']]]
 ];
