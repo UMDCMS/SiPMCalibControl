@@ -1,0 +1,28 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a6766ad..d9ea96e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+ project( hexactrl )
+ 
+ include(CheckCXXCompilerFlag)
+-check_cxx_compiler_flag(-std=c++14 HAVE_FLAG_STD_CXX14)
+-if(HAVE_FLAG_STD_CXX14)
+-  set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14" )
+-  message("will use c++14")
++check_cxx_compiler_flag(-std=c++17 HAVE_FLAG_STD_CXX17)
++if(HAVE_FLAG_STD_CXX17)
++  set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17" )
++  message("will use c++17")
+ else()
+   check_cxx_compiler_flag(-std=c++11 HAVE_FLAG_STD_CXX11)
+   if(HAVE_FLAG_STD_CXX11)
+@@ -117,7 +117,7 @@ else()
+     message( "\t${exec}" )
+     get_filename_component(ex ${exec} NAME_WE)
+     add_executable( ${ex} ${exec} $<TARGET_OBJECTS:anaobjectlib> ${headers} )
+-    target_link_libraries( ${ex} ${Boost_LIBRARIES} boost_program_options boost_regex boost_serialization boost_chrono )
++    target_link_libraries( ${ex} ${Boost_LIBRARIES} boost_program_options boost_regex boost_serialization boost_chrono zmq yaml-cpp)
+     install( TARGETS ${ex} DESTINATION ${DESTINATION}/bin
+       ARCHIVE DESTINATION ${DESTINATION}/lib
+       LIBRARY DESTINATION ${DESTINATION}/lib )
